@@ -4,6 +4,7 @@ import Strong from '@/components/atoms/strong';
 import Tag from '@/components/atoms/tag';
 import Post from '@/components/organisms/post';
 import { getPosts, getTags } from '@/libs/post';
+import type { Metadata } from 'next';
 
 const Page = async () => {
   const [posts, tags] = await Promise.all([getPosts(), getTags()]);
@@ -42,5 +43,8 @@ const Page = async () => {
     </>
   );
 };
+
+export const generateMetadata = async () =>
+  ({ alternates: { canonical: 'tags' }, title: 'tags' }) as Metadata;
 
 export default Page;

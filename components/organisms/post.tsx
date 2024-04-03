@@ -7,7 +7,7 @@ import MDProse from '../molecules/md-prose';
 type Props = {
   slug: string;
   title: string;
-  date: Date;
+  date: string;
   tags: string[];
   excerpt: string;
 };

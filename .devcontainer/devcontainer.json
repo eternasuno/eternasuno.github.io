@@ -5,6 +5,7 @@
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "eamodio.gitlens",
+        "eliostruyf.vscode-front-matter",
         "rangav.vscode-thunder-client",
         "semanticdiff.semanticdiff"
       ]

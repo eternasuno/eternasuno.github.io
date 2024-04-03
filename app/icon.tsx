@@ -24,7 +24,7 @@ const Icon = ({ id }: { id: string }) => {
   const { size } = imageMetadatas.find((data) => data.id === id) ?? imageMetadatas[0];
 
   return new ImageResponse(
-    <div tw="flex h-full w-full items-center justify-center rounded-full bg-black text-[60vw] text-white uppercase">
+    <div tw="flex h-full w-full items-center justify-center rounded-lg bg-black text-[60vw] text-white uppercase">
       {CREATOR[0]}
     </div>,
     { ...size },

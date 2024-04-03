@@ -2,7 +2,7 @@ import { format as formatDate, formatISO } from 'date-fns';
 import type { ComponentProps } from 'react';
 
 type Props = {
-  dateTime: Date;
+  dateTime: string;
   format?: string;
 } & Omit<ComponentProps<'time'>, 'dateTime'>;
 

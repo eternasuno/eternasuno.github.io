@@ -3,27 +3,24 @@ import { join } from 'path';
 import matter, { type GrayMatterFile } from 'gray-matter';
 import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
-import { POST_DIR } from './config';
+import { DEV, POST_DIR } from './config';
 
 export type Post = {
   title: string;
   slug: string;
-  date: Date;
+  date: string;
+  lastmod: string;
   tags: string[];
+  draft?: boolean;
   excerpt: string;
   content: string;
 };
 
 export const getSlugs = async () =>
-  (await fs.readdir(POST_DIR))
-    .map((filename) => filename.replace(/\.md$/, ''))
-    .sort((a, b) => (b > a ? 1 : -1));
+  (await fs.readdir(POST_DIR)).map((filename) => filename.replace(/\.md$/, ''));
 
 export const getPostBySlug = unstable_cache(
   cache(async (slug: string) => {
-    const [year, month, day] = slug.split('-', 3);
-    const date = new Date(Number(year), Number(month) - 1, Number(day));
-
     const path = join(POST_DIR, `${slug}.md`);
     const fileContent = await fs.readFile(path, 'utf-8');
     const { data, excerpt, content } = matter(fileContent, {
@@ -40,13 +37,15 @@ export const getPostBySlug = unstable_cache(
       excerpt_separator: '<!-- excerpt -->',
     });
 
-    return { ...data, slug, date, excerpt, content } as Post;
+    return { ...data, slug, excerpt, content } as Post;
   }),
   ['posts'],
 );
 
 export const getPosts = async () =>
-  Promise.all((await getSlugs()).map((slug) => getPostBySlug(slug)));
+  (await Promise.all((await getSlugs()).map((slug) => getPostBySlug(slug))))
+    .filter((post) => DEV || !post.draft)
+    .sort((a, b) => (b.date > a.date ? 1 : -1));
 
 export const getTags = async () =>
   Array.from(

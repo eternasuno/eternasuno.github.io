@@ -1,11 +1,11 @@
 import { CREATOR } from '@/libs/config';
 import Button from '../atoms/button';
 import Container from '../atoms/container';
+import DarkModeToggle from '../atoms/dark-mode-toggle';
 import Glass from '../atoms/glass';
 import Link from '../atoms/link';
 import Shell from '../atoms/shell';
 import Strong from '../atoms/strong';
-import ThemeToggle from '../atoms/theme-toggle';
 
 const Header = () => (
   <Glass asChild>
@@ -25,7 +25,7 @@ const Header = () => (
             </Button>
             <Button asChild className="btn-square swap swap-rotate">
               <label>
-                <ThemeToggle className="hidden" />
+                <DarkModeToggle className="hidden" />
                 <i className="i-heroicons-sun-solid swap-on size-6 md:size-7" />
                 <i className="i-heroicons-moon-solid swap-off size-6 md:size-7" />
               </label>

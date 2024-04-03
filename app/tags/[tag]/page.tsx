@@ -4,6 +4,7 @@ import Strong from '@/components/atoms/strong';
 import Tag from '@/components/atoms/tag';
 import Post from '@/components/organisms/post';
 import { getPostsByTag, getTags } from '@/libs/post';
+import type { Metadata } from 'next';
 
 const Page = async ({ params: { tag } }: { params: { tag: string } }) => {
   const currentTag = decodeURIComponent(tag);
@@ -54,5 +55,8 @@ const Page = async ({ params: { tag } }: { params: { tag: string } }) => {
     </>
   );
 };
+
+export const generateMetadata = async ({ params: { tag } }: { params: { tag: string } }) =>
+  ({ alternates: { canonical: `/tags/${tag}` }, title: decodeURIComponent(tag) }) as Metadata;
 
 export default Page;

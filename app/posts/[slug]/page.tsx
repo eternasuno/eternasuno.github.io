@@ -41,11 +41,7 @@ const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
 
 export const generateStaticParams = async () => (await getSlugs()).map((slug) => ({ slug }));
 
-export const generateMetadata = async ({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) => {
+export const generateMetadata = async ({ params: { slug } }: { params: { slug: string } }) => {
   const { title, excerpt: description } = await getPostBySlug(slug);
 
   return {

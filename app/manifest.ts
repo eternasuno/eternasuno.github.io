@@ -1,9 +1,10 @@
-import { CREATOR, TITLE } from '@/libs/config';
+import { DESCRIPTION, TITLE } from '@/libs/config';
 import type { MetadataRoute } from 'next';
 
 const Manifest = () =>
   ({
-    description: TITLE,
+    background_color: 'oklch(28.8229% 0.022103 277.508664/1)',
+    description: DESCRIPTION,
     display: 'fullscreen',
     icons: [
       {
@@ -36,8 +37,9 @@ const Manifest = () =>
     orientation: 'any',
     prefer_related_applications: false,
     scope: '/',
-    short_name: CREATOR,
+    short_name: TITLE,
     start_url: '/',
+    theme_color: 'oklch(28.8229% 0.022103 277.508664/1)',
   }) as MetadataRoute.Manifest;
 
 export default Manifest;

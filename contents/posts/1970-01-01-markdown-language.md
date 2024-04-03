@@ -1,11 +1,6 @@
 ---
 title: markdown 语法备忘
-date: 2024-04-03
-lastmod: 2024-04-03
-draft: false
-tags:
-  - markdown
-type: post
+tags: [markdown]
 ---
 
 Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地关注内容本身而非排版。它使用易读易写的纯文本格式编写文档，可与HTML混编，可导出 HTML、PDF 以及本身的 .md 格式的文件。
@@ -128,7 +123,7 @@ Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地
 
 要添加图像，请使用感叹号 (!), 然后在方括号增加替代文本，图片链接放在圆括号里，括号里的链接后可以增加一个可选的图片标题文本。
 
-![nextjs](/img/next.svg)
+![nextjs](/public/media/next.svg)
 
 ## 表格
 

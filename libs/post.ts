@@ -9,15 +9,15 @@ export type Post = {
   title: string;
   slug: string;
   date: string;
-  lastmod: string;
   tags: string[];
-  draft?: boolean;
   excerpt: string;
   content: string;
 };
 
 export const getSlugs = async () =>
-  (await fs.readdir(POST_DIR)).map((filename) => filename.replace(/\.md$/, ''));
+  (await fs.readdir(POST_DIR))
+    .map((filename) => filename.replace(/\.md$/, ''))
+    .sort((a, b) => (b > a ? 1 : -1));
 
 export const getPostBySlug = unstable_cache(
   cache(async (slug: string) => {
@@ -37,25 +37,23 @@ export const getPostBySlug = unstable_cache(
       excerpt_separator: '<!-- excerpt -->',
     });
 
-    return { ...data, slug, excerpt, content } as Post;
+    return { ...data, slug, date: slug.substring(0, 10), excerpt, content } as Post;
   }),
   ['posts'],
 );
 
 export const getPosts = async () =>
-  (await Promise.all((await getSlugs()).map((slug) => getPostBySlug(slug))))
-    .filter((post) => DEV || !post.draft)
-    .sort((a, b) => (b.date > a.date ? 1 : -1));
+  await Promise.all((await getSlugs()).map((slug) => getPostBySlug(slug)));
 
 export const getTags = async () =>
   Array.from(
-    (await getPosts()).reduce<Set<string>>((tags, post) => {
+    (await getPosts()).reduce((tags, post) => {
       for (const tag of post.tags) {
         tags.add(tag);
       }
 
       return tags;
-    }, new Set()),
+    }, new Set<string>()),
   );
 
 export const getPostsByTag = async (tag: string) =>

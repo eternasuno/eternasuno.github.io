@@ -82,5 +82,20 @@
       "name": "post",
       "previewPath": "posts"
     }
+  ],
+  "frontMatter.telemetry.disable": false,
+  "frontMatter.global.activeMode": "post",
+  "frontMatter.global.modes": [
+    {
+      "id": "post",
+      "features": [
+        "panel.actions",
+        "panel.metadata",
+        "panel.contentType",
+        "panel.otherActions",
+        "dashboard.data.view",
+        "dashboard.taxonomy.view"
+      ]
+    }
   ]
 }

@@ -2,9 +2,9 @@
 title: markdown 语法备忘
 date: 2024-04-03
 lastmod: 2024-04-03
-draft: true
+draft: false
 tags:
-    - markdown
+  - markdown
 type: post
 ---
 

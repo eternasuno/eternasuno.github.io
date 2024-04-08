@@ -75,6 +75,7 @@ border-radius 没有生效的原因是因为设置了 border-collapse: collapse 
 table {
   border-collapse: separate;
   border-radius: 5px;
+  border-spacing: 0;
   border: 1px solid black;
 }
 

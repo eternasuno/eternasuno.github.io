@@ -29,7 +29,7 @@
     "unified": "^11.0.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.6.3",
+    "@biomejs/biome": "1.7.2",
     "@egoist/tailwindcss-icons": "^1.7.4",
     "@iconify-json/heroicons": "^1.1.20",
     "@tailwindcss/typography": "^0.5.10",

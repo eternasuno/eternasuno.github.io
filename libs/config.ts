@@ -1,17 +1,10 @@
 import { join } from 'path';
-import metadata from '@/contents/metadata.json';
-import { env } from 'process';
+import { cwd, env } from 'process';
 
-export const DEV = env.NODE_ENV === 'development';
+export const AUTHOR = 'eternasuno';
 
-export const TITLE = metadata.title;
+export const DOMAIN = env.DOMAIN || 'http://localhost:3000';
 
-export const CREATOR = metadata.creator;
+export const POST_PATH = join(cwd(), 'posts');
 
-export const DESCRIPTION = metadata.description;
-
-export const BASE_URL = DEV
-  ? `http://localhost:${env.PORT || 3000}`
-  : `https://${metadata.host}`;
-
-export const POST_DIR = join(process.cwd(), 'contents', 'posts');
+export const SHOW_DRAFT = env.NODE_ENV === 'development';

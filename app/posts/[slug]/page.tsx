@@ -1,54 +1,23 @@
-import Hero from '@/components/atoms/hero';
-import Link from '@/components/atoms/link';
-import Strong from '@/components/atoms/strong';
-import Tag from '@/components/atoms/tag';
+import Container from '@/components/atoms/container';
 import Time from '@/components/atoms/time';
-import MDProse from '@/components/molecules/md-prose';
+import Markdown from '@/components/molecules/markdown';
 import { getPostBySlug, getSlugs } from '@/libs/post';
-import type { Metadata } from 'next';
 
 export const dynamicParams = false;
 
-const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
-  const { title, date, content, tags } = await getPostBySlug(slug);
-
-  return (
-    <>
-      <Hero className="space-y-2 text-center">
-        <Time className="font-serif" dateTime={date} format="EEEE, LLLL do, yyyy" />
-        <Strong asChild className="text-4xl md:text-6xl">
-          <h1>{title}</h1>
-        </Strong>
-      </Hero>
-
-      <div className="my-8 space-y-8 md:my-12">
-        <MDProse className="flex-1" markdown={content} />
-        <ul className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <li key={tag}>
-              <Tag asChild>
-                <Link $primary href={`/tags/${tag}`}>
-                  {tag}
-                </Link>
-              </Tag>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
-  );
-};
-
 export const generateStaticParams = async () => (await getSlugs()).map((slug) => ({ slug }));
 
-export const generateMetadata = async ({ params: { slug } }: { params: { slug: string } }) => {
-  const { title, excerpt: description } = await getPostBySlug(slug);
+const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
+  const { content, publishAt, title } = await getPostBySlug(slug);
 
-  return {
-    alternates: { canonical: `/posts/${slug}` },
-    description,
-    title,
-  } as Metadata;
+  return (
+    <Container className="space-y-8">
+      <h2 className="text-3xl capitalize">{title}</h2>
+      <Time className="text-sm text-base-content/75" date={publishAt} />
+      <Markdown className="mt-5 pl-3">{content}</Markdown>
+    </Container>
+  );
 };
 
 export default Page;

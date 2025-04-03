@@ -65,7 +65,7 @@ td {
 
 然而结果是并没有出现圆角。
 
-![result](/public/media/html-radius-table/border-radius.png "border-radius 不生效")
+![result](/public/assets/html-radius-table/border-radius.png 'border-radius 不生效')
 
 ## 使用 border-collapse: separate
 
@@ -88,7 +88,7 @@ td {
 
 圆角确实出现了，但是因为有内部边框的存在，所有圆角内包含了直角，而且边框的宽度是原来的两倍。
 
-![result](/public/media/html-radius-table/border-collapse.png "边框分离")
+![result](/public/assets/html-radius-table/border-collapse.png '边框分离')
 
 当然可以通过不设置重复的边框来规避这些问题，但是这个方法麻烦而且普适性不高。
 
@@ -111,7 +111,7 @@ td {
 }
 ```
 
-![result](/public/media/html-radius-table/outline.png "使用 outline 定义边框")
+![result](/public/assets/html-radius-table/outline.png '使用 outline 定义边框')
 
 ## 使用 div 包裹
 
@@ -178,4 +178,4 @@ td {
 }
 ```
 
-![result](/public/media/html-radius-table/div.png "使用 div 包裹")
+![result](/public/assets/html-radius-table/div.png '使用 div 包裹')

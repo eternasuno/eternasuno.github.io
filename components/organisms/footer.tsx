@@ -1,24 +1,17 @@
-import { CREATOR } from '@/libs/config';
-import { getYear } from 'date-fns';
+import type { ComponentProps } from 'react';
+
 import Container from '../atoms/container';
 import Link from '../atoms/link';
 
-const Footer = () => (
-  <Container asChild>
-    <footer className="footer place-items-center gap-y-2 p-4 md:justify-between">
-      <span className="block">
-        Copyright © {getYear(new Date())} - <Link href="/">{CREATOR}</Link>
-      </span>
-      <span className="grid-flow-col items-center">
-        <Link $external href="https://creativecommons.org/licenses/by-nd/4.0">
-          CC BY-NC 4.0
-        </Link>
-        <Link $external aria-label="rss" className="leading-none" href="/rss">
-          <i className="i-heroicons-rss-solid size-5" />
-        </Link>
-      </span>
-    </footer>
-  </Container>
+const Footer = (props: ComponentProps<'footer'>) => (
+  <footer {...props}>
+    <Container className="flex justify-between text-sm">
+      <Link $external href="/rss.xml">
+        RSS
+      </Link>
+      <span>Copyright © {new Date().getFullYear()} - All right reserved</span>
+    </Container>
+  </footer>
 );
 
 export default Footer;

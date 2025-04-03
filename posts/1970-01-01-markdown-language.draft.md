@@ -12,14 +12,14 @@ Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地
 ```markdown
 # Heading level 1
 
-## Heading level 2 
+## Heading level 2
 
 ### Heading level 3
-``` 
+```
 
 # Heading level 1
 
-## Heading level 2 
+## Heading level 2
 
 ### Heading level 3
 
@@ -67,8 +67,8 @@ Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地
 - First item
 - Second item
 - Third item
-    - Indented item
-    - Indented item
+  - Indented item
+  - Indented item
 - Fourth item
 ```
 
@@ -114,48 +114,48 @@ Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地
 链接文本放在中括号内，链接地址放在后面的括号中。链接title是当鼠标悬停在链接上时会出现的文字，这个title是可选的，它放在圆括号中链接地址后面，跟链接地址之间以空格分隔。
 
 ```markdown
-这是一个链接 [Markdown语法](https://markdown.com.cn "最好的markdown教程")。
+这是一个链接 [Markdown语法](https://markdown.com.cn '最好的markdown教程')。
 ```
 
-这是一个链接 [Markdown语法](https://markdown.com.cn "最好的markdown教程")。
+这是一个链接 [Markdown语法](https://markdown.com.cn '最好的markdown教程')。
 
 ## 图片
 
 要添加图像，请使用感叹号 (!), 然后在方括号增加替代文本，图片链接放在圆括号里，括号里的链接后可以增加一个可选的图片标题文本。
 
-![nextjs](/public/media/next.svg)
+![nextjs](/public/assets/html-radius-table/border-collapse.png)
 
 ## 表格
 
 要添加表，请使用三个或多个连字符（---）创建每列的标题，并使用管道（|）分隔每列。您可以选择在表的任一端添加管道。
 
 ```markdown
-| Syntax      | Description |
-| ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
+| Syntax    | Description |
+| --------- | ----------- |
+| Header    | Title       |
+| Paragraph | Text        |
 ```
 
 呈现的输出如下所示：
 
-| Syntax      | Description |
-| ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        |
+| Syntax    | Description |
+| --------- | ----------- |
+| Header    | Title       |
+| Paragraph | Text        |
 
 您可以通过在标题行中的连字符的左侧，右侧或两侧添加冒号（:），将列中的文本对齐到左侧，右侧或中心。
 
 ```markdown
-| Syntax      | Description | Test Text     |
-| :---        |    :----:   |          ---: |
-| Header      | Title       | Here's this   |
-| Paragraph   | Text        | And more      |
+| Syntax    | Description |   Test Text |
+| :-------- | :---------: | ----------: |
+| Header    |    Title    | Here's this |
+| Paragraph |    Text     |    And more |
 ```
 
-| Syntax      | Description | Test Text     |
-| :---        |    :----:   |          ---: |
-| Header      | Title       | Here's this   |
-| Paragraph   | Text        | And more      |
+| Syntax    | Description |   Test Text |
+| :-------- | :---------: | ----------: |
+| Header    |    Title    | Here's this |
+| Paragraph |    Text     |    And more |
 
 ## 任务列表
 
@@ -175,4 +175,33 @@ Markdown是一种轻量级标记语言，排版语法简洁，让人们更多地
 
 在markdown里使用在前后添加`$`表示数学公式，例如$a^2$。如果需要表示公式块则在前后添加`$$`。
 
-$$ a^2 + b^2 = c^2 $$
+$$
+\def\d{\mathrm{d}}
+
+\oint_C \vec{B}\circ \d\vec{l} = \mu_0 \left( I_{\text{enc}} + \varepsilon_0 \frac{\d}{\d t} \int_S {\vec{E} \circ \hat{n}}\; \d a \right)
+$$
+
+## 流程图
+
+```graphviz-dot
+digraph BinaryTree {
+    node [shape=circle];
+
+    A -> B;
+    A -> C;
+    B -> D;
+    B -> E;
+    C -> F;
+    C -> G;
+
+    A [label="Root"];
+    B [label="Left"];
+    C [label="Right"];
+    D [label="L1"];
+    E [label="L2"];
+    F [label="R1"];
+    G [label="R2"];
+}
+```
+
+This code `console.log("Hello World"){:js}` will be highlighted.

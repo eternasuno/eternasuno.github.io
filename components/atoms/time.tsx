@@ -1,14 +1,15 @@
-import { format as formatDate, formatISO } from 'date-fns';
 import type { ComponentProps } from 'react';
 
-type Props = {
-  dateTime: string;
-  format?: string;
-} & Omit<ComponentProps<'time'>, 'dateTime'>;
+import { format as formatDate, formatISO } from 'date-fns';
 
-const Time = ({ dateTime, format = 'LLLL d, yyyy', ...rest }: Props) => (
-  <time {...rest} dateTime={formatISO(dateTime)}>
-    {formatDate(dateTime, format)}
+type Props = Omit<ComponentProps<'time'>, 'dateTime'> & {
+  date: Date;
+  format?: string;
+};
+
+const Time = ({ date, format = 'LLLL d, yyyy', ...rest }: Props) => (
+  <time {...rest} dateTime={formatISO(date)}>
+    {formatDate(date, format)}
   </time>
 );
 

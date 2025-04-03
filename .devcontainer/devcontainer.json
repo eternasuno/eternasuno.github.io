@@ -2,11 +2,10 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "eamodio.gitlens",
-        "rangav.vscode-thunder-client",
-        "semanticdiff.semanticdiff"
+        "semanticdiff.semanticdiff",
+        "esbenp.prettier-vscode"
       ]
     }
   },
@@ -16,6 +15,5 @@
       "version": "lts"
     }
   },
-  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
-  "postStartCommand": "yarn install"
+  "image": "mcr.microsoft.com/devcontainers/base:debian"
 }

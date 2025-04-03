@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui' {
+  themes:
+    light --default,
+    dark --prefersdark;
+  logs: false;
+}
+
+@layer base {
+  ::-webkit-scrollbar {
+    @apply hidden;
+  }
+
+  :root {
+    @apply overflow-x-clip;
+  }
+
+  body {
+    @apply min-h-screen max-w-screen overflow-x-clip;
+  }
+}
+
+@utility shiki {
+  &,
+  & span {
+    @apply dark:bg-(--shiki-dark-bg)! dark:font-(--shiki-dark-font-weight)! dark:text-(--shiki-dark)! dark:[font-style:var(--shiki-dark-font-style)]! dark:[text-decoration:var(--shiki-dark-text-decoration)]!;
+  }
+}

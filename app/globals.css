@@ -2,22 +2,14 @@
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
   themes:
-    light --default,
-    dark --prefersdark;
+    cmyk --default,
+    night --prefersdark;
   logs: false;
 }
 
 @layer base {
   ::-webkit-scrollbar {
     @apply hidden;
-  }
-
-  :root {
-    @apply overflow-x-clip;
-  }
-
-  body {
-    @apply min-h-screen max-w-screen overflow-x-clip;
   }
 }
 

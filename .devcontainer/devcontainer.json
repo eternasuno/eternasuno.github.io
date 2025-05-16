@@ -15,5 +15,6 @@
       "version": "lts"
     }
   },
-  "image": "mcr.microsoft.com/devcontainers/base:debian"
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "postCreateCommand": "pnpm install"
 }

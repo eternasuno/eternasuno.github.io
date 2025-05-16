@@ -1,9 +1,10 @@
+import { NextResponse } from 'next/server';
+
 import type { Post } from '@/libs/post';
 
 import { AUTHOR, DOMAIN } from '@/libs/config';
 import { toHtml } from '@/libs/markdown';
 import { getPosts } from '@/libs/post';
-import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-static';
 

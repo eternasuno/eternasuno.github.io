@@ -57,6 +57,7 @@ const rewriteAnchor = (node: Element) => {
     return;
   }
 
+  properties.href = new URL(href, DOMAIN).toString();
   properties.referrerpolicy = 'no-referrer';
   properties.rel = 'noopener';
   properties.target = '_blank';
@@ -69,5 +70,5 @@ const rewriteImg = (node: Element) => {
     return;
   }
 
-  properties.src = `${DOMAIN}/${src.replace(/^\/public/, '')}`;
+  properties.src = new URL(src.replace(/^\/public/, ''), DOMAIN).toString();
 };

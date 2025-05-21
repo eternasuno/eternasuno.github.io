@@ -24,7 +24,7 @@ const generateRss = async () =>
       <link>${DOMAIN}</link>
       <description><![CDATA[ ${AUTHOR}'s blog ]]></description>
       <lastBuildDate>${new Date().toISOString()}</lastBuildDate>
-      <atom:link href="${DOMAIN}/rss.xml" rel="self" type="application/rss+xml"/>
+      <atom:link href="${new URL('/rss.xml', DOMAIN).toString()}" rel="self" type="application/rss+xml"/>
       ${(await Promise.all((await getPosts()).map((post) => generateRssItem(post)))).join('')}
     </channel>
   </rss>
@@ -32,9 +32,9 @@ const generateRss = async () =>
 
 const generateRssItem = async ({ content, publishAt, slug, title }: Post) => `
   <item>
-    <guid>${DOMAIN}/posts/${slug}</guid>
+    <guid>${slug}</guid>
     <title><![CDATA[ ${title} ]]></title>
-    <link>${DOMAIN}/posts/${slug}</link>
+    <link>${new URL(`/posts/${slug}`, DOMAIN).toString()}</link>
     <description><![CDATA[ ${await toHtml(content)} ]]></description>
     <pubDate>${new Date(publishAt).toISOString()}</pubDate>
   </item>

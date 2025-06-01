@@ -17,7 +17,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "shiki": "^3.4.2",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.3.0",
     "unified": "^11.0.5"
   },
   "devDependencies": {

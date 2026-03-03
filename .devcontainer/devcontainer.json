@@ -5,16 +5,18 @@
         "bradlc.vscode-tailwindcss",
         "eamodio.gitlens",
         "semanticdiff.semanticdiff",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "GitHub.copilot-chat",
+        "GitHub.vscode-pull-request-github"
       ]
     }
   },
   "features": {
     "ghcr.io/devcontainers/features/node": {
-      "nodeGypDependencies": true,
-      "version": "lts"
+      "installYarnUsingApt": false
     }
   },
   "image": "mcr.microsoft.com/devcontainers/base:debian",
-  "postCreateCommand": "pnpm install"
+  "postCreateCommand": "pnpm install",
+  "remoteUser": "vscode"
 }

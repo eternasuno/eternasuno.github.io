@@ -7,18 +7,22 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 
-export async function compileMarkdown(content: string): Promise<string> {
+export const toHtml = async (content: string) => {
   const result = await unified()
     .use(remarkParse)
-    .use(remarkGfm)
+    .use(remarkGfm, { singleTilde: false })
     .use(remarkMath)
     .use(remarkRehype)
-    .use(rehypeMathml)
+    .use(rehypeMathml, { displayMode: true })
     .use(rehypeShiki, {
-      theme: 'github-dark',
+      inline: 'tailing-curly-colon',
+      themes: {
+        dark: 'one-dark-pro',
+        light: 'one-light',
+      },
     })
     .use(rehypeStringify)
     .process(content);
 
   return String(result);
-}
+};

@@ -8,6 +8,9 @@ description: 我的第一篇博客文章
 
 这是我的第一篇博客文章。
 
+
+<!-- excerpt -->
+
 ## 代码高亮
 
 ```typescript

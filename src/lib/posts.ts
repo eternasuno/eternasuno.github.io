@@ -1,59 +1,53 @@
-import matter from 'gray-matter';
-import { readdir, readFile } from 'node:fs/promises';
+import fs from 'node:fs/promises';
 import { basename, join } from 'node:path';
-import { compileMarkdown } from './markdown';
+import matter, { type GrayMatterFile } from 'gray-matter';
+import { toHtml } from './markdown';
 
-export interface PostMeta {
-  slug: string;
-  title: string;
-  date: string;
-  description?: string;
-}
-
-export interface Post extends PostMeta {
+export type Post = {
   content: string;
-}
+  excerpt: string;
+  publishAt: Date;
+  slug: string;
+  tags: string[];
+  title: string;
+};
 
-const POSTS_DIR = join(process.cwd(), 'posts');
+const POST_DIR = join(process.cwd(), 'posts');
 
-export async function getAllPosts(): Promise<PostMeta[]> {
-  const files = await readdir(POSTS_DIR);
-  const posts: PostMeta[] = [];
+const SHOW_DRAFT = process.env.NODE_ENV === 'development';
 
-  for (const file of files) {
-    if (!file.endsWith('.md')) continue;
+export const getSlugs = async () =>
+  (await fs.readdir(POST_DIR))
+    .filter((filename) => SHOW_DRAFT || !filename.endsWith('.draft.md'))
+    .map((filename) => basename(filename, '.md'))
+    .sort((a, b) => (b > a ? 1 : -1));
 
-    const slug = basename(file, '.md');
-    const content = await readFile(join(POSTS_DIR, file), 'utf-8');
-    const { data } = matter(content);
+export const getPostBySlug = async (slug: string) => {
+  const path = join(POST_DIR, `${slug}.md`);
+  const fileContent = await fs.readFile(path, 'utf-8');
+  const { content, data, excerpt } = matter(fileContent, {
+    // @ts-expect-error bug of gray-matter
+    excerpt: (file: GrayMatterFile<string>) => {
+      const [excerpt, rest] = file.content.split('<!-- excerpt -->', 2);
+      if (rest) {
+        file.excerpt = excerpt;
+        file.content = excerpt + rest;
+      } else {
+        file.excerpt = file.content.split('\n').find((line) => line) || file.content;
+      }
+    },
+  });
 
-    posts.push({
-      slug,
-      title: data.title || slug,
-      date: data.date || '',
-      description: data.description,
-    });
-  }
+  const contentHtml = await toHtml(content);
+  const excerptHtml = await toHtml(excerpt || '');
 
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
+  return {
+    ...data,
+    content: contentHtml,
+    excerpt: excerptHtml,
+    publishAt: new Date(slug.substring(0, 10)),
+    slug,
+  } as unknown as Post;
+};
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
-  try {
-    const filePath = join(POSTS_DIR, `${slug}.md`);
-    const fileContent = await readFile(filePath, 'utf-8');
-    const { data, content } = matter(fileContent);
-
-    const html = await compileMarkdown(content);
-
-    return {
-      slug,
-      title: data.title || slug,
-      date: data.date || '',
-      description: data.description,
-      content: html,
-    };
-  } catch {
-    return null;
-  }
-}
+export const getPosts = async () => Promise.all((await getSlugs()).map(getPostBySlug));

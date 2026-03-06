@@ -1,37 +1,33 @@
 {
+  "dependencies": {
+    "solid-js": "^1.9.11",
+    "vike": "^0.4.255",
+    "vike-solid": "^0.8.1"
+  },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.5",
-    "@builder.io/qwik": "^1.19.1",
-    "@builder.io/qwik-city": "^1.19.1",
+    "@biomejs/biome": "2.4.4",
     "@daiji256/rehype-mathml": "^1.2.2",
     "@shikijs/rehype": "^4.0.1",
     "@tailwindcss/vite": "^4.2.1",
-    "@types/node": "^24.0.0",
     "daisyui": "^5.5.19",
     "gray-matter": "^4.0.3",
-    "ignore": "^7.0.5",
     "rehype-stringify": "^10.0.1",
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "tailwindcss": "^4.2.1",
-    "typescript": "5.4.5",
-    "undici": "*",
+    "typescript": "^5.9.3",
     "unified": "^11.0.5",
-    "vite": "7.3.1",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite": "^7.3.1",
+    "vite-plugin-solid": "^2.11.10"
   },
   "scripts": {
-    "build": "qwik build",
-    "build.client": "vite build",
-    "build.preview": "vite build --ssr src/entry.preview.tsx",
-    "build.server": "qwik check-client src dist && vite build -c adapters/static/vite.config.ts",
-    "build.types": "tsc --incremental --noEmit",
-    "check": "tsc --noEmit && biome check",
-    "dev": "vite --open --mode ssr",
-    "preview": "qwik build preview && vite preview --open",
-    "qwik": "qwik"
+    "build": "vike build",
+    "dev": "vike dev",
+    "format": "biome format --write .",
+    "lint": "biome lint --write .",
+    "preview": "vike build && vike preview"
   },
   "type": "module"
 }

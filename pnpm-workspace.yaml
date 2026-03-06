@@ -1,5 +1,3 @@
 onlyBuiltDependencies:
-  - '@parcel/watcher'
+  - '@biomejs/biome'
   - esbuild
-  - less
-  - sharp

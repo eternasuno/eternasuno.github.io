@@ -1,50 +1,45 @@
 // https://vike.dev/Layout
 
-import "./Layout.css";
-
-import "./tailwind.css";
-import type { JSX } from "solid-js";
-import logoUrl from "../assets/logo.svg";
-import { Link } from "../components/Link";
+import './tailwind.css';
+import type { JSX } from 'solid-js';
+import { Link } from '../components/Link';
 
 export default function Layout(props: { children?: JSX.Element }) {
   return (
-    <div class={"flex max-w-5xl m-auto"}>
-      <Sidebar>
-        <Logo />
-        <Link href="/">Welcome</Link>
-        <Link href="/todo">Todo</Link>
-        <Link href="/star-wars">Data Fetching</Link>
-      </Sidebar>
-      <Content>{props.children}</Content>
-    </div>
-  );
-}
+    <div class="min-h-screen bg-base-100">
+      {/* 导航栏 */}
+      <nav class="navbar bg-base-200 shadow-lg">
+        <div class="container mx-auto">
+          <div class="flex-1">
+            <Link href="/" class="btn btn-ghost text-xl font-bold text-primary">
+              📝 我的博客
+            </Link>
+          </div>
+          <div class="flex-none">
+            <ul class="menu menu-horizontal px-1">
+              <li>
+                <Link href="/" class="font-medium">
+                  首页
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
 
-function Sidebar(props: { children: JSX.Element }) {
-  return (
-    <div id="sidebar" class={"p-5 flex flex-col shrink-0 border-r-2 border-r-gray-200"}>
-      {props.children}
-    </div>
-  );
-}
+      {/* 主要内容区 */}
+      <main class="min-h-[calc(100vh-8rem)]">{props.children}</main>
 
-function Content(props: { children: JSX.Element }) {
-  return (
-    <div id="page-container">
-      <div id="page-content" class={"p-5 pb-12 min-h-screen"}>
-        {props.children}
-      </div>
-    </div>
-  );
-}
-
-function Logo() {
-  return (
-    <div class={"p-5 mb-2"}>
-      <a href="/">
-        <img src={logoUrl} height={64} width={64} alt="logo" />
-      </a>
+      {/* 页脚 */}
+      <footer class="footer footer-center bg-base-200 p-10 text-base-content">
+        <aside>
+          <p class="font-semibold text-lg">我的技术博客</p>
+          <p class="text-base-content/70">分享前端开发与技术思考</p>
+          <p class="text-sm text-base-content/60 mt-2">
+            © {new Date().getFullYear()} - 使用 Vike + Solid 构建
+          </p>
+        </aside>
+      </footer>
     </div>
   );
 }

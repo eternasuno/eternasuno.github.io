@@ -5,9 +5,9 @@ import vikeSolid from 'vike-solid/config';
 // https://vike.dev/config
 
 export default {
-  description: 'Demo showcasing Vike',
+  description: '我的技术博客 - 分享前端开发与技术思考',
   extends: [vikeSolid],
   prerender: true,
   // https://vike.dev/head-tags
-  title: 'My Vike App',
+  title: '我的博客',
 } satisfies Config;

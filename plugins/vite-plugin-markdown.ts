@@ -1,40 +1,11 @@
-/** biome-ignore-all lint/correctness/useQwikValidLexicalScope: not use in qwik */
-
-import rehypeMathml from '@daiji256/rehype-mathml';
-import rehypeShiki from '@shikijs/rehype';
 import matter, { type GrayMatterFile } from 'gray-matter';
-import rehypeStringify from 'rehype-stringify';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import { unified } from 'unified';
 import type { Plugin } from 'vite';
+import { toHtml } from '../lib/markdown';
 
-type MarkdownModule = {
+export type MarkdownModule = {
   content: string;
   excerpt: string;
   metadata: Record<string, unknown>;
-};
-
-const toHtml = async (content: string) => {
-  const result = await unified()
-    .use(remarkParse)
-    .use(remarkGfm, { singleTilde: false })
-    .use(remarkMath)
-    .use(remarkRehype)
-    .use(rehypeMathml, { displayMode: true })
-    .use(rehypeShiki, {
-      inline: 'tailing-curly-colon',
-      themes: {
-        dark: 'one-dark-pro',
-        light: 'one-light',
-      },
-    })
-    .use(rehypeStringify)
-    .process(content);
-
-  return String(result);
 };
 
 const extractExcerpt = (file: GrayMatterFile<string>) => {
@@ -48,7 +19,7 @@ const extractExcerpt = (file: GrayMatterFile<string>) => {
   }
 };
 
-export const markdownPlugin = (): Plugin => {
+export const markdownPlugin = () => {
   return {
     enforce: 'pre',
     name: 'vite-plugin-markdown',
@@ -79,7 +50,7 @@ export const metadata = ${JSON.stringify(module.metadata)};`,
         map: null,
       };
     },
-  };
+  } as Plugin;
 };
 
 export default markdownPlugin;

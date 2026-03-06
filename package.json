@@ -9,6 +9,7 @@
     "@daiji256/rehype-mathml": "^1.2.2",
     "@shikijs/rehype": "^4.0.1",
     "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^25.3.5",
     "daisyui": "^5.5.19",
     "gray-matter": "^4.0.3",
     "rehype-stringify": "^10.0.1",
@@ -24,9 +25,8 @@
   },
   "scripts": {
     "build": "vike build",
+    "check": "biome check",
     "dev": "vike dev",
-    "format": "biome format --write .",
-    "lint": "biome lint --write .",
     "preview": "vike build && vike preview"
   },
   "type": "module"

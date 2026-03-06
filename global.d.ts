@@ -1,11 +1,8 @@
-declare module '*.md' {
-  export interface MarkdownModule {
-    content: string;
-    excerpt: string;
-    metadata: Record<string, unknown>;
-  }
+import type { MarkdownModule } from './plugins/vite-plugin-markdown';
 
+declare module '*.md' {
   const module: MarkdownModule;
+
   export default module;
 
   export const content: string;

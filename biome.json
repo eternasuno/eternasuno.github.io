@@ -16,17 +16,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": [
-      "**",
-      "!*.cjs",
-      "!*.js",
-      "!*.mjs",
-      "!*.spec.ts",
-      "!**/*.ts.build-*.mjs",
-      "!dist/*",
-      "!node_modules/*",
-      "!**/.DS_Store"
-    ]
+    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
   },
   "formatter": {
     "attributePosition": "auto",
@@ -61,28 +51,20 @@
   },
   "linter": {
     "domains": {
-      "solid": "recommended"
+      "next": "recommended",
+      "react": "recommended"
     },
     "enabled": true,
     "rules": {
       "nursery": {
         "useSortedClasses": "on"
       },
-      "recommended": true
-    }
-  },
-  "overrides": [
-    {
-      "includes": ["**/*.css"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noUnknownAtRules": "off"
-          }
-        }
+      "recommended": true,
+      "suspicious": {
+        "noUnknownAtRules": "off"
       }
     }
-  ],
+  },
   "vcs": {
     "clientKind": "git",
     "enabled": true,

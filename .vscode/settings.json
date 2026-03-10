@@ -41,5 +41,6 @@
   },
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "tinymist.rootPath": "posts"
 }

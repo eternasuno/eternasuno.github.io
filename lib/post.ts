@@ -1,43 +1,49 @@
-import type { MarkdownModule } from '../plugins/vite-plugin-markdown';
-import { SHOW_DRAFTS } from '../site.config';
-
-const Markdowns = import.meta.glob<MarkdownModule>('../posts/*.md', {
-  eager: true,
-  import: 'default',
-});
+import { promises as fs } from 'node:fs';
+import { join } from 'node:path';
+import { POST_CONTENT_PATH, SHOW_DRAFT } from '@/lib/config';
+import { compile } from '@/lib/typst';
 
 export type Post = {
   content: string;
-  excerpt: string;
+  description: string;
   publishAt: Date;
   slug: string;
+  tags: string[];
   title: string;
 };
 
-export const getSlugs = () =>
-  Object.keys(Markdowns)
+export const getSlugs = async () =>
+  (await fs.readdir(POST_CONTENT_PATH))
     .values()
-    .map((path) => path.match(/posts[\\/](.+?)\.md$/)?.at(1))
-    .filter((slug): slug is string => !!slug)
-    .filter((slug) => SHOW_DRAFTS || !slug.endsWith('.draft'))
+    .filter((filename) => SHOW_DRAFT || !filename.endsWith('.draft.typ'))
+    .map((filename) => filename.replace('.typ', ''))
     .toArray()
-    .sort((a, b) => b.localeCompare(a));
+    .sort((a, b) => (b > a ? 1 : -1));
 
-export const getPostBySlug = (slug: string) => {
-  const filename = `../posts/${slug}.md`;
-  const markdown = Markdowns[filename];
-  if (!markdown) {
-    throw new Error(`Post with slug "${slug}" not found.`);
-  }
+export const getPostBySlug = async (slug: string) => {
+  const path = join(POST_CONTENT_PATH, `${slug}.typ`);
+  const fileContent = await fs.readFile(path, 'utf-8');
+  const { metadata, content } = await compile(fileContent);
 
-  const { content, metadata, excerpt } = markdown;
   return {
     ...metadata,
     content,
-    excerpt,
     publishAt: new Date(slug.substring(0, 10)),
     slug,
-  } as Post;
+  } as unknown as Post;
 };
 
-export const getPosts = () => getSlugs().map(getPostBySlug);
+export const getPosts = async () => Promise.all((await getSlugs()).map(getPostBySlug));
+
+export const groupByTag = async () =>
+  (await getPosts()).reduce((tags, post) => {
+    for (const tag of post.tags) {
+      if (tags.has(tag)) {
+        tags.get(tag)?.push(post);
+      } else {
+        tags.set(tag, [post]);
+      }
+    }
+
+    return tags;
+  }, new Map<string, Post[]>());

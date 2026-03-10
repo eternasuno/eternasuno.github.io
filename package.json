@@ -1,33 +1,36 @@
 {
   "dependencies": {
-    "solid-js": "^1.9.11",
-    "vike": "^0.4.255",
-    "vike-solid": "^0.8.1"
+    "@myriaddreamin/typst-ts-node-compiler": "0.7.0-rc2",
+    "@shikijs/rehype": "^4.0.2",
+    "hast-util-select": "^6.0.4",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "rehype-parse": "^9.0.1",
+    "rehype-rewrite": "^4.0.4",
+    "rehype-stringify": "^10.0.1",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.4",
-    "@daiji256/rehype-mathml": "^1.2.2",
-    "@shikijs/rehype": "^4.0.1",
-    "@tailwindcss/vite": "^4.2.1",
-    "@types/node": "^25.3.5",
-    "daisyui": "^5.5.19",
-    "gray-matter": "^4.0.3",
-    "rehype-stringify": "^10.0.1",
-    "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0",
-    "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.2",
+    "@biomejs/biome": "^2.4.6",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/hast": "^3.0.4",
+    "@types/node": "^24.12.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "babel-plugin-react-compiler": "1.0.0",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5.9.3",
-    "unified": "^11.0.5",
-    "vite": "^7.3.1",
-    "vite-plugin-solid": "^2.11.10"
+    "typescript": "^5.9.3"
   },
+  "name": "blog",
+  "private": true,
   "scripts": {
-    "build": "vike build",
-    "check": "biome check",
-    "dev": "vike dev",
-    "preview": "vike build && vike preview"
+    "build": "next build",
+    "dev": "next dev",
+    "format": "biome format --write",
+    "lint": "biome check",
+    "start": "next start"
   },
-  "type": "module"
+  "version": "0.1.0"
 }

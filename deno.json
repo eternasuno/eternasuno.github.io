@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": false,
     "jsx": "react-jsx",
     "jsxImportSource": "lume",
     "types": [

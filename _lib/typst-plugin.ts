@@ -52,6 +52,7 @@ export const typst = (userOptions?: Options) => {
       const file = await processor.process(str);
       const metadata = file.data.metadata as Record<string, unknown>;
       const content = String(file);
+      console.log('Compiled Typst content:', {  metadata });
 
       return { content, ...metadata } as { content: string } & Record<string, unknown>;
     };

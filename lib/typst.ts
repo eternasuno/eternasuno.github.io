@@ -1,12 +1,12 @@
 import rehypeShiki from '@shikijs/rehype';
 import rehypeStringify from 'rehype-stringify';
 import { unified } from 'unified';
-import { makeTypstParsePlugin } from '@/lib/typst-parse';
+import { makeTypstRehypePlugin } from '@/lib/typst-rehype';
 import { POST_PATH } from './config';
 
 const processor = unified()
   .use(
-    makeTypstParsePlugin({
+    makeTypstRehypePlugin({
       inputs: { target: 'html' },
       selector: '<frontmatter>',
       workspace: POST_PATH,
@@ -26,5 +26,5 @@ export const compile = async (body: string) => {
   const metadata = file.data.metadata as Record<string, unknown>;
   const content = String(file);
 
-  return { content, metadata };
+  return { content, ...metadata } as { content: string } & Record<string, unknown>;
 };

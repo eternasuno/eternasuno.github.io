@@ -7,6 +7,7 @@
     title
   }
 
+  set document(title: final-title, description: description, keywords: tags)
   [#metadata((title: final-title, tags: tags, description: description)) <frontmatter>]
 
   show math.equation: it => {

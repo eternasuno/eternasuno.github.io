@@ -42,5 +42,6 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "tinymist.rootPath": "posts"
+  "tinymist.fontPaths": ["${workspaceFolder}/posts/asset/font"],
+  "tinymist.rootPath": "${workspaceFolder}/posts"
 }

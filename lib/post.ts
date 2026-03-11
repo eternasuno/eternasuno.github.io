@@ -1,4 +1,4 @@
-import { promises as fs } from 'node:fs';
+import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { POST_CONTENT_PATH, SHOW_DRAFT } from '@/lib/config';
 import { compile } from '@/lib/typst';
@@ -13,7 +13,7 @@ export type Post = {
 };
 
 export const getSlugs = async () =>
-  (await fs.readdir(POST_CONTENT_PATH))
+  (await readdir(POST_CONTENT_PATH))
     .values()
     .filter((filename) => SHOW_DRAFT || !filename.endsWith('.draft.typ'))
     .map((filename) => filename.replace('.typ', ''))
@@ -22,15 +22,14 @@ export const getSlugs = async () =>
 
 export const getPostBySlug = async (slug: string) => {
   const path = join(POST_CONTENT_PATH, `${slug}.typ`);
-  const fileContent = await fs.readFile(path, 'utf-8');
-  const { metadata, content } = await compile(fileContent);
+  const fileContent = await readFile(path, 'utf-8');
+  const data = await compile(fileContent);
 
   return {
-    ...metadata,
-    content,
+    ...data,
     publishAt: new Date(slug.substring(0, 10)),
     slug,
-  } as unknown as Post;
+  } as Post;
 };
 
 export const getPosts = async () => Promise.all((await getSlugs()).map(getPostBySlug));

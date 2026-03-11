@@ -1,36 +1,36 @@
 {
   "[javascript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit",
-      "source.organizeImports.biome": "explicit"
+      "source.fixAll.ts": "explicit",
+      "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[json]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit"
+      "source.sort.json": "explicit"
     },
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[jsonc]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit"
+      "source.sort.json": "explicit"
     },
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[typescript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit",
-      "source.organizeImports.biome": "explicit"
+      "source.fixAll.ts": "explicit",
+      "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[typescriptreact]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.biome": "explicit",
-      "source.organizeImports.biome": "explicit"
+      "source.fixAll.ts": "explicit",
+      "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
@@ -42,6 +42,8 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "tinymist.fontPaths": ["${workspaceFolder}/posts/asset/font"],
+  "tinymist.fontPaths": [
+    "${workspaceFolder}/posts/asset/font"
+  ],
   "tinymist.rootPath": "${workspaceFolder}/posts"
 }

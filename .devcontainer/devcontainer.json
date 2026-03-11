@@ -5,6 +5,7 @@
         "-dbaeumer.vscode-eslint",
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
+        "denoland.vscode-deno",
         "eamodio.gitlens",
         "GitHub.copilot-chat",
         "GitHub.vscode-pull-request-github",
@@ -14,11 +15,11 @@
     }
   },
   "features": {
+    "ghcr.io/devcontainers-extra/features/deno:1": {},
     "ghcr.io/devcontainers/features/node": {
       "installYarnUsingApt": false
     }
   },
   "image": "mcr.microsoft.com/devcontainers/base:debian",
-  "postCreateCommand": "pnpm install",
   "remoteUser": "vscode"
 }

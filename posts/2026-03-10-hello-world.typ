@@ -1,4 +1,4 @@
-#import "/template/post.typ": post
+#import "./_template.typ": post
 
 #show: post.with(title: "hello world")
 

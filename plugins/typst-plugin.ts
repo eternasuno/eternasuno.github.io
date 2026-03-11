@@ -1,11 +1,13 @@
 import { NodeCompiler, type NodeTypstDocument } from '@myriaddreamin/typst-ts-node-compiler';
 import type { Root } from 'hast';
 import { select } from 'hast-util-select';
-import type { Plugin } from 'unified';
+import { toHtml } from 'hast-util-to-html';
+import Site from 'lume/core/site.ts';
+import { merge } from 'lume/core/utils/object.ts';
 import { visit } from 'unist-util-visit';
 
-const compile = (mainFileContent: string) => (compiler: NodeCompiler) => {
-  const result = compiler.compileHtml({ mainFileContent });
+const compile = (mainFilePath: string) => (compiler: NodeCompiler) => {
+  const result = compiler.compileHtml({ mainFilePath });
 
   const error = result.takeError();
   if (error && error.compilationStatus !== 'ok') {
@@ -25,7 +27,7 @@ const compile = (mainFileContent: string) => (compiler: NodeCompiler) => {
   return result.result;
 };
 
-const tryHtml = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
+const toHast = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
   const result = compiler.tryHtml(doc);
 
   const error = result.takeError();
@@ -46,7 +48,7 @@ const tryHtml = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
   return result.result.hast() as Root;
 };
 
-const rewrite = (hast: Root) => {
+const convert = (hast: Root) => {
   const body = select('body', hast);
 
   if (body) {
@@ -59,12 +61,12 @@ const rewrite = (hast: Root) => {
     });
   }
 
-  return { children: body?.children || [], type: 'root' } as Root;
+  return toHtml(body?.children || []);
 };
 
 const matter = (selector: string) => (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
   try {
-    const result = compiler.query(doc, { selector }) as Array<{ value: unknown }>;
+    const result = compiler.query(doc, { selector }) as Array<{ value: Record<string, unknown> }>;
 
     return result.at(0)?.value;
   } catch (error) {
@@ -74,25 +76,52 @@ const matter = (selector: string) => (doc: NodeTypstDocument) => (compiler: Node
   }
 };
 
-type TypstParseOptions = {
+type MakeParserOptions = {
   inputs?: Record<string, string>;
   selector?: string;
   workspace?: string;
 };
 
-export const makeTypstRehypePlugin = ({
-  workspace,
-  inputs,
-  selector,
-}: TypstParseOptions): Plugin<[], string, Root> => {
+const makeParser = ({ inputs, selector, workspace }: MakeParserOptions) => {
   const compiler = NodeCompiler.create({ workspace, inputs });
 
-  return function () {
-    this.parser = (doc, file) => {
-      const document = compile(doc)(compiler);
-      file.data.metadata = selector ? matter(selector)(document)(compiler) : undefined;
+  return (mainFilePath: string) => {
+    const doc = compile(mainFilePath)(compiler);
+    const hast = toHast(doc)(compiler);
+    const content = convert(hast);
+    const metadata = selector ? matter(selector)(doc)(compiler) : undefined;
 
-      return rewrite(tryHtml(document)(compiler));
-    };
+    return { content, ...metadata } as { content: string } & Record<string, unknown>;
   };
 };
+
+export type Options = {
+  extensions?: string[];
+  pageSubExtension?: string;
+} & Omit<MakeParserOptions, 'workspace'>;
+
+export const defaults = {
+  extensions: ['.typ'],
+  inputs: undefined,
+  pageSubExtension: '.page',
+  selector: undefined,
+} satisfies Options;
+
+export const typst = (userOptions?: Options) => {
+  const options = merge(defaults, userOptions);
+
+  return (site: Site) => {
+    const parse = makeParser({
+      inputs: options.inputs,
+      selector: options.selector,
+      workspace: site.src('/'),
+    });
+
+    site.loadPages(options.extensions, {
+      loader: (path) => Promise.resolve(parse(path)),
+      pageSubExtension: options.pageSubExtension,
+    });
+  };
+};
+
+export default typst;

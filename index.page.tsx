@@ -1,5 +1,13 @@
+export default (data: Lume.Data) => {
+  const posts = data.search.pages('url^=/posts/');
 
-
-export default (data:Lume.Data, helpers:Lume.Helpers) => <div class="prose">
-  data:{data.search.pages('url^=/posts/').map(page => <a key={page.url} href={page.url}>1{page.title}</a>)}
-</div>
+  return (
+    <ol class='prose mx-auto'>
+      {posts.map((page) => (
+        <li key={page.url}>
+          <a href={page.url}>{page.title}</a>
+        </li>
+      ))}
+    </ol>
+  );
+};

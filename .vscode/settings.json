@@ -34,7 +34,7 @@
   },
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  "editor.formatOnSaveMode": "file",
   "editor.formatOnType": false,
   "editor.quickSuggestions": {
     "strings": "on"

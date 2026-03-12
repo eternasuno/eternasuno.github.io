@@ -1,13 +1,98 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
   themes:
-    cmyk --default,
-    night --prefersdark;
+    newsprint --default,
+    newsprint-night --prefersdark;
   logs: false;
 }
 
+@plugin 'daisyui/theme/index.js' {
+  name: 'newsprint';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: oklch(98% 0 0);
+  --color-base-200: oklch(94% 0 0);
+  --color-base-300: oklch(88% 0 0);
+  --color-base-content: oklch(17% 0 0);
+  --color-primary: oklch(17% 0 0);
+  --color-primary-content: oklch(98% 0 0);
+  --color-secondary: oklch(32% 0 0);
+  --color-secondary-content: oklch(98% 0 0);
+  --color-accent: oklch(48% 0 0);
+  --color-accent-content: oklch(98% 0 0);
+  --color-neutral: oklch(21% 0 0);
+  --color-neutral-content: oklch(98% 0 0);
+  --color-info: oklch(55% 0 0);
+  --color-success: oklch(44% 0 0);
+  --color-warning: oklch(62% 0 0);
+  --color-error: oklch(42% 0 0);
+  --radius-box: 0rem;
+  --radius-field: 0rem;
+  --radius-selector: 0rem;
+}
+
+@plugin 'daisyui/theme/index.js' {
+  name: 'newsprint-night';
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: oklch(17% 0 0);
+  --color-base-200: oklch(21% 0 0);
+  --color-base-300: oklch(28% 0 0);
+  --color-base-content: oklch(92% 0 0);
+  --color-primary: oklch(92% 0 0);
+  --color-primary-content: oklch(17% 0 0);
+  --color-secondary: oklch(78% 0 0);
+  --color-secondary-content: oklch(17% 0 0);
+  --color-accent: oklch(68% 0 0);
+  --color-accent-content: oklch(17% 0 0);
+  --color-neutral: oklch(12% 0 0);
+  --color-neutral-content: oklch(92% 0 0);
+  --color-info: oklch(70% 0 0);
+  --color-success: oklch(72% 0 0);
+  --color-warning: oklch(80% 0 0);
+  --color-error: oklch(70% 0 0);
+  --radius-box: 0rem;
+  --radius-field: 0rem;
+  --radius-selector: 0rem;
+}
+
+@custom-variant dark (&:where([data-theme=newsprint-night], [data-theme=newsprint-night] *));
+
+:root {
+  --font-main: 'Noto Serif SC', serif;
+  --font-display: 'Libre Baskerville', 'Noto Serif SC', serif;
+}
+
 @layer base {
+  html,
+  body {
+    font-family: var(--font-main);
+    background:
+      repeating-linear-gradient(
+        0deg,
+        color-mix(in oklab, var(--color-base-content) 4%, transparent) 0,
+        color-mix(in oklab, var(--color-base-content) 4%, transparent) 1px,
+        transparent 1px,
+        transparent 15px
+      ),
+      radial-gradient(
+        circle at 40% 20%,
+        color-mix(in oklab, var(--color-base-content) 6%, transparent) 0,
+        transparent 40%
+      ),
+      linear-gradient(180deg, var(--color-base-100) 0%, var(--color-base-200) 100%);
+    color: var(--color-base-content);
+  }
+
+  a,
+  button {
+    @apply transition-colors;
+  }
+
   ::-webkit-scrollbar {
     @apply hidden;
   }
@@ -18,4 +103,27 @@
   & span {
     @apply dark:bg-(--shiki-dark-bg)! dark:font-(--shiki-dark-font-weight)! dark:text-(--shiki-dark)! dark:[font-style:var(--shiki-dark-font-style)]! dark:[text-decoration:var(--shiki-dark-text-decoration)]!;
   }
+}
+
+@utility news-surface {
+  @apply border border-base-content/70 bg-base-100/90;
+}
+
+@utility news-title {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+@utility news-kicker {
+  @apply inline-block border-y border-base-content/60 px-1 py-0.5 text-xs uppercase tracking-[0.2em] text-base-content/70;
+}
+
+@utility news-grid {
+  background-image: linear-gradient(
+    90deg,
+    transparent 49%,
+    color-mix(in oklab, var(--color-base-content) 14%, transparent) 50%,
+    transparent 51%
+  );
+  background-size: 12px 12px;
 }

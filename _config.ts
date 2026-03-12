@@ -34,7 +34,7 @@ site.use(
     inputs: { target: 'html' },
     selector: '<frontmatter>',
     plugins: [[rehypeShiki, {
-      defaultColor: false,
+      // defaultColor: false,
       inline: 'tailing-curly-colon',
       themes: { dark: 'one-dark-pro', light: 'one-light' },
     }]],

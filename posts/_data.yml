@@ -1,1 +1,2 @@
+layout: layouts/base.tsx
 openGraphLayout: layouts/og_images.jsx

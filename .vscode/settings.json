@@ -43,7 +43,7 @@
     "*.css": "tailwindcss"
   },
   "tinymist.fontPaths": [
-    "${workspaceFolder}/_assets/fonts"
+    "${workspaceFolder}/_includes/fonts"
   ],
   "tinymist.rootPath": "${workspaceFolder}"
 }

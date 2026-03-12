@@ -1,13 +1,13 @@
-export default ({ title, children }: Lume.Data) => (
+export default ({ title, children, comp }: Lume.Data) => (
   <html>
     <head>
       <title>{title}</title>
       <link rel='stylesheet' href='/style.css'></link>
     </head>
     <body>
-      <header>header</header>
+      <comp.Header>header</comp.Header>
       {children}
-      <footer>footer</footer>
+      <comp.Footer>footer</comp.Footer>
     </body>
   </html>
 );

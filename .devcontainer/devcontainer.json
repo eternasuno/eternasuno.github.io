@@ -2,8 +2,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "-dbaeumer.vscode-eslint",
-        "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "denoland.vscode-deno",
         "eamodio.gitlens",
@@ -15,10 +13,7 @@
     }
   },
   "features": {
-    "ghcr.io/devcontainers-extra/features/deno:1": {},
-    "ghcr.io/devcontainers/features/node": {
-      "installYarnUsingApt": false
-    }
+    "ghcr.io/devcontainers-extra/features/deno:1": {}
   },
   "image": "mcr.microsoft.com/devcontainers/base:debian",
   "remoteUser": "vscode"

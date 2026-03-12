@@ -5,7 +5,7 @@
 
 = Hello world
 
-#image("/_assets/images/hello.png")
+#image("/_includes/images/hello.png")
 
 
 这是一篇测试文章，用于验证 Typst 的基本功能。 `console.log("Hello world");` 是一行 JavaScript 代码，用于在浏览器的控制台输出 "Hello world"。

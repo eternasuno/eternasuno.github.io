@@ -1,9 +1,10 @@
 import { NodeCompiler, type NodeTypstDocument } from '@myriaddreamin/typst-ts-node-compiler';
 import type { Root } from 'hast';
 import { select } from 'hast-util-select';
-import { toHtml } from 'hast-util-to-html';
 import Site from 'lume/core/site.ts';
 import { merge } from 'lume/core/utils/object.ts';
+import rehypeStringify from 'rehype-stringify';
+import { type Plugin, unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
 const compile = (mainFilePath: string) => (compiler: NodeCompiler) => {
@@ -48,7 +49,7 @@ const toHast = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
   return result.result.hast() as Root;
 };
 
-const convert = (hast: Root) => {
+const rewrite = (hast: Root) => {
   const body = select('body', hast);
 
   if (body) {
@@ -61,7 +62,7 @@ const convert = (hast: Root) => {
     });
   }
 
-  return toHtml(body?.children || []);
+  return { children: body?.children || [], type: 'root' } as Root;
 };
 
 const matter = (selector: string) => (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
@@ -76,49 +77,80 @@ const matter = (selector: string) => (doc: NodeTypstDocument) => (compiler: Node
   }
 };
 
-type MakeParserOptions = {
+type MakeTypstRehypeOptions = {
   inputs?: Record<string, string>;
   selector?: string;
   workspace?: string;
 };
 
-const makeParser = ({ inputs, selector, workspace }: MakeParserOptions) => {
+const makeTypstRehype = ({
+  workspace,
+  inputs,
+  selector,
+}: MakeTypstRehypeOptions): Plugin<[], string, Root> => {
   const compiler = NodeCompiler.create({ workspace, inputs });
 
-  return (mainFilePath: string) => {
-    const doc = compile(mainFilePath)(compiler);
-    const hast = toHast(doc)(compiler);
-    const content = convert(hast);
-    const metadata = selector ? matter(selector)(doc)(compiler) : undefined;
+  return function () {
+    this.parser = (doc, file) => {
+      const document = compile(doc)(compiler);
+      file.data.metadata = selector ? matter(selector)(document)(compiler) : undefined;
 
-    return { content, ...metadata } as { content: string } & Record<string, unknown>;
+      return rewrite(toHast(document)(compiler));
+    };
   };
 };
 
 export type Options = {
   extensions?: string[];
   pageSubExtension?: string;
-} & Omit<MakeParserOptions, 'workspace'>;
+  plugins?: Array<unknown | Array<unknown>>;
+} & Omit<MakeTypstRehypeOptions, 'workspace'>;
 
 export const defaults = {
   extensions: ['.typ'],
   inputs: undefined,
   pageSubExtension: '.page',
+  plugins: [],
   selector: undefined,
 } satisfies Options;
+
+const makeProcessor = (plugins: Array<unknown | Array<unknown>>) => {
+  let processor = unified();
+
+  for (const plugin of plugins) {
+    if (Array.isArray(plugin)) {
+      processor = processor.use(...plugin);
+    } else {
+      // @ts-ignore - This is a valid use of rehype plugins, but the types don't reflect it.
+      processor = processor.use(plugin);
+    }
+  }
+
+  return processor;
+};
 
 export const typst = (userOptions?: Options) => {
   const options = merge(defaults, userOptions);
 
   return (site: Site) => {
-    const parse = makeParser({
+    const typstRehype = makeTypstRehype({
       inputs: options.inputs,
       selector: options.selector,
       workspace: site.src('/'),
     });
 
+    const processor = makeProcessor([typstRehype, ...options.plugins, rehypeStringify]);
+
+    const loader = async (path: string) => {
+      const file = await processor.process(path);
+      const metadata = file.data.metadata as Record<string, unknown>;
+      const content = String(file);
+
+      return { content, ...metadata } as { content: string } & Record<string, unknown>;
+    };
+
     site.loadPages(options.extensions, {
-      loader: (path) => Promise.resolve(parse(path)),
+      loader,
       pageSubExtension: options.pageSubExtension,
     });
   };

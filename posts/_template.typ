@@ -2,7 +2,7 @@
 
 #let post(description: "", tags: (), title: auto, body) = {
   let final-title = if title == auto {
-    datetime.today().display("[year]-[month]-[day]")
+    datetime.today().display("[year].[month].[day]")
   } else {
     title
   }
@@ -10,8 +10,12 @@
   set document(title: final-title, description: description, keywords: tags)
   [#metadata((title: final-title, tags: tags, description: description)) <frontmatter>]
 
-  show math.equation: it => {
-    if target == "html" { html.frame(it) } else { it }
+  show math.equation.where(block: false): it => {
+    if target == "html" { html.span(html.frame(it)) } else { it }
+  }
+
+  show math.equation.where(block: true): it => {
+    if target == "html" { html.p(html.frame(it)) } else { it }
   }
 
   show image: it => {

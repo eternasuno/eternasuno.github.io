@@ -17,6 +17,7 @@
     "@myriaddreamin/typst-ts-node-compiler": "npm:@myriaddreamin/typst-ts-node-compiler@^0.7.0-rc2",
     "@shikijs/rehype": "npm:@shikijs/rehype@^4.0.2",
     "hast": "npm:@types/hast@^3.0.4",
+    "hast-util-from-html": "npm:hast-util-from-html@^2.0.3",
     "hast-util-select": "npm:hast-util-select@^6.0.4",
     "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/",
     "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.14/jsx-runtime.ts",
@@ -26,7 +27,8 @@
   },
   "lint": {
     "plugins": [
-      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/lint.ts"
+      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/lint.ts",
+      "jsr:@ryu/deno-lint-plugin-tailwindcss@0.2.0"
     ],
     "rules": {
       "exclude": [

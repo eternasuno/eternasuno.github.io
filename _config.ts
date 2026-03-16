@@ -7,6 +7,7 @@ import feed from 'lume/plugins/feed.ts';
 import jsx from 'lume/plugins/jsx.ts';
 import metas from 'lume/plugins/metas.ts';
 import og_images from 'lume/plugins/og_images.ts';
+import pagefind from 'lume/plugins/pagefind.ts';
 import picture from 'lume/plugins/picture.ts';
 import robots from 'lume/plugins/robots.ts';
 import tailwindcss from 'lume/plugins/tailwindcss.ts';
@@ -20,7 +21,7 @@ const site = lume({
   location: new URL(DOMAIN),
   watcher: {
     dependencies: {
-      'posts/**/*.page.typ': ['posts/_template.typ'],
+      'posts/*.page.typ': ['posts/_template.typ'],
     },
   },
 });
@@ -50,5 +51,6 @@ site.use(transform_images());
 site.use(metas());
 site.use(feed({ output: 'rss.xml' }));
 site.use(extract_date());
+site.use(pagefind());
 
 export default site;

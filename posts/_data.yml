@@ -1,1 +1,5 @@
+layout: layouts/post.tsx
 openGraphLayout: layouts/og_images.jsx
+metas:
+  description: '=description'
+  keywords: '=tags'

@@ -1,1 +1,8 @@
 layout: layouts/base.tsx
+title: "Eternasuno's Blog"
+metas:
+  color: ['white', 'black']
+  generator: false
+  robots: false
+  site: "Eternasuno's Blog"
+  title: '=title'

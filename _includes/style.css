@@ -21,3 +21,13 @@
     @apply dark:bg-(--shiki-dark-bg)! dark:font-(--shiki-dark-font-weight)! dark:text-(--shiki-dark)! dark:[font-style:var(--shiki-dark-font-style)]! dark:[text-decoration:var(--shiki-dark-text-decoration)]!;
   }
 }
+
+@utility typst-doc {
+  & {
+    @apply inline-block;
+  }
+
+  & [fill] {
+    @apply fill-current!;
+  }
+}

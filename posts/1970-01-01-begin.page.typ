@@ -1,6 +1,6 @@
 #import "/posts/_template.typ": post
 
-#show: post.with(title: "hello world")
+#show: post.with(title: "hello world", tags: ("test", "hello"), description: "This is a test post")
 
 
 = Hello world

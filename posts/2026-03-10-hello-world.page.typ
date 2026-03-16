@@ -1,7 +1,6 @@
-#import "/posts/_template.typ": post
+#import "./_template.typ": post
 
 #show: post.with(title: "hello world")
-
 
 = Hello world
 
@@ -16,5 +15,10 @@
 console.log("Hello world");
 ```
 
+Let $a$, $b$, and $c$ be the side
+lengths of right-angled triangle.
+Then, we know that:
+$ a^2 + b^2 = c^2 $
 
-$ f(x) = integral_1^2 x^2 / (sqrt(x^2 + 1)) d x $
+Prove by induction:
+$ sum_(k=1)^n k = (n(n+1)) / 2 $

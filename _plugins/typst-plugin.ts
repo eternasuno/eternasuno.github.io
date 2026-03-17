@@ -127,8 +127,25 @@ const toSvg = (src: string) => {
 
   try {
     const svg = metadata === 'base64' ? atob(payload) : decodeURIComponent(payload);
+    const root = fromHtml(svg, { fragment: true, space: 'svg' });
 
-    const root = fromHtml(svg, { fragment: true });
+    visit(root, 'element', (node) => {
+      const props = node.properties;
+      if (!props) {
+        return;
+      }
+
+      if (props.fill) {
+        props.fill = 'currentColor';
+      }
+
+      if (props.stroke) {
+        props.stroke = 'currentColor';
+      }
+
+      delete props.height;
+      delete props.width;
+    });
 
     return root.children.find(
       (child): child is Element => child.type === 'element' && child.tagName === 'svg',

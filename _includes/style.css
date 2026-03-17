@@ -22,12 +22,16 @@
   }
 }
 
-@utility typst-doc {
-  & {
-    @apply inline-block;
-  }
+@utility typst-math-inline {
+  @apply inline-flex;
 
-  & [fill] {
-    @apply fill-current!;
+  &>svg {
+    @apply inline h-4;
+  }
+}
+
+@utility typst-math-block {
+  &>svg {
+    @apply block  w-1/4 mx-auto;
   }
 }

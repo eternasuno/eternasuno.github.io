@@ -11,11 +11,19 @@
   [#metadata((title: final-title, tags: tags, description: description)) <frontmatter>]
 
   show math.equation.where(block: false): it => {
-    if target == "html" { html.span(html.frame(it)) } else { it }
+    if target == "html" {
+      html.elem("span", html.frame(it), attrs: ("class": "typst-math-inline"))
+    } else {
+      it
+    }
   }
 
   show math.equation.where(block: true): it => {
-    if target == "html" { html.p(html.frame(it)) } else { it }
+    if target == "html" {
+      html.elem("p", html.frame(it), attrs: ("class": "typst-math-block"))
+    } else {
+      it
+    }
   }
 
   show image: it => {

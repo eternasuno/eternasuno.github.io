@@ -40,6 +40,7 @@
     "npm:esbuild@0.27.3": "0.27.3",
     "npm:hast-util-from-html@^2.0.3": "2.0.3",
     "npm:hast-util-select@^6.0.4": "6.0.4",
+    "npm:hast-util-to-html@^9.0.5": "9.0.5",
     "npm:ico-endec@0.1.6": "0.1.6",
     "npm:lightningcss-wasm@1.31.1": "1.31.1",
     "npm:markdown-it-attrs@4.3.1": "4.3.1_markdown-it@14.1.0",
@@ -1727,6 +1728,7 @@
       "npm:@types/hast@^3.0.4",
       "npm:hast-util-from-html@^2.0.3",
       "npm:hast-util-select@^6.0.4",
+      "npm:hast-util-to-html@^9.0.5",
       "npm:rehype-stringify@^10.0.1",
       "npm:unified@^11.0.5",
       "npm:unist-util-visit@^5.1.0"

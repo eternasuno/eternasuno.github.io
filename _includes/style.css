@@ -1,13 +1,9 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
-  themes:
-    garden --default,
-    dim --prefersdark;
+  themes: garden --default, dim --prefersdark;
   logs: false;
 }
-
-/* @custom-variant dark (&:where([data-theme=newsprint-night], [data-theme=newsprint-night] *)); */
 
 @layer base {
   ::-webkit-scrollbar {
@@ -18,20 +14,22 @@
 @utility shiki {
   &,
   & span {
-    @apply dark:bg-(--shiki-dark-bg)! dark:font-(--shiki-dark-font-weight)! dark:text-(--shiki-dark)! dark:[font-style:var(--shiki-dark-font-style)]! dark:[text-decoration:var(--shiki-dark-text-decoration)]!;
+    @apply dark:bg-(--shiki-dark-bg)! dark:font-(--shiki-dark-font-weight)!
+      dark:text-(--shiki-dark)! dark:[font-style:var(--shiki-dark-font-style)]!
+      dark:[text-decoration:var(--shiki-dark-text-decoration)]!;
   }
 }
 
 @utility typst-math-inline {
   @apply inline-flex;
 
-  &>svg {
+  & > svg {
     @apply inline h-4;
   }
 }
 
 @utility typst-math-block {
-  &>svg {
-    @apply block  w-1/4 mx-auto;
+  & > svg {
+    @apply block w-1/4 mx-auto;
   }
 }

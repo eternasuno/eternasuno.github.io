@@ -1,5 +1,4 @@
 layout: layouts/post.tsx
-openGraphLayout: layouts/og_images.jsx
+openGraphLayout: layouts/og_images.tsx
 metas:
-  description: '=description'
   keywords: '=tags'

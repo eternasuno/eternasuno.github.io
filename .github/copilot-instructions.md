@@ -9,7 +9,8 @@
    - ❌ Bad: `function myFunction() { ... }`
    - ❌ Bad: `export default function Component() { ... }`
 
-2. **Type Inference**: Do NOT specify explicit return types for functions. Let TypeScript compiler automatically infer return types.
+2. **Type Inference**: Do NOT specify explicit return types for functions. Let TypeScript compiler
+   automatically infer return types.
    - ✅ Good: `const getName = (id: string) => { return "John"; }`
    - ❌ Bad: `const getName = (id: string): string => { return "John"; }`
    - ✅ Good: `const fetchData = async () => { return await api.get('/data'); }`
@@ -17,7 +18,8 @@
 
 ### Documentation and Comments Rules
 
-1. **No Comments in Code**: Do NOT add comments in the code. Code should be self-documenting through clear naming and structure.
+1. **No Comments in Code**: Do NOT add comments in the code. Code should be self-documenting
+   through clear naming and structure.
    - ✅ Good: `const isValidEmail = email.includes('@');`
    - ❌ Bad: `const isValidEmail = email.includes('@'); // check if email has @`
 

@@ -7,7 +7,6 @@ import feed from 'lume/plugins/feed.ts';
 import jsx from 'lume/plugins/jsx.ts';
 import metas from 'lume/plugins/metas.ts';
 import og_images from 'lume/plugins/og_images.ts';
-import pagefind from 'lume/plugins/pagefind.ts';
 import picture from 'lume/plugins/picture.ts';
 import robots from 'lume/plugins/robots.ts';
 import tailwindcss from 'lume/plugins/tailwindcss.ts';
@@ -35,7 +34,6 @@ site.use(
     inputs: { target: 'html' },
     selector: '<frontmatter>',
     plugins: [[rehypeShiki, {
-      // defaultColor: false,
       inline: 'tailing-curly-colon',
       themes: { dark: 'one-dark-pro', light: 'one-light' },
     }]],
@@ -49,8 +47,14 @@ site.use(favicon({ input: '_includes/favicon.svg' }));
 site.use(picture());
 site.use(transform_images());
 site.use(metas());
-site.use(feed({ output: 'rss.xml' }));
+site.use(feed({
+  output: 'rss.xml',
+  query: 'url^=/posts/',
+  info: {
+    title: "Eternasuno's Blog",
+    generator: false,
+  },
+}));
 site.use(extract_date());
-site.use(pagefind());
 
 export default site;

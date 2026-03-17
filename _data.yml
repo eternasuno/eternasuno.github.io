@@ -1,8 +1,10 @@
 layout: layouts/base.tsx
 title: "Eternasuno's Blog"
+description: '写点东西，记录生活。'
 metas:
   color: ['white', 'black']
   generator: false
   robots: false
   site: "Eternasuno's Blog"
   title: '=title'
+  description: '=description'

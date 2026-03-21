@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui' {
-  themes: lofi --default, black --prefersdark;
+  themes: light --default, dark --prefersdark;
   logs: false;
 }
 
@@ -28,14 +28,6 @@
       @apply dark:opacity-40!;
     }
   }
-}
-
-@utility btn-negative {
-  @apply cursor-pointer hover:bg-primary hover:text-primary-content;
-}
-
-@utility center {
-  @apply inline-grid place-items-center-safe;
 }
 
 @utility shiki {

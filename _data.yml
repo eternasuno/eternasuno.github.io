@@ -1,6 +1,6 @@
 layout: layouts/base.tsx
 author: 'eternasuno'
-title: 'eternasuno'
+title: "Eternasuno's Blog"
 description: 'World is trash, and so am I. '
 metas:
   color: ['white', 'black']

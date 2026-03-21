@@ -41,7 +41,7 @@ site.use(
     }]],
   }),
 );
-site.use(robots({ disallow: '*' }));
+site.use(robots({ allow: [], disallow: '*' }));
 site.use(tailwindcss());
 site.use(base_path());
 site.use(og_images());

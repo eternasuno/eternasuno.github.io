@@ -3,7 +3,6 @@ author: 'eternasuno'
 title: "Eternasuno's Blog"
 description: 'World is trash, and so am I. '
 metas:
-  color: ['white', 'black']
   generator: false
   robots: false
   site: "Eternasuno's Blog"

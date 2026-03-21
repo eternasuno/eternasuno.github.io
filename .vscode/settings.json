@@ -1,35 +1,37 @@
 {
   "[javascript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[json]": {
+    "editor.codeActionsOnSave": {
+      "source.sort.json": "explicit"
+    },
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.quickSuggestions": {
-      "strings": true
+    "editor.codeActionsOnSave": {
+      "source.sort.json": "explicit"
     },
-    "editor.suggest.insertMode": "replace"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[typescript]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "[typescriptreact]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit"
     },
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  "editor.formatOnSaveMode": "file",
   "editor.formatOnType": false,
   "editor.quickSuggestions": {
     "strings": "on"
@@ -37,26 +39,16 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "gitlens.codeLens.enabled": false,
-  "gitlens.plusFeatures.enabled": false,
-  "gitlens.showWhatsNewAfterUpgrades": false,
-  "tailwindCSS.classAttributes": [
-    "class",
-    "className",
-    "ngClass",
-    "tw"
+  "json.schemaDownload.trustedDomains": {
+    "https://developer.microsoft.com/json-schemas/": true,
+    "https://json-schema.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://raw.githubusercontent.com": true,
+    "https://schemastore.azurewebsites.net/": true,
+    "https://www.schemastore.org/": true
+  },
+  "tinymist.fontPaths": [
+    "${workspaceFolder}/_includes/fonts"
   ],
-  "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.experimental.classRegex": [
-    "twc\\.[^`]+`([^`]*)`",
-    "twc\\([^`]*?\\)`([^`]*)`",
-    [
-      "twc\\.[^`]+\\(([^)]*)\\)",
-      "(?:'|\"|`)([^']*)(?:'|\"|`)"
-    ],
-    [
-      "twc\\([^`]*?\\).*?\\(([^)]*)\\)",
-      "(?:'|\"|`)([^']*)(?:'|\"|`)"
-    ]
-  ]
+  "tinymist.rootPath": "${workspaceFolder}"
 }

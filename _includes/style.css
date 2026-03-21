@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui' {
+  themes: light --default, dark --prefersdark;
+  logs: false;
+}
+
+@layer base {
+  ::-webkit-scrollbar {
+    @apply hidden;
+  }
+}
+
+@layer components {
+  #search {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: var(--color-primary);
+    --pagefind-ui-text: var(--color-base-content);
+    --pagefind-ui-background: var(--color-base-100);
+    --pagefind-ui-border: var(--color-base-content);
+    --pagefind-ui-tag: var(--color-base-content);
+    --pagefind-ui-border-width: calc(var(--spacing) * 0.5);
+    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-image-border-radius: calc(var(--spacing) * 2);
+    --pagefind-ui-font: sans-serif;
+
+    & .pagefind-ui__search-input::placeholder {
+      @apply dark:opacity-40!;
+    }
+  }
+}
+
+@utility shiki {
+  &,
+  & span {
+    @apply bg-(--shiki-light-bg) font-(--shiki-light-font-weight) text-(--shiki-light)
+      [font-style:var(--shiki-light-font-style)]
+      [text-decoration:var(--shiki-light-text-decoration)] dark:bg-(--shiki-dark-bg)
+      dark:font-(--shiki-dark-font-weight) dark:text-(--shiki-dark)
+      dark:[font-style:var(--shiki-dark-font-style)]
+      dark:[text-decoration:var(--shiki-dark-text-decoration)];
+  }
+}
+
+@utility typst-math-inline {
+  @apply inline-grid;
+
+  & > svg {
+    @apply inline h-4;
+  }
+}
+
+@utility typst-math-block {
+  & > svg {
+    @apply block h-6 mx-auto;
+  }
+}

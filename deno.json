@@ -1,0 +1,87 @@
+{
+  "allowScripts": [
+    "npm:sharp@0.34.5"
+  ],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "lume",
+    "types": [
+      "lume/types.ts"
+    ]
+  },
+  "fmt": {
+    "lineWidth": 99,
+    "singleQuote": true
+  },
+  "imports": {
+    "@myriaddreamin/typst-ts-node-compiler": "npm:@myriaddreamin/typst-ts-node-compiler@^0.7.0-rc2",
+    "@shikijs/rehype": "npm:@shikijs/rehype@^4.0.2",
+    "hast": "npm:@types/hast@^3.0.4",
+    "hast-util-from-html": "npm:hast-util-from-html@^2.0.3",
+    "hast-util-select": "npm:hast-util-select@^6.0.4",
+    "hast-util-to-html": "npm:hast-util-to-html@^9.0.5",
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/",
+    "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.14/jsx-runtime.ts",
+    "rehype-stringify": "npm:rehype-stringify@^10.0.1",
+    "unified": "npm:unified@^11.0.5",
+    "unist-util-visit": "npm:unist-util-visit@^5.1.0"
+  },
+  "lint": {
+    "plugins": [
+      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/lint.ts",
+      "jsr:@ryu/deno-lint-plugin-tailwindcss@0.2.0"
+    ],
+    "rules": {
+      "exclude": [
+        "no-import-prefix"
+      ]
+    }
+  },
+  "lock": true,
+  "nodeModulesDir": "auto",
+  "permissions": {
+    "lume": {
+      "env": true,
+      "ffi": true,
+      "import": [
+        "cdn.jsdelivr.net:443",
+        "jsr.io:443",
+        "deno.land:443",
+        "esm.sh:443"
+      ],
+      "net": [
+        "0.0.0.0",
+        "cdn.jsdelivr.net:443",
+        "data.jsdelivr.com:443",
+        "jsr.io:443",
+        "deno.land:443",
+        "esm.sh:443",
+        "registry.npmjs.org:443"
+      ],
+      "read": true,
+      "run": true,
+      "sys": true,
+      "write": [
+        "./"
+      ]
+    }
+  },
+  "tasks": {
+    "build": {
+      "command": "deno task lume",
+      "description": "Build the site for production"
+    },
+    "lume": {
+      "command": "deno run -P=lume lume/cli.ts",
+      "description": "Run Lume command"
+    },
+    "serve": {
+      "command": "deno task lume -s",
+      "description": "Run and serve the site for development"
+    }
+  },
+  "unstable": [
+    "temporal",
+    "fmt-component"
+  ]
+}

@@ -1,0 +1,4 @@
+layout: layouts/post.tsx
+openGraphLayout: layouts/og_images.tsx
+metas:
+  keywords: '=tags'

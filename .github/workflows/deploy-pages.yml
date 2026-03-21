@@ -30,16 +30,6 @@ jobs:
         with:
           deno-version: v2.x
 
-      - name: Cache Deno and node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/deno
-            node_modules
-          key: ${{ runner.os }}-deno-${{ hashFiles('deno.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-deno-
-
       - name: Static check
         run: deno check
 

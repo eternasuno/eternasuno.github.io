@@ -1,5 +1,5 @@
 export default ({ author }: { author: string }) => (
-  <footer class='flex justify-between gap-4 p-2 text-base-content/75 text-xs'>
+  <footer class='flex justify-between gap-4 py-2 text-base-content/75 text-xs'>
     <span class='hover:text-base-content'>© 2026 {author}</span>
     <a
       class='link link-hover hover:text-base-content'

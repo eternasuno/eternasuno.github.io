@@ -2,7 +2,7 @@
 
 #let post(description: "", tags: (), title: auto, body) = {
   let final-title = if title == auto {
-    datetime.today().display("[year].[month].[day]")
+    datetime.today().display("[year]-[month]-[day]")
   } else {
     title
   }

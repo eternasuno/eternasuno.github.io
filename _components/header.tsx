@@ -1,7 +1,7 @@
 export default ({ title }: { title: string }) => (
   <header class='my-4 space-y-4'>
     <a
-      class="inline-block font-bold text-2xl tracking-tighter before:pr-2 before:content-['ヽ(゜∇゜)ノ']"
+      class='inline-block font-bold text-2xl tracking-tighter'
       href='/'
       rel='noopener noreferrer'
     >

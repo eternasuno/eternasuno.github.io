@@ -3,11 +3,11 @@ export default ({ search, comp }: Lume.Data) => {
 
   return (
     <>
-      <ol>
+      <ol class='space-y-2'>
         {posts.map((post) => (
           <li class='items-center-safe flex gap-4'>
-            <comp.Time class='font-mono text-sm tracking-wider' date={post.date} />
-            <a class='link link-hover text-lg text-primary' href={post.url}>{post.title}</a>
+            <comp.Time class='font-mono tracking-wider' date={post.date} />
+            <a class='link link-hover text-primary' href={post.url}>{post.title}</a>
           </li>
         ))}
       </ol>

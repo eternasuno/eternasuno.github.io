@@ -13,11 +13,12 @@ import robots from 'lume/plugins/robots.ts';
 import tailwindcss from 'lume/plugins/tailwindcss.ts';
 import transform_images from 'lume/plugins/transform_images.ts';
 import process from 'node:process';
-import typst from './_plugins/typst-plugin.ts';
+import typst from './src/_plugins/typst-plugin.ts';
 
 const DOMAIN = process.env.DOMAIN || 'http://localhost:3000';
 
 const site = lume({
+  src: 'src',
   location: new URL(DOMAIN),
   watcher: {
     dependencies: {

@@ -20,7 +20,7 @@
     "hast-util-from-html": "npm:hast-util-from-html@^2.0.3",
     "hast-util-select": "npm:hast-util-select@^6.0.4",
     "hast-util-to-html": "npm:hast-util-to-html@^9.0.5",
-    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/",
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.4/",
     "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.14/jsx-runtime.ts",
     "rehype-stringify": "npm:rehype-stringify@^10.0.1",
     "unified": "npm:unified@^11.0.5",

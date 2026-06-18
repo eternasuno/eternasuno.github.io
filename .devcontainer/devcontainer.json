@@ -1,7 +1,11 @@
 {
+  "image": "ghcr.io/cachix/devenv/devcontainer:latest",
+  "overrideCommand": false,
+  "updateContentCommand": "devenv test",
   "customizations": {
     "vscode": {
       "extensions": [
+        "mkhl.direnv",
         "bradlc.vscode-tailwindcss",
         "denoland.vscode-deno",
         "eamodio.gitlens",
@@ -11,10 +15,5 @@
         "semanticdiff.semanticdiff"
       ]
     }
-  },
-  "features": {
-    "ghcr.io/devcontainers-extra/features/deno:1": {}
-  },
-  "image": "mcr.microsoft.com/devcontainers/base:debian",
-  "remoteUser": "vscode"
+  }
 }

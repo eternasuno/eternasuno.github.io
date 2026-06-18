@@ -12,8 +12,8 @@
     "singleQuote": true
   },
   "imports": {
-    "@myriaddreamin/typst-ts-node-compiler": "npm:@myriaddreamin/typst-ts-node-compiler@^0.7.0-rc2",
-    "@shikijs/rehype": "npm:@shikijs/rehype@^4.0.2",
+    "@myriaddreamin/typst-ts-node-compiler": "npm:@myriaddreamin/typst-ts-node-compiler@^0.7.0",
+    "@shikijs/rehype": "npm:@shikijs/rehype@^4.2.0",
     "hast": "npm:@types/hast@^3.0.4",
     "hast-util-from-html": "npm:hast-util-from-html@^2.0.3",
     "hast-util-select": "npm:hast-util-select@^6.0.4",

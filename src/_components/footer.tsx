@@ -1,13 +1,25 @@
-export default ({ author }: { author: string }) => (
-  <footer class='flex justify-between gap-4 py-2 text-base-content/75 text-xs'>
-    <span class='hover:text-base-content'>© 2026 {author}</span>
-    <a
-      class='link link-hover hover:text-base-content'
-      href='https://creativecommons.org/licenses/by-nc/4.0/'
-      target='_blank'
-      rel='noopener noreferrer'
-    >
-      CC BY-NC 4.0
-    </a>
-  </footer>
-);
+export default ({ author, search }: { author: string; search: Lume.Search }) => {
+  const posts = search.pages('url^=/posts/');
+  const tags = [...new Set(posts.flatMap((post: any) => post.tags || []))].sort();
+
+  return (
+    <footer class='space-y-2 py-2 text-base-content/75 text-xs'>
+      {tags.length > 0 && (
+        <p>
+          {tags.map((tag, i) => (
+            <>
+              {i > 0 && ' '}
+              <span>#{tag}</span>
+            </>
+          ))}
+        </p>
+      )}
+      <p>
+        Subscribe via{' '}
+        <a class='link link-hover' href='/rss.xml' target='_blank' rel='noopener noreferrer'>
+          rss
+        </a>. © 2026 {author}.
+      </p>
+    </footer>
+  );
+};

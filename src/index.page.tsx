@@ -3,14 +3,18 @@ export default ({ search, comp }: Lume.Data) => {
 
   return (
     <>
-      <ol class='space-y-2'>
+      <ul class='space-y-2'>
         {posts.map((post) => (
-          <li class='items-center-safe flex gap-4'>
-            <comp.Time class='font-mono tracking-wider' date={post.date} />
-            <a class='link link-hover text-primary' href={post.url}>{post.title}</a>
+          <li>
+            <span>
+              <i>
+                <comp.Time date={post.date} />
+              </i>
+            </span>{' '}
+            <a class='link link-hover' href={post.url}>{post.title}</a>
           </li>
         ))}
-      </ol>
+      </ul>
     </>
   );
 };

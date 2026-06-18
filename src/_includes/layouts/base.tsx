@@ -1,4 +1,4 @@
-export default ({ author, metas, children, comp }: Lume.Data) => (
+export default ({ author, metas, children, comp, search }: Lume.Data) => (
   <html>
     <head>
       <meta charSet='utf-8' />
@@ -10,7 +10,7 @@ export default ({ author, metas, children, comp }: Lume.Data) => (
     <body class='mx-auto flex min-h-dvh w-screen max-w-196 flex-col gap-y-4 p-8'>
       <comp.Header title={metas?.site} />
       <main class='grow'>{children}</main>
-      <comp.Footer author={author} />
+      <comp.Footer author={author} search={search} />
     </body>
   </html>
 );

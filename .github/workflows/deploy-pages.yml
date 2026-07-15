@@ -22,19 +22,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v16
         with:
-          deno-version: v2.x
+          name: devenv
+      - name: Install devenv.sh
+        run: nix profile add nixpkgs#devenv
 
-      - name: Static check
-        run: deno check
+      - name: Build the devenv shell and run any pre-commit hooks
+        run: devenv test
 
-      - name: Build site
-        run: deno task build
+      - name: check && build
+        shell: devenv shell bash -- -e {0}
+        run: |
+          deno check
+          deno task build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

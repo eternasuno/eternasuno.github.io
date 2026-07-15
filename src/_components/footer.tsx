@@ -1,24 +1,27 @@
-export default ({ author, search }: { author: string; search: Lume.Search }) => {
-  const posts = search.pages('url^=/posts/');
-  const tags = [...new Set(posts.flatMap((post: any) => post.tags || []))].sort();
+export default ({ author }: { author: string }) => {
+  const year = new Date().getFullYear();
 
   return (
-    <footer class='space-y-2 py-2 text-base-content/75 text-xs'>
-      {tags.length > 0 && (
-        <p>
-          {tags.map((tag, i) => (
-            <>
-              {i > 0 && ' '}
-              <span>#{tag}</span>
-            </>
-          ))}
-        </p>
-      )}
+    <footer class="mt-16 pt-6 border-t border-[#b8b0a4] text-xs text-[#6b6560]">
       <p>
-        Subscribe via{' '}
-        <a class='link link-hover' href='/rss.xml' target='_blank' rel='noopener noreferrer'>
+        &copy; {year} {author} &middot;{" "}
+        <a
+          href="/rss.xml"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:underline decoration-[#b8b0a4] hover:decoration-[#2a2a2a] underline-offset-[0.2em]"
+        >
           rss
-        </a>. © 2026 {author}.
+        </a>{" "}
+        &middot;{" "}
+        <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:underline decoration-[#b8b0a4] hover:decoration-[#2a2a2a] underline-offset-[0.2em]"
+        >
+          CC BY-NC-SA 4.0
+        </a>
       </p>
     </footer>
   );

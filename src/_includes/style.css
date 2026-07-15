@@ -1,32 +1,46 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
-@plugin 'daisyui' {
-  themes: light --default, dark --prefersdark;
-  logs: false;
-}
 
 @layer base {
   ::-webkit-scrollbar {
     @apply hidden;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: #2a2a2a;
+    text-decoration: underline;
+    text-decoration-color: #b8b0a4;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  a:hover {
+    text-decoration-color: #2a2a2a;
+  }
+
+  dialog::backdrop {
+    background: rgba(42, 42, 42, 0.4);
   }
 }
 
 @layer components {
   #search {
     --pagefind-ui-scale: 1;
-    --pagefind-ui-primary: var(--color-primary);
-    --pagefind-ui-text: var(--color-base-content);
-    --pagefind-ui-background: var(--color-base-100);
-    --pagefind-ui-border: var(--color-base-content);
-    --pagefind-ui-tag: var(--color-base-content);
-    --pagefind-ui-border-width: calc(var(--spacing) * 0.5);
+    --pagefind-ui-primary: #2a2a2a;
+    --pagefind-ui-text: #2a2a2a;
+    --pagefind-ui-background: #ddd5c8;
+    --pagefind-ui-border: #b8b0a4;
+    --pagefind-ui-tag: #6b6560;
+    --pagefind-ui-border-width: 1px;
     --pagefind-ui-border-radius: 0;
-    --pagefind-ui-image-border-radius: calc(var(--spacing) * 2);
+    --pagefind-ui-image-border-radius: 0.5rem;
     --pagefind-ui-font: sans-serif;
-
-    & .pagefind-ui__search-input::placeholder {
-      @apply dark:opacity-40!;
-    }
   }
 }
 
@@ -35,10 +49,7 @@
   & span {
     @apply bg-(--shiki-light-bg) font-(--shiki-light-font-weight) text-(--shiki-light)
       [font-style:var(--shiki-light-font-style)]
-      [text-decoration:var(--shiki-light-text-decoration)] dark:bg-(--shiki-dark-bg)
-      dark:font-(--shiki-dark-font-weight) dark:text-(--shiki-dark)
-      dark:[font-style:var(--shiki-dark-font-style)]
-      dark:[text-decoration:var(--shiki-dark-text-decoration)];
+      [text-decoration:var(--shiki-light-text-decoration)];
   }
 }
 
@@ -54,4 +65,26 @@
   & > svg {
     @apply block h-6 mx-auto;
   }
+}
+
+/* Prose overrides for warm palette */
+.prose {
+  --tw-prose-body: #2a2a2a;
+  --tw-prose-headings: #2a2a2a;
+  --tw-prose-lead: #6b6560;
+  --tw-prose-links: #2a2a2a;
+  --tw-prose-bold: #2a2a2a;
+  --tw-prose-counters: #6b6560;
+  --tw-prose-bullets: #b8b0a4;
+  --tw-prose-hr: #b8b0a4;
+  --tw-prose-quotes: #6b6560;
+  --tw-prose-quote-borders: #b8b0a4;
+  --tw-prose-captions: #6b6560;
+  --tw-prose-code: #2a2a2a;
+  --tw-prose-pre-code: #2a2a2a;
+  --tw-prose-pre-bg: #d0c8bc;
+  --tw-prose-th-borders: #b8b0a4;
+  --tw-prose-td-borders: #b8b0a4;
+  --tw-prose-kbd: #2a2a2a;
+  --tw-prose-kbd-shadows: none;
 }

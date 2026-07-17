@@ -1,5 +1,5 @@
 export default ({ author, metas, children, comp, search, title, url }: Lume.Data) => (
-  <html>
+  <html data-theme="custom-dark">
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,15 +7,16 @@ export default ({ author, metas, children, comp, search, title, url }: Lume.Data
       <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
       <title>{metas?.site}</title>
     </head>
-    <body class="bg-[#ddd5c8] text-[#2a2a2a]">
-      <div class="mx-auto flex min-h-dvh max-w-6xl flex-col lg:flex-row">
-        <aside class="w-full lg:w-[35%] p-6 lg:p-8 lg:pr-12 lg:sticky lg:top-0 lg:h-fit">
-          <comp.Sidebar search={search} metas={metas} title={title} url={url} />
-        </aside>
-        <main class="w-full lg:w-[65%] p-6 lg:p-8 lg:pl-12 flex-1">
+    <body class="bg-[#0f1722] text-[#c8d6e5] min-h-dvh">
+      <div class="mx-auto max-w-[800px] px-6 flex flex-col min-h-dvh">
+        <header class="pt-8">
+          <comp.Header metas={metas} title={title} url={url} />
+        </header>
+        <main class="flex-1">
           {children}
-          <comp.Footer author={author} />
         </main>
+        <comp.Footer author={author} />
+        <comp.Searchdialog />
       </div>
     </body>
   </html>

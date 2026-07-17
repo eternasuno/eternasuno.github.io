@@ -4,9 +4,14 @@ export default ({ date, class: className }: { date: Date; class?: string }) => (
   </time>
 );
 
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
 const formatDate = (date: Date) => {
-  const year = date.getFullYear().toString().slice(-2);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
-  return `${year}/${month}/${day}`;
+  const month = MONTHS[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day} ${month}, ${year}`;
 };

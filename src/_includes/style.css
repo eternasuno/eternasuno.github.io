@@ -1,5 +1,7 @@
 @import 'tailwindcss';
+@plugin "daisyui";
 @plugin '@tailwindcss/typography';
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Noto+Sans+Mono:wdth,wght@62.5..100,400..700&display=swap');
 
 @layer base {
   ::-webkit-scrollbar {
@@ -7,49 +9,37 @@
   }
 
   body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Host Grotesk', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  a {
-    color: #2a2a2a;
-    text-decoration: underline;
-    text-decoration-color: #b8b0a4;
-    text-underline-offset: 0.2em;
-    transition: text-decoration-color 0.2s ease;
-  }
-
-  a:hover {
-    text-decoration-color: #2a2a2a;
-  }
-
   dialog::backdrop {
-    background: rgba(42, 42, 42, 0.4);
+    background: rgba(0, 0, 0, 0.6);
   }
 }
 
 @layer components {
   #search {
     --pagefind-ui-scale: 1;
-    --pagefind-ui-primary: #2a2a2a;
-    --pagefind-ui-text: #2a2a2a;
-    --pagefind-ui-background: #ddd5c8;
-    --pagefind-ui-border: #b8b0a4;
-    --pagefind-ui-tag: #6b6560;
+    --pagefind-ui-primary: #7aa2e7;
+    --pagefind-ui-text: #c8d6e5;
+    --pagefind-ui-background: #0f1722;
+    --pagefind-ui-border: #1e2a3a;
+    --pagefind-ui-tag: #3a4a5c;
     --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-border-radius: 0.5rem;
     --pagefind-ui-image-border-radius: 0.5rem;
-    --pagefind-ui-font: sans-serif;
+    --pagefind-ui-font: 'Host Grotesk', sans-serif;
   }
 }
 
 @utility shiki {
   &,
   & span {
-    @apply bg-(--shiki-light-bg) font-(--shiki-light-font-weight) text-(--shiki-light)
-      [font-style:var(--shiki-light-font-style)]
-      [text-decoration:var(--shiki-light-text-decoration)];
+    @apply bg-(--shiki-dark-bg) font-(--shiki-dark-font-weight) text-(--shiki-dark)
+      [font-style:var(--shiki-dark-font-style)]
+      [text-decoration:var(--shiki-dark-text-decoration)];
   }
 }
 
@@ -67,24 +57,24 @@
   }
 }
 
-/* Prose overrides for warm palette */
+/* Prose overrides for dark theme */
 .prose {
-  --tw-prose-body: #2a2a2a;
-  --tw-prose-headings: #2a2a2a;
-  --tw-prose-lead: #6b6560;
-  --tw-prose-links: #2a2a2a;
-  --tw-prose-bold: #2a2a2a;
-  --tw-prose-counters: #6b6560;
-  --tw-prose-bullets: #b8b0a4;
-  --tw-prose-hr: #b8b0a4;
-  --tw-prose-quotes: #6b6560;
-  --tw-prose-quote-borders: #b8b0a4;
-  --tw-prose-captions: #6b6560;
-  --tw-prose-code: #2a2a2a;
-  --tw-prose-pre-code: #2a2a2a;
-  --tw-prose-pre-bg: #d0c8bc;
-  --tw-prose-th-borders: #b8b0a4;
-  --tw-prose-td-borders: #b8b0a4;
-  --tw-prose-kbd: #2a2a2a;
+  --tw-prose-body: #c8d6e5;
+  --tw-prose-headings: #ffffff;
+  --tw-prose-lead: #4a5568;
+  --tw-prose-links: #7aa2e7;
+  --tw-prose-bold: #ffffff;
+  --tw-prose-counters: #4a5568;
+  --tw-prose-bullets: #2a3a4a;
+  --tw-prose-hr: #1e2a3a;
+  --tw-prose-quotes: #c8d6e5;
+  --tw-prose-quote-borders: #7aa2e7;
+  --tw-prose-captions: #4a5568;
+  --tw-prose-code: #c8d6e5;
+  --tw-prose-pre-code: #c8d6e5;
+  --tw-prose-pre-bg: #1a2332;
+  --tw-prose-th-borders: #2a3a4a;
+  --tw-prose-td-borders: #2a3a4a;
+  --tw-prose-kbd: #c8d6e5;
   --tw-prose-kbd-shadows: none;
 }

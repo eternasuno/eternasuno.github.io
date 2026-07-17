@@ -7,8 +7,8 @@
         "denoland.vscode-deno",
         "eamodio.gitlens",
         "GitHub.vscode-pull-request-github",
-        "myriad-dreamin.tinymist",
-        "jnoortheen.nix-ide"
+        "jnoortheen.nix-ide",
+        "myriad-dreamin.tinymist"
       ],
       "settings": {
         "[javascript]": {
@@ -28,6 +28,12 @@
             "source.sort.json": "explicit"
           },
           "editor.defaultFormatter": "denoland.vscode-deno"
+        },
+        "[nix]": {
+          "editor.defaultFormatter": "jnoortheen.nix-ide",
+          "editor.formatOnSaveMode": "file",
+          "editor.insertSpaces": true,
+          "editor.tabSize": 2
         },
         "[typescript]": {
           "editor.codeActionsOnSave": {

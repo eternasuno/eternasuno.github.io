@@ -1,10 +1,10 @@
 layout: layouts/base.tsx
-author: 'eternasuno'
-title: "ʕ•ᴥ•ʔ Eternasuno's Blog"
-description: 'World is trash, and so am I. '
+author: "eternasuno"
+title: "Eternasuno's Blog"
+description: "World is trash, and so am I. "
 metas:
   generator: false
   robots: false
-  site: "ʕ•ᴥ•ʔ Eternasuno's Blog"
-  title: '=title'
-  description: '=description'
+  site: "Eternasuno's Blog"
+  title: "=title"
+  description: "=description"

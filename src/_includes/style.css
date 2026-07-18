@@ -1,36 +1,27 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@plugin "daisyui" {
+  logs: false;
+  themes: cmyk --default, dracula --prefersdark;
+};
 @plugin '@tailwindcss/typography';
-@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Noto+Sans+Mono:wdth,wght@62.5..100,400..700&display=swap');
 
 @layer base {
   ::-webkit-scrollbar {
     @apply hidden;
-  }
-
-  body {
-    font-family: 'Host Grotesk', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  dialog::backdrop {
-    background: rgba(0, 0, 0, 0.6);
   }
 }
 
 @layer components {
   #search {
     --pagefind-ui-scale: 1;
-    --pagefind-ui-primary: #7aa2e7;
-    --pagefind-ui-text: #c8d6e5;
-    --pagefind-ui-background: #0f1722;
-    --pagefind-ui-border: #1e2a3a;
-    --pagefind-ui-tag: #3a4a5c;
+    --pagefind-ui-primary: var(--color-primary);
+    --pagefind-ui-text: var(--color-base-content);
+    --pagefind-ui-background: var(--color-base-100);
+    --pagefind-ui-border: var(--color-base-content);
+    --pagefind-ui-tag: var(--color-base-content);
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-border-radius: 0.5rem;
     --pagefind-ui-image-border-radius: 0.5rem;
-    --pagefind-ui-font: 'Host Grotesk', sans-serif;
   }
 }
 
@@ -43,38 +34,4 @@
   }
 }
 
-@utility typst-math-inline {
-  @apply inline-grid;
 
-  & > svg {
-    @apply inline h-4;
-  }
-}
-
-@utility typst-math-block {
-  & > svg {
-    @apply block h-6 mx-auto;
-  }
-}
-
-/* Prose overrides for dark theme */
-.prose {
-  --tw-prose-body: #c8d6e5;
-  --tw-prose-headings: #ffffff;
-  --tw-prose-lead: #4a5568;
-  --tw-prose-links: #7aa2e7;
-  --tw-prose-bold: #ffffff;
-  --tw-prose-counters: #4a5568;
-  --tw-prose-bullets: #2a3a4a;
-  --tw-prose-hr: #1e2a3a;
-  --tw-prose-quotes: #c8d6e5;
-  --tw-prose-quote-borders: #7aa2e7;
-  --tw-prose-captions: #4a5568;
-  --tw-prose-code: #c8d6e5;
-  --tw-prose-pre-code: #c8d6e5;
-  --tw-prose-pre-bg: #1a2332;
-  --tw-prose-th-borders: #2a3a4a;
-  --tw-prose-td-borders: #2a3a4a;
-  --tw-prose-kbd: #c8d6e5;
-  --tw-prose-kbd-shadows: none;
-}

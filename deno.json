@@ -24,16 +24,16 @@
     "hast-util-from-html": "npm:hast-util-from-html@^2.0.3",
     "hast-util-select": "npm:hast-util-select@^6.0.4",
     "hast-util-to-html": "npm:hast-util-to-html@^9.0.5",
-    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.4/",
-    "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.14/jsx-runtime.ts",
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume/",
+    "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx/jsx-runtime.ts",
     "rehype-stringify": "npm:rehype-stringify@^10.0.1",
     "unified": "npm:unified@^11.0.5",
     "unist-util-visit": "npm:unist-util-visit@^5.1.0"
   },
   "lint": {
     "plugins": [
-      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/lint.ts",
-      "jsr:@ryu/deno-lint-plugin-tailwindcss@0.2.0"
+      "https://cdn.jsdelivr.net/gh/lumeland/lume/lint.ts",
+      "jsr:@ryu/deno-lint-plugin-tailwindcss@*"
     ],
     "rules": {
       "exclude": [

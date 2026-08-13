@@ -9,7 +9,7 @@ export default ({ search }: Lume.Data) => {
           <time class='shrink-0 italic opacity-60' datetime={date.toISOString()}>
             {format(date)}
           </time>
-          <a href={url} class='hover:opacity-70'>
+          <a href={url} class='text-primary hover:opacity-70'>
             {title}
           </a>
         </div>

@@ -1,6 +1,6 @@
 export default ({ author }: { author?: string }) => (
   <footer>
-    <div class='mx-auto flex w-full max-w-[640px] items-center justify-between px-6 py-6 text-sm opacity-70'>
+    <div class='mx-auto flex w-full max-w-160 items-center justify-between px-6 py-6 text-sm opacity-70'>
       <span>
         © {new Date().getFullYear()} {author}
       </span>

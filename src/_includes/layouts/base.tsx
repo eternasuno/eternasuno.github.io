@@ -13,9 +13,9 @@ export default ({ metas, children, title, author }: Lume.Data) => {
         <link rel='alternate' type='application/rss+xml' href='/rss.xml' />
         <title>{title}</title>
       </head>
-      <body class='grid min-h-dvh grid-rows-[auto_1fr_auto] bg-base-100'>
+      <body class='flex min-h-dvh flex-col'>
         <Header site={siteName} />
-        <main class='mx-auto w-screen max-w-160 px-6 py-16'>
+        <main class='mx-auto w-screen max-w-160 flex-1 px-6 py-16'>
           {children}
         </main>
         <Footer author={author} />

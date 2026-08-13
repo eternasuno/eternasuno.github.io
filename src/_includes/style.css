@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @plugin "daisyui" {
   logs: false;
-  themes: cmyk --default, dracula --prefersdark;
+  themes: nord --default, dracula --prefersdark;
 };
 @plugin '@tailwindcss/typography';
 
@@ -26,6 +26,17 @@
 }
 
 @utility shiki {
+  & code {
+    counter-reset: step;
+    counter-increment: step 0;
+  }
+
+  & code .line::before {
+    content: counter(step);
+    counter-increment: step;
+    @apply inline-block w-4 mr-4 text-right opacity-50;
+  }
+
   &,
   & span {
     @apply bg-(--shiki-dark-bg) font-(--shiki-dark-font-weight) text-(--shiki-dark)

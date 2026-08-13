@@ -1,11 +1,9 @@
 {
-  "allowScripts": [
-    "npm:@tailwindcss/oxide@4.1.14",
-    "npm:esbuild@0.27.3",
-    "npm:esbuild@0.28.0",
-    "npm:sharp@0.34.4",
-    "npm:sharp@0.34.5"
-  ],
+  "allowScripts": {
+    "deny": [
+      "npm:sharp"
+    ]
+  },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "lume",
@@ -19,12 +17,12 @@
   },
   "imports": {
     "@myriaddreamin/typst-ts-node-compiler": "npm:@myriaddreamin/typst-ts-node-compiler@^0.8.0-rc3",
-    "@shikijs/rehype": "npm:@shikijs/rehype@^4.3.1",
+    "@shikijs/rehype": "npm:@shikijs/rehype@^4.4.3",
     "hast": "npm:@types/hast@^3.0.5",
     "hast-util-from-html": "npm:hast-util-from-html@^2.0.3",
     "hast-util-select": "npm:hast-util-select@^6.0.4",
     "hast-util-to-html": "npm:hast-util-to-html@^9.0.5",
-    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume/",
+    "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/",
     "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx/jsx-runtime.ts",
     "rehype-stringify": "npm:rehype-stringify@^10.0.1",
     "unified": "npm:unified@^11.0.5",
@@ -32,7 +30,7 @@
   },
   "lint": {
     "plugins": [
-      "https://cdn.jsdelivr.net/gh/lumeland/lume/lint.ts",
+      "https://cdn.jsdelivr.net/gh/lumeland/lume@3.3.1/lint.ts",
       "jsr:@ryu/deno-lint-plugin-tailwindcss@*"
     ],
     "rules": {
@@ -42,7 +40,6 @@
     }
   },
   "lock": true,
-  "nodeModulesDir": "auto",
   "permissions": {
     "lume": {
       "env": true,

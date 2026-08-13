@@ -102,7 +102,9 @@ const rewrite = (hast: Root) => {
 
       if (
         node.tagName === 'img' &&
-        node.properties.class?.toString().includes('typst-frame') &&
+        (node.properties?.class ?? node.properties?.className)?.toString().includes(
+          'typst-frame',
+        ) &&
         typeof node.properties.src === 'string' &&
         typeof index === 'number' &&
         parent
@@ -128,24 +130,6 @@ const toSvg = (src: string) => {
   try {
     const svg = metadata === 'base64' ? atob(payload) : decodeURIComponent(payload);
     const root = fromHtml(svg, { fragment: true, space: 'svg' });
-
-    visit(root, 'element', (node) => {
-      const props = node.properties;
-      if (!props) {
-        return;
-      }
-
-      if (props.fill) {
-        props.fill = 'currentColor';
-      }
-
-      if (props.stroke) {
-        props.stroke = 'currentColor';
-      }
-
-      delete props.height;
-      delete props.width;
-    });
 
     return root.children.find(
       (child): child is Element => child.type === 'element' && child.tagName === 'svg',

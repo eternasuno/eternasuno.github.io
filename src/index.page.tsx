@@ -1,16 +1,19 @@
-export default ({ search, comp }: Lume.Data) => {
+export default ({ search }: Lume.Data) => {
   const posts = search.pages('url^=/posts/', 'date=desc');
+  const format = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format;
 
   return (
-    <ol class='space-y-4 p-4'>
-      {posts.map((post) => (
-        <li class='flex items-baseline gap-4'>
-          <comp.Time class='text-sm' date={post.date} />
-          <a class='link link-hover link-primary' href={post.url}>
-            {post.title}
+    <div class='space-y-4'>
+      {posts.map(({ date, url, title }) => (
+        <div class='flex items-baseline gap-3'>
+          <time class='shrink-0 italic opacity-60' datetime={date.toISOString()}>
+            {format(date)}
+          </time>
+          <a href={url} class='hover:opacity-70'>
+            {title}
           </a>
-        </li>
+        </div>
       ))}
-    </ol>
+    </div>
   );
 };

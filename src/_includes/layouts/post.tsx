@@ -1,10 +1,15 @@
 export const layout = 'layouts/base.tsx';
 
-export default ({ children, title }: Lume.Data) => (
-  <div class='m-4 space-y-10' data-pagefind-body>
-    <h1 class='text-4xl leading-tight'>{title}</h1>
-    <article class='prose max-w-none'>
+export default ({ title, date, children }: Lume.Data) => (
+  <article data-pagefind-body>
+    <h1 class='mt-8 font-bold text-3xl'>{title || 'Untitled'}</h1>
+    <p class='mt-3 text-sm italic opacity-60'>
+      <time datetime={date?.toISOString()}>
+        {new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(date)}
+      </time>
+    </p>
+    <div class='prose mt-8 max-w-none prose-pre:overflow-x-auto prose-table:[&_img]:inline-block'>
       {children}
-    </article>
-  </div>
+    </div>
+  </article>
 );

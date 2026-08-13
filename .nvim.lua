@@ -8,4 +8,14 @@ vim.lsp.config("denols", {
   },
 })
 
+vim.lsp.config("tailwindcss", {
+  settings = {
+    tailwindCSS = {
+      experimental = {
+        configFile = "src/_includes/style.css",
+      },
+    },
+  },
+})
+
 vim.lsp.enable({ "denols", "tinymist", "tailwindcss" })

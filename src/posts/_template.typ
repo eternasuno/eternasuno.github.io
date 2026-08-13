@@ -36,6 +36,13 @@
     }
   }
 
+  let frame-drawing(body) = if target == "html" { html.frame(box(body)) } else { body }
+  show rect: it => frame-drawing(it)
+  show circle: it => frame-drawing(it)
+  show ellipse: it => frame-drawing(it)
+  show line: it => frame-drawing(it)
+  show polygon: it => frame-drawing(it)
+
   if target != "html" {
     align(center, text(size: 2em, weight: "bold", final-title))
     v(2em)

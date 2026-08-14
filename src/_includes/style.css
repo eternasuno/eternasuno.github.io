@@ -2,49 +2,83 @@
 @plugin "daisyui" {
   logs: false;
   themes: nord --default, dracula --prefersdark;
-};
+}
 @plugin '@tailwindcss/typography';
 
 @layer base {
-  ::-webkit-scrollbar {
-    @apply hidden;
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
   #search {
-    --pagefind-ui-scale: 1;
+    --pagefind-ui-scale: 0.95;
     --pagefind-ui-primary: var(--color-primary);
     --pagefind-ui-text: var(--color-base-content);
     --pagefind-ui-background: var(--color-base-100);
-    --pagefind-ui-border: var(--color-base-content);
-    --pagefind-ui-tag: var(--color-base-content);
+    --pagefind-ui-border: color-mix(in oklch, var(--color-base-content) 15%, transparent);
+    --pagefind-ui-tag: color-mix(in oklch, var(--color-base-content) 8%, transparent);
     --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 0.5rem;
+    --pagefind-ui-border-radius: 0.75rem;
     --pagefind-ui-image-border-radius: 0.5rem;
+    --pagefind-ui-font: inherit;
   }
 }
+
+@layer utilities {
+  .prose {
+    & table { 
+      & img {
+        @apply inline-block;
+      }
+    }
+
+    & figure {
+      @apply grid place-items-center;
+
+      & figcaption {
+        @apply text-center mt-4;
+      }
+    }
+
+    & math {
+      & mtable {
+        @apply border-spacing-4;
+      }
+    }
+  }
+}
+
 
 @utility shiki {
   & code {
     counter-reset: step;
     counter-increment: step 0;
+    display: grid;
   }
 
   & code .line::before {
     content: counter(step);
     counter-increment: step;
-    @apply inline-block w-4 mr-4 text-right opacity-50;
+    display: inline-block;
+    width: 1.5rem;
+    margin-right: 1.25rem;
+    text-align: right;
+    user-select: none;
+    opacity: 0.35;
+    font-size: 0.8em;
   }
 
   &,
   & span {
-    @apply bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg) 
-      font-(--shiki-light-font-weight) dark:font-(--shiki-dark-font-weight) 
+    @apply bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)
+      font-(--shiki-light-font-weight) dark:font-(--shiki-dark-font-weight)
       text-(--shiki-light) dark:text-(--shiki-dark)
       [font-style:var(--shiki-light-font-style)] dark:[font-style:var(--shiki-dark-font-style)]
-      [text-decoration:var(--shiki-light-text-decoration)] dark:[text-decoration:var(--shiki-dark-text-decoration)];
+      [text-decoration:var(--shiki-light-text-decoration)]
+      dark:[text-decoration:var(--shiki-dark-text-decoration)];
   }
 }
-
-

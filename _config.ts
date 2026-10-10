@@ -31,6 +31,8 @@ const site = lume({
 site.add('_includes/style.css', 'style.css');
 site.add('_includes/images', 'img');
 
+site.data('terminalHost', site.options.location.hostname);
+
 site.use(jsx());
 site.use(
   typst({

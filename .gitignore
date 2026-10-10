@@ -2,6 +2,7 @@ _site
 _cache
 .env
 node_modules
+.maki/
 
 # Devenv
 .devenv*

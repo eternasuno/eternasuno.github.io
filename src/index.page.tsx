@@ -22,14 +22,14 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
         </div>
         <p class='terminal-dir-header'>total {posts.length} posts</p>
         <ul class='terminal-dir-listing'>
-          {posts.map(({ date, url, title, content }) => {
+          {posts.map(({ date, url, title, page }) => {
             const postDate = new Date(date);
             const formattedDate = new Intl.DateTimeFormat('en-US', {
               month: 'short',
               day: '2-digit',
               year: 'numeric',
             }).format(postDate).replace(',', '');
-            const size = new TextEncoder().encode(content ?? '').length;
+            const size = new TextEncoder().encode(page.text).length;
             const formattedSize = size >= 1000 ? `${(size / 1000).toFixed(1)}K` : `${size}B`;
 
             return (

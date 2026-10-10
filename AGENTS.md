@@ -28,7 +28,10 @@ Personal blog built with **Lume v3.3.1**, a Deno-powered static site generator.
 | `deno task build` | Production build (`deno task lume`)                           |
 
 Formatting/lint are configured in `deno.json` (non-default: line width 99, single quotes).
-**`deno check` FAILS in this repo** (see Architecture Notes) — use `deno task build` to verify.
+Verify changes with both `deno check` and `deno task build`, matching CI. The build command
+runs `deno run` without type checking, so a successful build does not establish type correctness.
+If either command fails, report its actual error and distinguish dependency failures from project
+errors; do not skip type checking because of a previously recorded failure.
 
 ## Project Structure
 
@@ -105,11 +108,14 @@ src/
   both: older Lume (master / v3.3.0) crashed `serve` via an HMR hook rewriting local URLs with a
   `#0` suffix + Deno 2.9 applying `registerHooks` to CJS `require()` ("Cannot find module ...#0").
   That bug does NOT reproduce on 3.3.1.
-- **`deno check` FAILS** (pre-existing, unfixed): `@jridgewell/remapping@2.3.5` (via
-  `@tailwindcss/node`) ships `build-source-map-tree.d.cts` with syntax Deno 2.9.4 cannot parse
-  ("Unexpected token <eof>", line 14). CI (`deploy-pages.yml`) runs `deno check` then
-  `deno task build` — the check step would fail on push. Possible fixes: pin remapping <2.3.5,
-  exclude the bad types, or drop `deno check` from CI.
+- **Type-check verification:** CI (`deploy-pages.yml`) runs `deno check` before
+  `deno task build`. Always run both when changing TypeScript/TSX. A local check on 2026-10-10
+  failed parsing `@jridgewell/remapping@2.3.5/types/build-source-map-tree.d.cts`, line 14
+  ("Unexpected token <eof>"). This environment-specific dependency failure can block checking
+  project code; it is not evidence that CI has the same failure or that project types are valid.
+  Report blocked verification explicitly rather than treating a successful build as a type check.
+  Lume search-result `content` is not guaranteed to be a string; use `page.text` when reading
+  rendered HTML as text (for example, when calculating HTML byte size).
 - Themes are DaisyUI 5 **`nord` (--default) / `dracula` (--prefersdark)**, declared in style.css:
   `@plugin "daisyui" { themes: nord --default, dracula --prefersdark; }`. The browser's
   `prefers-color-scheme` controls the theme. There is no theme toggle button and no localStorage

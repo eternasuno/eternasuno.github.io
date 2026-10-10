@@ -1,4 +1,5 @@
 layout: layouts/post.tsx
+date: Git Created
 openGraphLayout: layouts/og_images.tsx
 metas:
   keywords: '=tags'

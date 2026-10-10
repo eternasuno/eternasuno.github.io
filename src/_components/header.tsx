@@ -1,42 +1,103 @@
 export default ({ site }: { site: string }) => (
-  <header class='w-full'>
-    <div class='mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-8 lg:max-w-4xl lg:py-10'>
+  <>
+    <header class='sticky top-0 z-50 w-full border-b border-primary/30 bg-base-100/90 backdrop-blur-[0.5rem]'>
       <a
-        href='/'
-        class='flex items-center gap-2 font-bold text-base-content text-lg tracking-tight transition-colors hover:text-primary sm:text-xl lg:text-2xl'
+        class='absolute top-2 left-2 z-[60] -translate-y-24 rounded-md bg-base-100 px-3 py-2 focus:translate-y-0'
+        href='#main-content'
       >
-        <span>{site}</span>
+        Skip to content
       </a>
-      <button
-        type='button'
-        class='btn btn-ghost btn-sm px-2.5 font-mono text-base-content/70 text-xs hover:text-base-content lg:text-sm'
-        aria-label='Search'
-        onclick='search_modal.showModal()'
-      >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke-width='1.5'
-          stroke='currentColor'
-          class='size-4 lg:size-5'
-        >
-          <path
-            stroke-linecap='round'
-            stroke-linejoin='round'
-            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-          />
-        </svg>
-      </button>
-    </div>
-
-    <dialog id='search_modal' class='modal modal-bottom sm:modal-middle backdrop-blur-xs'>
-      <div class='modal-box h-[80vh] max-h-[85vh] max-w-xl overflow-y-auto rounded-t-2xl border border-base-content/10 shadow-2xl sm:h-auto sm:rounded-2xl lg:max-w-2xl'>
-        <div id='search' />
+      <div class='mx-auto flex h-14 max-w-[75rem] items-center gap-4 px-4'>
+        <a class='text-sm font-semibold' href='/'>{site}</a>
+        <nav class='ml-auto flex items-center gap-2' aria-label='Main navigation'>
+          <button
+            type='button'
+            class='flex size-[2.125rem] items-center justify-center rounded-md text-base-content/70 hover:bg-primary/10 hover:text-primary'
+            aria-label='Search'
+            aria-haspopup='dialog'
+            aria-controls='search_modal'
+            onclick="document.getElementById('search_modal').showModal()"
+          >
+            <svg
+              class='size-[1.125rem]'
+              aria-hidden='true'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='1.5'
+            >
+              <path
+                stroke-linecap='round'
+                stroke-linejoin='round'
+                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+              />
+            </svg>
+          </button>
+          <button
+            type='button'
+            class='flex size-[2.125rem] items-center justify-center rounded-md text-base-content/70 hover:bg-primary/10 hover:text-primary'
+            aria-label='Toggle light and dark mode'
+            onclick="const root = document.documentElement; const current = root.getAttribute('data-theme'); const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'halloween' : 'light'; const theme = current || systemTheme; root.setAttribute('data-theme', theme === 'halloween' ? 'light' : 'halloween')"
+          >
+            <svg
+              class='size-[1.125rem]'
+              aria-hidden='true'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='1.5'
+            >
+              <circle cx='12' cy='12' r='4' />
+              <path
+                stroke-linecap='round'
+                d='M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42'
+              />
+            </svg>
+          </button>
+          <a
+            class='flex size-[2.125rem] items-center justify-center rounded-md text-base-content/70 hover:bg-primary/10 hover:text-primary'
+            href='/rss.xml'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='RSS feed'
+          >
+            <svg
+              class='size-[1.125rem]'
+              aria-hidden='true'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='1.5'
+            >
+              <path
+                stroke-linecap='round'
+                stroke-linejoin='round'
+                d='M5 19a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z'
+              />
+              <path stroke-linecap='round' stroke-linejoin='round' d='M4 11a9 9 0 0 1 9 9' />
+              <path stroke-linecap='round' stroke-linejoin='round' d='M4 4a16 16 0 0 1 16 16' />
+            </svg>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <dialog
+      id='search_modal'
+      class='modal'
+      aria-labelledby='search-title'
+    >
+      <div class='modal-box terminal-search-dialog'>
+        <h2 class='sr-only' id='search-title'>Search</h2>
+        <span class='terminal-search-prefix' aria-hidden='true'>
+          <span class='terminal-prompt'>$</span>{' '}
+          <span class='terminal-search-command'>find . -name</span>
+        </span>
+        <div id='search'></div>
+        <p class='terminal-search-empty'>Type a query to search posts.</p>
       </div>
       <form method='dialog' class='modal-backdrop'>
-        <button type='submit'>close</button>
+        <button type='submit'>Close search</button>
       </form>
     </dialog>
-  </header>
+  </>
 );

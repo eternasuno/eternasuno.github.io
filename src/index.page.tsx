@@ -1,82 +1,87 @@
-export default ({ search, description }: Lume.Data) => {
+export default ({ search, author }: Lume.Data) => {
   const posts = search.pages('url^=/posts/', 'date=desc');
-
   return (
-    <div class='space-y-12 lg:space-y-16'>
-      {description && (
-        <p class='max-w-2xl text-base-content/75 text-sm leading-relaxed sm:text-base lg:text-lg'>
-          {description}
-        </p>
-      )}
-
-      <section class='space-y-6 lg:space-y-8'>
-        <div class='flex items-center justify-between border-b border-base-content/20 border-dashed pb-2.5'>
-          <h2 class='font-bold text-base text-base-content tracking-tight sm:text-lg lg:text-xl'>
-            All Posts
-          </h2>
-          <span class='font-mono text-base-content/50 text-xs lg:text-sm'>
-            {posts.length} posts
-          </span>
+    <article class='terminal-window'>
+      <header class='terminal-titlebar'>
+        <div class='terminal-buttons' aria-hidden='true'>
+          <span class='terminal-dot bg-error'></span>
+          <span class='terminal-dot bg-warning'></span>
+          <span class='terminal-dot bg-success'></span>
         </div>
+        <p class='terminal-title' aria-label='Terminal command'>
+          <span class='hidden sm:inline'>
+            <span class='terminal-prompt'>{author}@localhost</span>
+            <span class='terminal-prompt'>:</span>
+          </span>
+          <span class='terminal-path'>~/blog</span>{' '}
+          <span class='terminal-prompt'>$</span> <span class='terminal-cmd'>cd /posts</span>
+          <span class='terminal-cursor' aria-hidden='true'></span>
+        </p>
+      </header>
+      <div class='terminal-body'>
+        <header class='terminal-output-header'>
+          <h1 class='terminal-main-title'>文章</h1>
+        </header>
+        <nav class='terminal-toc' aria-label='Listing'>
+          <div class='terminal-toc-header'>
+            <span class='terminal-prompt'>$</span>{' '}
+            <span class='terminal-cmd'>ls -la ./posts/ | more</span>
+          </div>
+          <p class='terminal-dir-header'>total {posts.length} posts</p>
+          <ul class='terminal-dir-listing'>
+            {posts.map(({ date, url, title, content }) => {
+              const postDate = new Date(date);
+              const formattedDate = new Intl.DateTimeFormat('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+              }).format(postDate).replace(',', '');
+              const size = new TextEncoder().encode(content ?? '').length;
+              const formattedSize = size >= 1000 ? `${(size / 1000).toFixed(1)}K` : `${size}B`;
 
-        <ul class='space-y-6 sm:space-y-8 lg:space-y-10'>
-          {posts.map(({ date, url, title, description: postDesc, tags }) => {
-            const d = date ? new Date(date) : new Date();
-            const formattedDate = new Intl.DateTimeFormat('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }).format(d);
-
-            return (
-              <li key={url} class='group space-y-2'>
-                <a
-                  href={url}
-                  class='block font-semibold text-base text-primary leading-snug decoration-dashed underline-offset-4 transition-all group-hover:underline sm:text-lg lg:text-xl'
-                >
-                  {title || 'Untitled'}
-                </a>
-
-                <div class='flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-base-content/60 text-xs lg:text-sm'>
-                  <time datetime={d.toISOString()} class='inline-flex items-center gap-1.5'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 20 20'
-                      fill='currentColor'
-                      class='size-3.5 opacity-70 lg:size-4'
-                    >
-                      <path
-                        fill-rule='evenodd'
-                        d='M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z'
-                        clip-rule='evenodd'
-                      />
-                    </svg>
-                    <span>{formattedDate}</span>
-                  </time>
-                  {tags && Array.isArray(tags) && tags.length > 0 && (
-                    <div class='flex flex-wrap gap-1.5 font-sans sm:ml-auto'>
-                      {tags.map((tag: string) => (
-                        <span
-                          key={tag}
-                          class='text-base-content/60 text-xs underline decoration-dashed transition-colors hover:text-base-content'
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {postDesc && (
-                  <p class='line-clamp-2 pt-0.5 text-base-content/70 text-sm leading-relaxed lg:text-base'>
-                    {postDesc}
-                  </p>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-    </div>
+              return (
+                <li key={url}>
+                  <a
+                    class='terminal-dir-row'
+                    href={url}
+                    aria-label={`${
+                      title || 'Untitled'
+                    }, published ${formattedDate}, article HTML size ${size} bytes`}
+                  >
+                    <span class='terminal-dir-perm' aria-hidden='true'>-rw-r--r--</span>
+                    <span class='terminal-dir-size' aria-hidden='true'>{formattedSize}</span>
+                    <time class='terminal-dir-date' datetime={postDate.toISOString()}>
+                      {formattedDate}
+                    </time>
+                    <span class='terminal-dir-name'>
+                      {title || 'Untitled'}
+                      <span aria-hidden='true'>/</span>
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <div class='terminal-more'>
+            <span class='terminal-more__status'>
+              <span class='terminal-more__label'>--More--</span>
+              <span class='terminal-more__pct'>(100%)</span>
+            </span>
+            <span class='terminal-more__hint'>end of listing</span>
+          </div>
+        </nav>
+        <footer class='terminal-footer'>
+          <p class='terminal-footer-line'>$ echo "Maintained by {author}"</p>
+          <p class='terminal-footer-output'>
+            Maintained by <a href='/'>{author}</a>
+          </p>
+        </footer>
+        <div class='terminal-status-bar' aria-label='Terminal status'>
+          <span class='terminal-status-item'>NORMAL</span>
+          <span class='terminal-status-item'>posts: {posts.length}</span>
+          <span class='terminal-status-item terminal-status-right'>EOF</span>
+        </div>
+      </div>
+    </article>
   );
 };

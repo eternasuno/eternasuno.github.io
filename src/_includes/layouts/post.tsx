@@ -1,52 +1,6 @@
 export const layout = 'layouts/base.tsx';
 
-const BackBtn = () => (
-  <a
-    href='/'
-    class='group inline-flex shrink-0 items-center gap-1.5 font-mono text-base-content/60 text-xs transition-colors hover:text-base-content lg:text-sm'
-  >
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      fill='none'
-      viewBox='0 0 24 24'
-      stroke-width='1.5'
-      stroke='currentColor'
-      class='mb-1 size-3.5 shrink-0 transition-transform group-hover:-translate-x-0.5 lg:size-4'
-    >
-      <path
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        d='M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18'
-      />
-    </svg>
-    <span>Back to Posts</span>
-  </a>
-);
-
-const TopBtn = () => (
-  <a
-    href='#top'
-    class='group inline-flex items-center gap-1.5 transition-colors hover:text-base-content'
-  >
-    <span>Back to Top</span>
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      fill='none'
-      viewBox='0 0 24 24'
-      stroke-width='1.5'
-      stroke='currentColor'
-      class='mb-1 size-3.5 shrink-0 transition-transform group-hover:-translate-y-0.5 lg:size-4'
-    >
-      <path
-        stroke-linecap='round'
-        stroke-linejoin='round'
-        d='M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18'
-      />
-    </svg>
-  </a>
-);
-
-export default ({ title, date, tags, description, children }: Lume.Data) => {
+export default ({ title, date, tags, description, author, readingInfo, children }: Lume.Data) => {
   const formattedDate = date
     ? new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
@@ -56,48 +10,78 @@ export default ({ title, date, tags, description, children }: Lume.Data) => {
     : '';
 
   return (
-    <article data-pagefind-body class='space-y-8 lg:space-y-10'>
-      <header class='space-y-4 lg:space-y-5'>
-        <BackBtn />
-
-        <h1 class='font-bold text-2xl text-base-content leading-tight tracking-tight sm:text-3xl lg:text-4xl'>
-          {title || 'Untitled'}
-        </h1>
-
-        {description && (
-          <p class='max-w-2xl text-base-content/70 text-sm leading-relaxed sm:text-base lg:text-lg'>
-            {description}
-          </p>
-        )}
-
-        <div class='flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 font-mono text-base-content/60 text-xs lg:text-sm'>
-          {formattedDate && (
-            <time datetime={date ? new Date(date).toISOString() : undefined}>
-              {formattedDate}
-            </time>
-          )}
-          {tags && Array.isArray(tags) && tags.length > 0 && (
-            <div class='flex flex-wrap gap-1.5 font-sans sm:ml-auto'>
+    <article class='terminal-window'>
+      <header class='terminal-titlebar'>
+        <div class='terminal-buttons' aria-hidden='true'>
+          <span class='terminal-dot bg-error'></span>
+          <span class='terminal-dot bg-warning'></span>
+          <span class='terminal-dot bg-success'></span>
+        </div>
+        <p class='terminal-title' aria-label='Terminal command'>
+          <span class='terminal-path'>~/blog</span>{' '}
+          <span class='terminal-prompt'>$</span> <span class='terminal-cmd'>cd /posts</span>
+          <span class='terminal-cursor' aria-hidden='true'></span>
+        </p>
+      </header>
+      <div class='terminal-body'>
+        <header class='terminal-output-header' data-pagefind-body>
+          <h1 id='article-title' class='terminal-main-title'>{title || 'Untitled'}</h1>
+          {description && <p class='mt-3 text-base-content/70'>{description}</p>}
+          <div class='mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-base-content/65'>
+            {formattedDate && <time datetime={new Date(date).toISOString()}>{formattedDate}</time>}
+            {readingInfo && (
+              <span data-pagefind-ignore>
+                {readingInfo.words.toLocaleString('en-US')} words · {readingInfo.minutes} min read
+              </span>
+            )}
+          </div>
+          {Array.isArray(tags) && tags.length > 0 && (
+            <div class='mt-3 flex flex-wrap gap-2'>
               {tags.map((tag: string) => (
-                <span key={tag} class='badge badge-soft badge-xs font-normal'>
-                  #{tag}
-                </span>
+                <span class='badge badge-soft badge-sm' key={tag}>#{tag}</span>
               ))}
             </div>
           )}
-        </div>
-
-        <hr class='border-base-content/20 border-dashed pt-2' />
-      </header>
-
-      <div class='prose max-w-none text-base text-base-content/90 leading-[1.8] lg:text-lg lg:leading-[1.85]'>
-        {children}
+        </header>
+        <div class='prose max-w-none font-sans wrap-anywhere' data-pagefind-body>{children}</div>
+        <footer class='terminal-footer'>
+          <div class='terminal-footer-line'>
+            <span class='terminal-prompt'>$</span>{' '}
+            <span>echo &quot;Maintained by {author}&quot;</span>
+          </div>
+          <div class='terminal-footer-output'>
+            Maintained by <a class='link link-hover' href='/'>{author}</a>
+          </div>
+          <div class='terminal-status-bar'>
+            <span class='terminal-status-item'>NORMAL</span>
+            {readingInfo && (
+              <span class='terminal-status-item'>
+                words: {readingInfo.words.toLocaleString('en-US')}
+              </span>
+            )}
+            <span class='terminal-status-item terminal-status-right'>EOF</span>
+          </div>
+        </footer>
       </div>
-
-      <footer class='mt-16 flex items-center justify-between border-base-content/20 border-dashed border-t pt-8 font-mono text-base-content/50 text-xs lg:mt-20 lg:text-sm'>
-        <BackBtn />
-        <TopBtn />
-      </footer>
+      <a
+        id='back-to-top'
+        href='#top'
+        aria-label='Back to top'
+        class='btn btn-primary btn-outline btn-square btn-sm fixed bottom-5 right-5 z-40 text-xl shadow-md sm:btn-lg sm:text-2xl'
+        hidden
+      >
+        ↑
+      </a>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `const articleTitle = document.getElementById('article-title');
+const backToTop = document.getElementById('back-to-top');
+const headerHeight = document.querySelector('body > header').getBoundingClientRect().height;
+new IntersectionObserver(([entry]) => {
+  backToTop.hidden = entry.isIntersecting || entry.boundingClientRect.bottom > (entry.rootBounds?.top ?? 0);
+}, { rootMargin: '-' + headerHeight + 'px 0px 0px 0px' }).observe(articleTitle);`,
+        }}
+      />
     </article>
   );
 };

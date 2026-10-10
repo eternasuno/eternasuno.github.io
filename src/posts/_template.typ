@@ -20,6 +20,7 @@
         src: web-path,
         alt: if it.alt != none { it.alt } else { "" },
         loading: "lazy",
+        "image-size": "",
         class: "typst-article-image",
       ))
     } else {

@@ -1,17 +1,14 @@
 export default ({ author }: { author?: string }) => (
-  <footer class='w-full'>
-    <div class="mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-10 font-mono text-base-content/60 text-xs lg:max-w-4xl lg:text-sm">
-      <span>
-        © {new Date().getFullYear()} {author}
-      </span>
+  <footer class='mt-12 w-full border-t border-primary/30 bg-base-200'>
+    <div class='mx-auto flex max-w-[62.5rem] flex-wrap items-center justify-between gap-2 px-4 py-3 text-xs text-base-content/60'>
+      <span>© {new Date().getFullYear()} {author}</span>
       <a
-        href='/rss.xml'
-        aria-label='RSS'
-        target='_blank'
-        rel='noopener noreferrer'
-        class="uppercase tracking-wider transition-colors hover:text-base-content"
+        class='hover:text-primary'
+        href='https://creativecommons.org/licenses/by-nc-sa/4.0/'
+        rel='license'
+        title='Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International'
       >
-        RSS
+        CC BY-NC-SA 4.0
       </a>
     </div>
   </footer>

@@ -4,6 +4,10 @@
       "npm:sharp"
     ]
   },
+  "exclude": [
+    ".devenv/",
+    "_site/"
+  ],
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "lume",

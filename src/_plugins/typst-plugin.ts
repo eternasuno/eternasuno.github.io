@@ -38,8 +38,12 @@ export const typst = (userOptions?: Options) => {
       const file = await processor.process(path);
       const metadata = file.data.metadata as Record<string, unknown>;
       const content = String(file);
+      let wordCount = 0;
+      visit(fromHtml(content, { fragment: true }), 'text', (node) => {
+        wordCount += Array.from(node.value.replace(/\s/gu, '')).length;
+      });
 
-      return { content, ...metadata } as { content: string } & Record<string, unknown>;
+      return { content, ...metadata, wordCount } as { content: string } & Record<string, unknown>;
     };
 
     site.loadPages(options.extensions, {

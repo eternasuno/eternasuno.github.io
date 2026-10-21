@@ -13,7 +13,7 @@ export default ({ metas, children, title, author }: Lume.Data) => {
         <link rel='alternate' type='application/rss+xml' href='/rss.xml' />
         <title>{title}</title>
       </head>
-      <body class='leading-[1.7] antialiased'>
+      <body class='flex min-h-dvh flex-col leading-[1.7] antialiased'>
         <Header site={siteName} />
         <main
           id='main-content'

@@ -1,5 +1,5 @@
 export default ({ author }: { author?: string }) => (
-  <footer class='mt-12 w-full border-t border-primary/30 bg-base-200'>
+  <footer class='mt-auto w-full border-t border-primary/20 bg-base-100'>
     <div class='mx-auto flex max-w-[62.5rem] flex-wrap items-center justify-between gap-2 px-4 py-3 text-xs text-base-content/60'>
       <span>© {new Date().getFullYear()} {author}</span>
       <a

@@ -7,16 +7,22 @@ export default ({ site }: { site: string }) => (
       >
         Skip to content
       </a>
-      <div class='mx-auto flex h-14 max-w-[75rem] items-center gap-4 px-4'>
-        <a class='text-sm font-semibold' href='/'>{site}</a>
+      <div class='mx-auto flex h-14 max-w-[62.5rem] items-center gap-4 px-4'>
+        <a
+          class='flex min-w-0 items-center gap-2 text-sm font-semibold hover:text-primary'
+          href='/'
+        >
+          <span class='text-primary' aria-hidden='true'>~/</span>
+          <span class='truncate'>{site}</span>
+        </a>
         <nav class='ml-auto flex items-center gap-2' aria-label='Main navigation'>
           <button
             type='button'
-            class='flex size-[2.125rem] items-center justify-center rounded-md text-base-content/70 hover:bg-primary/10 hover:text-primary'
+            class='btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary'
             aria-label='Search'
             aria-haspopup='dialog'
             aria-controls='search_modal'
-            onclick="document.getElementById('search_modal').showModal()"
+            onclick="const dialog = document.getElementById('search_modal'); dialog.showModal(); dialog.querySelector('input')?.focus()"
           >
             <svg
               class='size-[1.125rem]'
@@ -35,7 +41,7 @@ export default ({ site }: { site: string }) => (
           </button>
           <button
             type='button'
-            class='flex size-[2.125rem] items-center justify-center rounded-md text-base-content/70 hover:bg-primary/10 hover:text-primary'
+            class='btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary'
             aria-label='Toggle light and dark mode'
             onclick="const root = document.documentElement; const current = root.getAttribute('data-theme'); const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'halloween' : 'light'; const theme = current || systemTheme; root.setAttribute('data-theme', theme === 'halloween' ? 'light' : 'halloween')"
           >
@@ -55,7 +61,7 @@ export default ({ site }: { site: string }) => (
             </svg>
           </button>
           <a
-            class='flex size-[2.125rem] items-center justify-center rounded-md text-base-content/70 hover:bg-primary/10 hover:text-primary'
+            class='btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary'
             href='/rss.xml'
             target='_blank'
             rel='noopener noreferrer'
@@ -88,12 +94,23 @@ export default ({ site }: { site: string }) => (
     >
       <div class='modal-box terminal-search-dialog'>
         <h2 class='sr-only' id='search-title'>Search</h2>
-        <span class='terminal-search-prefix' aria-hidden='true'>
-          <span class='terminal-prompt'>$</span>{' '}
-          <span class='terminal-search-command'>find . -name</span>
-        </span>
-        <div id='search'></div>
-        <p class='terminal-search-empty'>Type a query to search posts.</p>
+        <div class='flex items-center justify-between border-b border-primary/25 px-4 py-2'>
+          <span class='text-xs text-base-content/75' aria-hidden='true'>SEARCH / posts</span>
+          <form method='dialog'>
+            <button class='btn btn-ghost btn-sm min-h-11 gap-2' aria-label='Close search'>
+              <span class='text-xs'>Esc</span>
+              <span aria-hidden='true'>×</span>
+            </button>
+          </form>
+        </div>
+        <div class='relative'>
+          <span class='terminal-search-prefix' aria-hidden='true'>
+            <span class='terminal-prompt'>$</span>{' '}
+            <span class='terminal-search-command'>find . -name</span>
+          </span>
+          <div id='search'></div>
+        </div>
+        <p class='terminal-search-empty'>输入关键词，搜索文章内容。</p>
       </div>
       <form method='dialog' class='modal-backdrop'>
         <button type='submit'>Close search</button>

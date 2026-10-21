@@ -19,6 +19,12 @@ export default (
 
   return (
     <Terminal user={author} host={terminalHost} path='~/posts' command={`cat ${filename}`}>
+      <a
+        href='/'
+        class='mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-info hover:underline'
+      >
+        <span aria-hidden='true'>←</span> cd .. / 全部文章
+      </a>
       <header class='terminal-output-header' data-pagefind-body>
         <h1 id='article-title' class='terminal-main-title'>{title || 'Untitled'}</h1>
         {description && <p class='mt-3 text-base-content/70'>{description}</p>}
@@ -38,7 +44,9 @@ export default (
           </div>
         )}
       </header>
-      <div class='prose max-w-none font-sans wrap-anywhere' data-pagefind-body>{children}</div>
+      <div class='prose mx-auto max-w-[72ch] font-sans wrap-anywhere' data-pagefind-body>
+        {children}
+      </div>
       <TerminalFooter host={terminalHost} author={author} path='~/posts' />
       <TerminalStatus>
         {readingInfo && `words: ${readingInfo.words.toLocaleString('en-US')}`}

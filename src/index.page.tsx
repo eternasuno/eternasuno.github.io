@@ -1,7 +1,6 @@
 import Terminal from './_components/terminal.tsx';
 import TerminalFooter from './_components/terminal-footer.tsx';
 import TerminalStatus from './_components/terminal-status.tsx';
-import TerminalCommand from './_components/terminal-command.tsx';
 
 export default ({ search, author, terminalHost }: Lume.Data) => {
   const posts = search.pages('url^=/posts/', 'date=desc');
@@ -9,18 +8,19 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
   return (
     <Terminal user={author} host={terminalHost} path='~' command='ls -la ./posts/ | more'>
       <header class='terminal-output-header'>
-        <h1 class='terminal-main-title'>文章</h1>
+        <p class='mb-3 text-xs tracking-widest text-info' aria-hidden='true'>~/posts/</p>
+        <div class='flex flex-wrap items-end justify-between gap-3'>
+          <h1 class='terminal-main-title'>文章</h1>
+          <p class='text-sm text-base-content/75'>{posts.length} posts · newest first</p>
+        </div>
       </header>
       <nav class='terminal-toc' aria-label='Listing'>
-        <div class='terminal-toc-header'>
-          <TerminalCommand
-            user={author}
-            host={terminalHost}
-            path='~'
-            command='ls -la ./posts/ | more'
-          />
+        <div class='terminal-dir-header' aria-hidden='true'>
+          <span class='terminal-dir-perm'>mode</span>
+          <span class='terminal-dir-size'>字数</span>
+          <span class='terminal-dir-date'>published</span>
+          <span>name</span>
         </div>
-        <p class='terminal-dir-header'>total {posts.length} posts</p>
         <ul class='terminal-dir-listing'>
           {posts.map(({ date, url, title, wordCount }) => {
             const postDate = new Date(date);

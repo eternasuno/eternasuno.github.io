@@ -13,11 +13,11 @@ export default ({ metas, children, title, author }: Lume.Data) => {
         <link rel='alternate' type='application/rss+xml' href='/rss.xml' />
         <title>{title}</title>
       </head>
-      <body class='flex min-h-dvh flex-col leading-[1.7] antialiased'>
+      <body class='flex min-h-dvh flex-col font-mono leading-relaxed antialiased [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-primary [&_:focus-visible]:outline-offset-4'>
         <Header site={siteName} />
         <main
           id='main-content'
-          class='terminal-guide'
+          class='relative flex-1 px-4 pt-12 pb-16 max-lg:px-3 max-lg:pt-6 max-lg:pb-8 bg-radial-[at_50%_0%] from-primary/5 to-transparent to-65%'
         >
           {children}
         </main>

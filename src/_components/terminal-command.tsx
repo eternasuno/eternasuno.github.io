@@ -9,10 +9,16 @@ export interface Props {
 export default ({ user, host, command, path = '~/blog', cursor = false }: Props) => (
   <>
     <span class='hidden sm:inline'>
-      <span class='terminal-prompt'>{user}@{host}:</span>
+      <span class='text-success'>{user}@{host}:</span>
     </span>
-    <span class='terminal-path'>{path}</span> <span class='terminal-prompt'>$</span>{' '}
-    <span class='terminal-cmd'>{command}</span>
-    {cursor && <span class='terminal-cursor' aria-hidden='true'></span>}
+    <span class='text-info'>{path}</span> <span class='text-success'>$</span>{' '}
+    <span class='text-primary'>{command}</span>
+    {cursor && (
+      <span
+        class='ml-0.5 inline-block h-0.5 w-2 align-text-bottom bg-primary motion-safe:animate-pulse'
+        aria-hidden='true'
+      >
+      </span>
+    )}
   </>
 );

@@ -1,3 +1,5 @@
+import ArticleBody from '../../_components/article-body.tsx';
+import TerminalHeading from '../../_components/terminal-heading.tsx';
 import Terminal from '../../_components/terminal.tsx';
 import TerminalFooter from '../../_components/terminal-footer.tsx';
 import TerminalStatus from '../../_components/terminal-status.tsx';
@@ -25,8 +27,8 @@ export default (
       >
         <span aria-hidden='true'>←</span> cd .. / 全部文章
       </a>
-      <header class='terminal-output-header' data-pagefind-body>
-        <h1 id='article-title' class='terminal-main-title'>{title || 'Untitled'}</h1>
+      <header class='mb-8 border-b border-primary/30 pb-6' data-pagefind-body>
+        <TerminalHeading id='article-title'>{title || 'Untitled'}</TerminalHeading>
         {description && <p class='mt-3 text-base-content/70'>{description}</p>}
         <div class='mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-base-content/65'>
           {formattedDate && <time datetime={new Date(date).toISOString()}>{formattedDate}</time>}
@@ -44,9 +46,7 @@ export default (
           </div>
         )}
       </header>
-      <div class='prose mx-auto max-w-[72ch] font-sans wrap-anywhere' data-pagefind-body>
-        {children}
-      </div>
+      <ArticleBody>{children}</ArticleBody>
       <TerminalFooter host={terminalHost} author={author} path='~/posts' />
       <TerminalStatus>
         {readingInfo && `words: ${readingInfo.words.toLocaleString('en-US')}`}
@@ -55,7 +55,7 @@ export default (
         id='back-to-top'
         href='#top'
         aria-label='Back to top'
-        class='btn btn-primary btn-outline btn-square btn-sm fixed bottom-5 right-5 z-40 text-xl shadow-md sm:btn-lg sm:text-2xl'
+        class='[&[hidden]]:hidden! btn btn-primary btn-outline btn-square btn-sm fixed bottom-5 right-5 z-40 text-xl shadow-md sm:btn-lg sm:text-2xl'
         hidden
       >
         ↑

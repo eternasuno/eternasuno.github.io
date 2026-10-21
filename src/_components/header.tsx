@@ -1,6 +1,8 @@
+import SearchDialog from './search-dialog.tsx';
+
 export default ({ site }: { site: string }) => (
   <>
-    <header class='sticky top-0 z-50 w-full border-b border-primary/30 bg-base-100/90 backdrop-blur-[0.5rem]'>
+    <header class='sticky top-0 z-50 w-full border-b border-primary/30 bg-base-100/90 backdrop-blur-sm'>
       <a
         class='absolute top-2 left-2 z-[60] -translate-y-24 rounded-md bg-base-100 px-3 py-2 focus:translate-y-0'
         href='#main-content'
@@ -9,7 +11,7 @@ export default ({ site }: { site: string }) => (
       </a>
       <div class='mx-auto flex h-14 max-w-[62.5rem] items-center gap-4 px-4'>
         <a
-          class='flex min-w-0 items-center gap-2 text-sm font-semibold hover:text-primary'
+          class='flex min-w-0 items-center gap-2 font-semibold text-sm hover:text-primary'
           href='/'
         >
           <span class='text-primary' aria-hidden='true'>~/</span>
@@ -25,7 +27,7 @@ export default ({ site }: { site: string }) => (
             onclick="const dialog = document.getElementById('search_modal'); dialog.showModal(); dialog.querySelector('input')?.focus()"
           >
             <svg
-              class='size-[1.125rem]'
+              class='size-4.5'
               aria-hidden='true'
               viewBox='0 0 24 24'
               fill='none'
@@ -46,7 +48,7 @@ export default ({ site }: { site: string }) => (
             onclick="const root = document.documentElement; const current = root.getAttribute('data-theme'); const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'halloween' : 'light'; const theme = current || systemTheme; root.setAttribute('data-theme', theme === 'halloween' ? 'light' : 'halloween')"
           >
             <svg
-              class='size-[1.125rem]'
+              class='size-4.5'
               aria-hidden='true'
               viewBox='0 0 24 24'
               fill='none'
@@ -68,7 +70,7 @@ export default ({ site }: { site: string }) => (
             aria-label='RSS feed'
           >
             <svg
-              class='size-[1.125rem]'
+              class='size-4.5'
               aria-hidden='true'
               viewBox='0 0 24 24'
               fill='none'
@@ -87,34 +89,6 @@ export default ({ site }: { site: string }) => (
         </nav>
       </div>
     </header>
-    <dialog
-      id='search_modal'
-      class='modal'
-      aria-labelledby='search-title'
-    >
-      <div class='modal-box terminal-search-dialog'>
-        <h2 class='sr-only' id='search-title'>Search</h2>
-        <div class='flex items-center justify-between border-b border-primary/25 px-4 py-2'>
-          <span class='text-xs text-base-content/75' aria-hidden='true'>SEARCH / posts</span>
-          <form method='dialog'>
-            <button class='btn btn-ghost btn-sm min-h-11 gap-2' aria-label='Close search'>
-              <span class='text-xs'>Esc</span>
-              <span aria-hidden='true'>×</span>
-            </button>
-          </form>
-        </div>
-        <div class='relative'>
-          <span class='terminal-search-prefix' aria-hidden='true'>
-            <span class='terminal-prompt'>$</span>{' '}
-            <span class='terminal-search-command'>find . -name</span>
-          </span>
-          <div id='search'></div>
-        </div>
-        <p class='terminal-search-empty'>输入关键词，搜索文章内容。</p>
-      </div>
-      <form method='dialog' class='modal-backdrop'>
-        <button type='submit'>Close search</button>
-      </form>
-    </dialog>
+    <SearchDialog />
   </>
 );

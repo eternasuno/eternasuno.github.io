@@ -98,6 +98,15 @@ const rewrite = (hast: Root) => {
 
   if (body) {
     visit(body, 'element', (node, index, parent) => {
+      if (
+        node.tagName === 'a' &&
+        typeof node.properties.href === 'string' &&
+        !node.properties.href.startsWith('#')
+      ) {
+        node.properties.target = '_blank';
+        node.properties.rel = ['noopener', 'noreferrer'];
+      }
+
       if (node.tagName === 'code' && node.properties?.['data-lang']) {
         const lang = node.properties['data-lang'];
 

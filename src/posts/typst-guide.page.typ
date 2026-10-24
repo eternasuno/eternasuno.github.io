@@ -6,13 +6,15 @@
   tags: ("typst", "syntax", "guide"),
 )
 
-这篇文章用具体示例过一遍最常见的 Typst 语法。
+Typst 是一种用文字和简单标记编写文档的排版工具。你可以用它写笔记、报告或论文。这篇文章从常用写法开始，介绍文字、列表、代码、公式和图片等内容。
+
+下面的示例中，`#` 表示调用 Typst 的函数或进入代码表达式，`(...)` 用来传入参数，`[...]` 用来放文字等文档内容。例如，`#underline[重点]` 就是给“重点”加上下划线。
 
 = 标题与段落
 
 标题用 `=` 表示层级，一级标题一个 `=`，二级两个 `==`，三级三个 `===`，依此类推。段落直接书写，空行分段。
 
-== 三级标题示例
+== 二级标题示例
 
 这是一段普通的正文。行内的换行会被当作空格处理，真正的分段要靠空行。
 
@@ -30,7 +32,7 @@
 - #strike[删除线] 用 `#strike[...]` 函数
 - 行内代码 `#text(...)` 用一对反引号包裹
 
-字号、颜色等排版属性用 `#text(...)` 设置，例如 #text(size: 0.9em)[小一号的字]。
+字号、颜色等文字样式可以用 `#text(...)` 设置。例如，`#text(size: 0.9em)[小一号的字]` 会显示为 #text(size: 0.9em)[小一号的字]。这里的 `0.9em` 表示当前字号的 90%。
 
 = 列表
 
@@ -44,23 +46,23 @@
 
 有序列表每一项以 `+ ` 开头：
 
-+ 第一步：编写内容
-+ 第二步：构建站点
-+ 第三步：部署上线
++ 第一步：准备材料
++ 第二步：整理内容
++ 第三步：检查文档
 
 = 链接与引用
 
 链接用 `#link("url")[文字]`，例如 Typst 官网 #link("https://typst.app/")[typst.app]。
 
-引用块用 `#quote[...]`：
+引用别人的话时，可以用 `#quote[...]`。如果想让引用单独成块，可以写成 `#quote(block: true)[...]`：
 
-#quote[
-  这是一段引用文字，用来测试引用块的样式。
+#quote(block: true)[
+  这是一段引用文字，可以换成你想引用的原文。
 ]
 
 = 代码
 
-代码块用三个反引号包裹，反引号后跟语言名即可获得语法高亮：
+多行代码用三个反引号包裹，在开头的反引号后写上语言名，例如 `python`。Typst 可以根据语言名为代码着色：
 
 ```python
 def fibonacci(n: int) -> list[int]:
@@ -77,20 +79,22 @@ print(fibonacci(10))
 TypeScript 同样支持：
 
 ```ts
-interface Post {
+interface Book {
   title: string;
-  tags: string[];
-  published: boolean;
+  finished: boolean;
 }
 
-const posts: Post[] = await loadAllPosts();
-const drafts = posts.filter((p) => !p.published);
-console.log(`Found ${drafts.length} draft(s).`);
+const books: Book[] = [
+  { title: "学习 Typst", finished: false },
+  { title: "旅行笔记", finished: true },
+];
+const unread = books.filter((book) => !book.finished);
+console.log(`还有 ${unread.length} 本书没读完。`);
 ```
 
 = 数学公式
 
-数学是 Typst 的强项，行内公式用 `$...$`（美元符号与内容之间没有空格），块级公式用 `$ ... $`（两侧留有空格）。
+公式写在一对美元符号之间。紧贴两侧美元符号书写的 `$...$` 会嵌在文字中；两侧都留出空白的 `$ ... $` 会单独成行。公式内部仍然可以使用空格，让源码更容易阅读。
 
 行内公式示例：勾股定理 $a^2 + b^2 = c^2$，欧拉恒等式 $e^(i pi) + 1 = 0$。
 
@@ -108,7 +112,9 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
 
 = 表格
 
-表格用 `#table(...)` 创建，`columns` 指定列宽，`table.header(...)` 标记表头行，单元格内容用方括号包裹，可以是任意内容（公式、代码、图片都可以）：
+表格用 `#table(...)` 创建。`columns` 可以指定列数，也可以像下面这样设置各列的宽度比例：`(1fr, 1.2fr, 2fr)` 表示三列按 1∶1.2∶2 分配可用宽度。
+
+`table.header(...)` 用来设置表头。每个单元格的内容放在 `[...]` 中，按从左到右、从上到下的顺序填写。单元格里也能放公式、代码和图片：
 
 #table(
   columns: (1fr, 1.2fr, 2fr),
@@ -116,18 +122,18 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
   table.header([元素], [示例], [说明]),
   [行内公式], [$a^2 + b^2 = c^2$], [与文字混排显示],
   [块级公式], [$E = m c^2$], [单独成行、居中显示],
-  [行内代码], [`deno task serve`], [等宽字体与底色],
+  [行内代码], [`print("Hello")`], [显示一小段代码],
   [图片], [#image("../_includes/images/typst-logo.png", width: 60%)], [相对路径引入],
-  [链接], [#link("https://lume.land/")[Lume]], [链接颜色与下划线],
+  [链接], [#link("https://typst.app/")[Typst 官网]], [点击后打开网页],
 )
 
 = 图片
 
-图片用 `#image("路径")` 引入，路径相对于文章所在目录：
+图片用 `#image("路径")` 引入。相对路径从当前 Typst 文件所在的目录开始查找。例如，把图片 `photo.png` 放在文档旁边，就可以写 `#image("photo.png")`。下面是一张图片示例：
 
 #image("../_includes/images/typst-logo.png")
 
-带题注的图片用 `#figure(...)` 包裹，题注会自动编号：
+想给图片加上说明文字，可以用 `#figure(...)` 包裹图片，并通过 `caption` 设置题注。Typst 会自动为它编号：
 
 #figure(
   image("../_includes/images/typst-logo.png"),
@@ -136,7 +142,7 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
 
 = 图形绘制
 
-Typst 可以原生绘制矢量图形，例如矩形 `#rect(...)` 和圆形 `#circle(...)`：
+不准备图片文件，也可以直接用 Typst 画简单图形。`#rect(...)` 用来画矩形，`#circle(...)` 用来画圆形。`width` 和 `height` 设置宽高，`fill` 设置填充颜色。下面用几个不同高度的矩形组成柱状图：
 
 #figure(
   {
@@ -152,7 +158,7 @@ Typst 可以原生绘制矢量图形，例如矩形 `#rect(...)` 和圆形 `#cir
   caption: [用 `rect` 绘制的柱状图],
 )
 
-圆与描边：
+`radius` 可以设置圆的半径，`stroke` 可以设置边框的粗细和颜色。下面是一个圆和一个矩形：
 
 #figure(
   {
@@ -166,4 +172,4 @@ Typst 可以原生绘制矢量图形，例如矩形 `#rect(...)` 和圆形 `#cir
 
 = 脚注
 
-脚注用 `#footnote[...]`，点击编号可以跳转到文末的注释列表。示例：Typst 是一门排版语言#footnote[Typst 是 2019 年开始开发的排版系统，目标是取代 LaTeX。]。
+脚注用 `#footnote[...]` 添加，方括号里写补充说明。Typst 会自动生成编号，并把说明放到相应的注释区域；具体位置取决于输出格式。示例：Typst 可以用来编写文档#footnote[常见用途包括笔记、报告、论文和演示文稿。]。

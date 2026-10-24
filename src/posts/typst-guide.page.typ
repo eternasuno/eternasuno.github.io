@@ -1,4 +1,4 @@
-#import "./_template.typ": post
+#import "./_template.typ": post, drawing
 
 #show: post.with(
   title: "Typst 语法速览",
@@ -145,7 +145,7 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
 不准备图片文件，也可以直接用 Typst 画简单图形。`#rect(...)` 用来画矩形，`#circle(...)` 用来画圆形。`width` 和 `height` 设置宽高，`fill` 设置填充颜色。下面用几个不同高度的矩形组成柱状图：
 
 #figure(
-  {
+  drawing({
     set align(center)
     box(rect(width: 34pt, height: 18pt, fill: rgb("#e74c3c"), radius: 2pt))
     h(10pt)
@@ -154,19 +154,19 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
     box(rect(width: 34pt, height: 52pt, fill: rgb("#2ecc71"), radius: 2pt))
     h(10pt)
     box(rect(width: 34pt, height: 44pt, fill: rgb("#f39c12"), radius: 2pt))
-  },
+  }),
   caption: [用 `rect` 绘制的柱状图],
 )
 
 `radius` 可以设置圆的半径，`stroke` 可以设置边框的粗细和颜色。下面是一个圆和一个矩形：
 
 #figure(
-  {
+  drawing({
     set align(center)
     circle(radius: 22pt, stroke: 2pt + rgb("#8e44ad"), fill: rgb("#8e44ad").transparentize(70%))
     h(10pt)
     box(rect(width: 60pt, height: 30pt, stroke: 1pt + rgb("#555555")))
-  },
+  }),
   caption: [`circle` 与带描边的 `rect`],
 )
 

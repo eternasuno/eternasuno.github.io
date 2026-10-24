@@ -1,5 +1,13 @@
 #let target = sys.inputs.at("target", default: "pdf")
 
+#let drawing(body) = {
+  if target == "html" {
+    html.frame(box(body))
+  } else {
+    body
+  }
+}
+
 #let post(description: "", tags: (), title: auto, body) = {
   let final-title = if title == auto {
     "Untitled"
@@ -36,13 +44,6 @@
       doc
     }
   }
-
-  let frame-drawing(body) = if target == "html" { html.frame(box(body)) } else { body }
-  show rect: it => frame-drawing(it)
-  show circle: it => frame-drawing(it)
-  show ellipse: it => frame-drawing(it)
-  show line: it => frame-drawing(it)
-  show polygon: it => frame-drawing(it)
 
   if target != "html" {
     align(center, text(size: 2em, weight: "bold", final-title))

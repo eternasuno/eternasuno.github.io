@@ -11,14 +11,14 @@ export default () => (
       </div>
       <div class='relative'>
         <span
-          class='pointer-events-none absolute top-3 left-4 z-1 font-mono text-base/7 text-base-content/75'
+          class="pointer-events-none absolute top-3 left-4 z-1 font-mono text-base-content/75 text-base/7"
           aria-hidden='true'
         >
           <span class='text-success'>$</span> <span class='max-sm:hidden'>find . -name</span>
         </span>
         <div id='search' class='relative'></div>
       </div>
-      <p class='m-0 px-4 py-6 text-center font-mono text-sm text-base-content/75 leading-normal group-has-[input:not(:placeholder-shown)]:hidden'>
+      <p class="m-0 px-4 py-6 text-center font-mono text-base-content/75 text-sm leading-normal group-has-[input:not(:placeholder-shown)]:hidden">
         输入关键词，搜索文章内容。
       </p>
     </div>

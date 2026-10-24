@@ -23,14 +23,14 @@ export default (
     <Terminal user={author} host={terminalHost} path='~/posts' command={`cat ${filename}`}>
       <a
         href='/'
-        class='mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-info hover:underline'
+        class="mb-6 inline-flex min-h-11 items-center gap-2 text-info text-sm hover:underline"
       >
         <span aria-hidden='true'>←</span> cd .. / 全部文章
       </a>
       <header class='mb-8 border-b border-primary/30 pb-6' data-pagefind-body>
         <TerminalHeading id='article-title'>{title || 'Untitled'}</TerminalHeading>
         {description && <p class='mt-3 text-base-content/70'>{description}</p>}
-        <div class='mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-base-content/65'>
+        <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-base-content/65 text-sm">
           {formattedDate && <time datetime={new Date(date).toISOString()}>{formattedDate}</time>}
           {readingInfo && (
             <span data-pagefind-ignore>
@@ -41,7 +41,7 @@ export default (
         {Array.isArray(tags) && tags.length > 0 && (
           <div class='mt-3 flex flex-wrap gap-2'>
             {tags.map((tag: string) => (
-              <span class='badge badge-soft badge-sm' key={tag}>#{tag}</span>
+              <span class="badge badge-sm badge-soft" key={tag}>#{tag}</span>
             ))}
           </div>
         )}
@@ -55,7 +55,7 @@ export default (
         id='back-to-top'
         href='#top'
         aria-label='Back to top'
-        class='[&[hidden]]:hidden! btn btn-primary btn-outline btn-square btn-sm fixed bottom-5 right-5 z-40 text-xl shadow-md sm:btn-lg sm:text-2xl'
+        class="[&[hidden]]:hidden! btn btn-outline btn-primary btn-sm btn-square sm:btn-lg fixed right-5 bottom-5 z-40 text-xl shadow-md sm:text-2xl"
         hidden
       >
         ↑

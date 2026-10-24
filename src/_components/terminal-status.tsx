@@ -4,11 +4,11 @@ export default ({ children }: { children?: Lume.Data['children'] }) => (
     aria-label='Terminal status'
     data-pagefind-ignore
   >
-    <span class='border-r border-primary/30 px-3 py-1 bg-primary font-semibold text-primary-content'>
+    <span class="border-primary/30 border-r bg-primary px-3 py-1 font-semibold text-primary-content">
       NORMAL
     </span>
     {children && (
-      <span class='border-r border-primary/30 px-3 py-1 text-base-content/75'>
+      <span class="border-primary/30 border-r px-3 py-1 text-base-content/75">
         {children}
       </span>
     )}

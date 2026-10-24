@@ -9,15 +9,15 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
   return (
     <Terminal user={author} host={terminalHost} path='~' command='ls -la ./posts/ | more'>
       <header class='mb-8 border-b border-primary/30 pb-6'>
-        <p class='mb-3 text-xs tracking-widest text-info' aria-hidden='true'>~/posts/</p>
+        <p class='mb-3 text-info text-xs tracking-widest' aria-hidden='true'>~/posts/</p>
         <div class='flex flex-wrap items-end justify-between gap-3'>
           <TerminalHeading>文章</TerminalHeading>
-          <p class='text-sm text-base-content/75'>{posts.length} posts · newest first</p>
+          <p class='text-base-content/75 text-sm'>{posts.length} posts · newest first</p>
         </div>
       </header>
       <nav class='mb-8' aria-label='Listing'>
         <div
-          class='mb-2 flex gap-4 border-b border-primary/30 px-3 pb-3 text-sm leading-relaxed text-info max-lg:hidden'
+          class="mb-2 flex gap-4 border-b border-primary/30 px-3 pb-3 text-info text-sm leading-relaxed max-lg:hidden"
           aria-hidden='true'
         >
           <span class='w-24 shrink-0 text-base-content/75'>mode</span>
@@ -37,7 +37,7 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
             return (
               <li key={url}>
                 <a
-                  class='flex items-baseline gap-4 rounded-none border-b border-l-2 border-b-primary/12 border-l-transparent px-3 py-4 wrap-anywhere hover:border-l-primary hover:bg-primary/8 focus-visible:border-l-primary focus-visible:bg-primary/8 max-lg:grid max-lg:grid-cols-[auto_1fr] max-lg:gap-y-1.5'
+                  class="wrap-anywhere flex items-baseline gap-4 rounded-none border-b border-b-primary/12 border-l-2 border-l-transparent px-3 py-4 hover:border-l-primary hover:bg-primary/8 focus-visible:border-l-primary focus-visible:bg-primary/8 max-lg:grid max-lg:grid-cols-[auto_1fr] max-lg:gap-y-1.5"
                   href={url}
                   aria-label={`${
                     title || 'Untitled'
@@ -70,7 +70,7 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
             );
           })}
         </ul>
-        <div class='mt-6 flex flex-wrap justify-between gap-x-4 gap-y-2 border-t border-dashed border-primary/30 pt-3 text-xs leading-relaxed text-base-content/75'>
+        <div class="mt-6 flex flex-wrap justify-between gap-x-4 gap-y-2 border-dashed border-primary/30 border-t pt-3 text-base-content/75 text-xs leading-relaxed">
           <span class='flex items-center gap-1.5'>
             <span class='font-semibold text-primary'>--More--</span>
             <span class='text-success'>(100%)</span>

@@ -12,17 +12,17 @@ const Titlebar = (props: CommandProps) => (
       <span class='size-3 rounded-full bg-success'></span>
     </div>
     <p
-      class='min-w-0 flex-1 truncate text-xs leading-relaxed text-base-content/75'
+      class="min-w-0 flex-1 truncate text-base-content/75 text-xs leading-relaxed"
       aria-label='Terminal command'
       data-pagefind-ignore
     >
-      <TerminalCommand {...props} cursor />
+      <TerminalCommand {...{ ...props, cursor: true }} />
     </p>
   </header>
 );
 
 export default ({ children, ...command }: Props) => (
-  <article class='mx-auto w-full max-w-[62.5rem] overflow-hidden rounded-xl border border-primary/30 bg-base-100 shadow-xl shadow-primary/10'>
+  <article class="mx-auto w-full max-w-[62.5rem] overflow-hidden rounded-xl border border-primary/30 bg-base-100 shadow-primary/10 shadow-xl">
     <Titlebar {...command} />
     <div class='relative p-6 sm:p-8 lg:p-12'>{children}</div>
   </article>

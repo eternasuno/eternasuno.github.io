@@ -13,7 +13,7 @@ export default ({ children }: { children?: Lume.Data['children'] }) => (
         {children}
       </span>
     )}
-    <span class="ml-auto border-l border-primary/30 px-3 py-1 text-success max-lg:shrink-0 max-lg:px-2">
+    <span class="ml-auto border-l border-primary/30 px-3 py-1 text-success-content dark:text-success max-lg:shrink-0 max-lg:px-2">
       EOF
     </span>
   </div>

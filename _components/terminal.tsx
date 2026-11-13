@@ -17,7 +17,7 @@ const Titlebar = (props: CommandProps) => (
       class="min-w-0 flex-1 truncate text-base-content/75 text-xs leading-relaxed"
       data-pagefind-ignore
     >
-      <TerminalCommand {...{ ...props, cursor: true }} />
+      <TerminalCommand {...props} cursor />
     </p>
   </header>
 );

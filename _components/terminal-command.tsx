@@ -14,12 +14,11 @@ export default ({
   cursor = false,
 }: Props) => (
   <>
-    <span class="hidden sm:inline">
-      <span class="text-success">
-        {user}@{host}:
-      </span>
+    <span class="hidden text-success-content sm:inline dark:text-success">
+      {user}@{host}:
     </span>
-    <span class="text-info">{path}</span> <span class="text-success">$</span>{' '}
+    <span class="text-info-content">{path}</span>{' '}
+    <span class="text-success-content dark:text-success">$</span>{' '}
     <span class="text-primary">{command}</span>
     {cursor && (
       <span

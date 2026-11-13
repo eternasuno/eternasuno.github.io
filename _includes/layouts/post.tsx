@@ -36,14 +36,12 @@ export default ({
     >
       <a
         href="/"
-        class="mb-6 inline-flex min-h-11 items-center gap-2 text-info text-sm hover:underline"
+        class="mb-6 inline-flex min-h-11 items-center gap-2 text-info-content text-sm hover:underline"
       >
         <span aria-hidden="true">←</span> cd .. / 全部文章
       </a>
       <header class="mb-8 border-b border-primary/30 pb-6" data-pagefind-body>
-        <TerminalHeading id="article-title">
-          {title || 'Untitled'}
-        </TerminalHeading>
+        <TerminalHeading id="article-title">{title}</TerminalHeading>
         {description && <p class="mt-3 text-base-content/70">{description}</p>}
         <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-base-content/65 text-sm">
           {formattedDate && (

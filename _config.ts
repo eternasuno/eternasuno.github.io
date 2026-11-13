@@ -45,6 +45,7 @@ site.use(
         rehypeShiki,
         {
           defaultColor: false,
+          defaultLanguage: 'text',
           inline: 'tailing-curly-colon',
           themes: { dark: 'one-dark-pro', light: 'one-light' },
           transformers: [

@@ -10,7 +10,7 @@ notes.
   `package.json`.
 - **Templates:** build-time TSX using Lume's JSX engine, not React. `jsxImportSource` in
   `tsconfig.json` is `@lumeland/ssx` (`^0.1.16`).
-- **Content:** Typst compiled to HTML by `src/_plugins/typst-plugin.ts`, using
+- **Content:** Typst compiled to HTML by `_plugins/typst-plugin.ts`, using
   `@myriaddreamin/typst-ts-node-compiler` (`^0.8.0-rc3`).
 - **Styles:** Tailwind CSS v4, DaisyUI 5, and `@tailwindcss/typography`.
 - **Highlighting:** `@shikijs/rehype` (`^4.5.0`), with `one-light` / `one-dark-pro`.
@@ -36,39 +36,45 @@ Documentation-only changes do not require rebuilding the site.
 
 ## Source Map
 
+The Lume source root is the project root (Lume's default `src: './'`; `_config.ts` sets no `src`).
+Lume already ignores `node_modules`, `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`,
+`tsconfig.json`, `_cache`, dot files, and `_`-prefixed names. Root files that a default loader
+would turn into pages must be listed in `site.ignore(...)` in `_config.ts`: currently `AGENTS.md`
+(Markdown) and `devenv.yaml` (YAML). Add new root `.md`/`.yml`/`.yaml`/`.vto` files there too (for
+example `README.md` or a local `devenv.local.yaml`), and confirm `_site` gains no extra pages.
+
 ```text
-_config.ts                         Lume plugins, domain, assets, watchers, global terminalHost
+_config.ts                         Lume plugins, domain, ignores, assets, watchers, terminalHost
 package.json                       Dependencies, scripts, pnpm/Node 24 engines
 pnpm-lock.yaml                     Locked dependency graph
 tsconfig.json                      TypeScript + `@lumeland/ssx` JSX configuration
-biome.json                         Formatting (80 columns, single quotes) and lint rules
-src/
-├── _components/
-│   ├── article-body.tsx           Article prose container and typography rules
-│   ├── header.tsx                 Sticky navigation, search trigger, theme toggle, RSS
-│   ├── search-dialog.tsx          Native #search_modal dialog and Pagefind components
-│   ├── footer.tsx                 Copyright and CC BY-NC-SA 4.0 link
-│   ├── terminal.tsx               Shared terminal window and title bar
-│   ├── terminal-command.tsx       Shared user@host, path, command, optional cursor
-│   ├── terminal-footer.tsx        Maintenance prompt and author link
-│   ├── terminal-heading.tsx       Shared terminal h1 heading
-│   └── terminal-status.tsx        NORMAL / page statistics / EOF status bar
-├── _data.yml                      Global layout, author, title, description, metas
-├── _includes/
-│   ├── favicon.svg
-│   ├── images/                    Copied verbatim to /img/
-│   ├── layouts/
-│   │   ├── base.tsx               HTML shell, Header, main, Footer
-│   │   ├── post.tsx               Terminal article layout and back-to-top behavior
-│   │   └── og_images.tsx          Black/white Satori OG image template
-│   └── style.css                  Themes, terminal UI, Pagefind, prose, Shiki
-├── _plugins/typst-plugin.ts        Typst loader, metadata, HTML rewriting, character count
-├── index.page.tsx                 Terminal-style post directory listing
-├── 404.page.tsx                   404, kaomoji, home link
-└── posts/
-    ├── _data.yml                  Post layout, Git Created dates, OG layout, tag metas
-    ├── _template.typ              Shared Typst post template
-    └── *.page.typ                 Posts (currently hello-world and typst-guide)
+biome.json                         Formatting (Biome default 80 columns, single quotes) and lint rules
+_components/
+├── article-body.tsx               Article prose container and typography rules
+├── header.tsx                     Sticky navigation, search trigger, theme toggle, RSS
+├── search-dialog.tsx              Native #search_modal dialog and Pagefind components
+├── footer.tsx                     Copyright and CC BY-NC-SA 4.0 link
+├── terminal.tsx                   Shared terminal window and title bar
+├── terminal-command.tsx           Shared user@host, path, command, optional cursor
+├── terminal-footer.tsx            Maintenance prompt and author link
+├── terminal-heading.tsx           Shared terminal h1 heading
+└── terminal-status.tsx            NORMAL / page statistics / EOF status bar
+_data.yml                          Global layout, author, title, description, metas
+_includes/
+├── favicon.svg
+├── images/                        Copied verbatim to /img/
+├── layouts/
+│   ├── base.tsx                   HTML shell, theme restore script, Header, main, Footer
+│   ├── post.tsx                   Terminal article layout and back-to-top behavior
+│   └── og_images.tsx              Black/white Satori OG image template
+└── style.css                      Themes, terminal UI, Pagefind, prose, Shiki
+_plugins/typst-plugin.ts           Typst loader, metadata, HTML rewriting, character count
+index.page.tsx                     Terminal-style post directory listing
+404.page.tsx                       404, kaomoji, home link
+posts/
+├── _data.yml                      Post layout, Git Created dates, OG layout, tag metas
+├── _template.typ                  Shared Typst post template
+└── *.page.typ                     Posts (currently hello-world and typst-guide)
 ```
 
 Other configuration:
@@ -97,7 +103,10 @@ Other configuration:
 - Global data defaults to `layouts/base.tsx`. Post data selects `layouts/post.tsx`, which itself
   uses the base layout; it also sets `openGraphLayout: layouts/og_images.tsx` and tag keywords.
 - Posts use descriptive `*.page.typ` filenames, **not date-prefixed filenames**. Their default date
-  is **`Git Created`**, configured in `src/posts/_data.yml`.
+  is **`Git Created`**, configured in `posts/_data.yml`. Lume resolves it with
+  `git log --diff-filter=A --follow`, so renamed/moved posts keep their original date once the move
+  is committed (deletion and addition in the same commit); until then a local build falls back to
+  the file's birthtime.
 - The homepage queries `search.pages('url^=/posts/', 'date=desc')`, without pagination. When
   reading rendered HTML from Lume pages, use `page.text`; search-result `content` is not guaranteed
   to be a string.
@@ -113,16 +122,18 @@ Other configuration:
   and serializes the result. It returns only the compiled HTML body's children.
 - **Code highlighting belongs to Shiki, not Typst.** The HTML template sets `raw(theme: none)`; the
   plugin rewrites `data-lang` into `language-*`. Shiki uses `defaultColor: false`, inline
-  `tailing-curly-colon`, and a transformer adding `data-line`. The CSS `shiki` utility consumes
+  `tailing-curly-colon`, `defaultLanguage: 'text'` (so language-less blocks get the same styling
+  and line numbers), and a transformer adding `data-line`. The CSS `shiki` utility consumes
   `--shiki-*` variables and displays line numbers via `content: attr(data-line)` on `.line::before`.
 - **Two separate counts exist:** the Typst loader's `wordCount` counts non-whitespace Unicode code
   points in serialized HTML text nodes and is shown as `字` on the homepage. Lume's `reading_info`
   plugin supplies `readingInfo.words` and `readingInfo.minutes` for article metadata/status. Do not
   substitute one for the other or label the homepage count as file bytes.
 - Math is exported as MathML; `.prose math mtable` spacing is adjusted in CSS.
-- The template's HTML image rule maps the source basename to `/img/<filename>`, adds lazy loading,
-  the `image-size` marker, and `typst-article-image`, and forwards `it.alt` or an empty string.
-  Images are copied without a transform pipeline. Keep basenames unique and do not assume nested
+- The template's HTML image rule maps the source basename to `/img/<filename>`, adds lazy loading
+  and the `image-size` marker, and forwards `it.alt` or an empty string. Typst `width` is not
+  forwarded; images inside tables are capped by `[&_table_img]:max-w-48` in `article-body.tsx` so
+  they do not squeeze other columns. Images are copied without a transform pipeline. Keep basenames unique and do not assume nested
   source paths survive this rewrite. Use string alt text, not Typst content blocks.
 - **Vector inlining is live functionality.** The template provides `#drawing(body)`, which wraps
   vector drawings with `html.frame(box(body))` for HTML. The plugin converts `img.typst-frame` SVG
@@ -147,8 +158,8 @@ Other configuration:
   Pagefind.
 - The terminal window is capped at `62.5rem`. Directory permissions on the homepage are hidden
   below `lg` (`64rem`, `max-lg:hidden`). Cursor animation respects reduced-motion preferences.
-- Fonts are system fonts only. The body uses a monospace stack with CJK fallbacks; article prose
-  explicitly uses `font-sans`. Do not introduce font assets or undefined utilities such as
+- Fonts are system fonts only. The body uses Tailwind's default monospace stack and article prose
+  explicitly uses `font-sans`; neither names a CJK font, so CJK glyphs come from the OS fallback. Do not introduce font assets or undefined utilities such as
   `font-title` without the corresponding font configuration.
 - Preserve semantic navigation, visible focus styles, skip-to-content behavior, and accessible
   labels. UI copy is currently mixed: Chinese homepage heading `文章` and `字` counts, English
@@ -157,11 +168,18 @@ Other configuration:
 ### Themes
 
 - DaisyUI themes are **`light --default` / `halloween --prefersdark`** in `style.css`.
-- The header toggle sets the root `data-theme` between `light` and `halloween`. Without an explicit
-  attribute, the system color scheme selects the theme. There is no localStorage persistence.
-- Shiki dark-mode colors in `style.css` honor explicit `data-theme='halloween'`, or the system dark
-  preference only when no `data-theme` attribute exists (`:root:not([data-theme])`). Keep this
-  aligned with the theme toggle.
+- The header toggle sets the root `data-theme` between `light` and `halloween` and saves it to
+  `localStorage.theme`. A blocking inline script in `base.tsx` `<head>` (before the stylesheet)
+  restores it on every page load, so the choice survives navigation without a flash. Without a
+  saved value, no `data-theme` attribute is set and the system color scheme selects the theme.
+- `style.css` redefines Tailwind's `dark` variant (`@custom-variant dark`) to match the toggle:
+  explicit `data-theme='halloween'`, or the system dark preference only when no `data-theme`
+  attribute exists (`:root:not([data-theme])`). Use `dark:` for theme-specific styles; the Shiki
+  utility's dark colors use `@variant dark`. Keep this aligned with the theme toggle.
+- Text contrast: built-in `info`/`success` fail WCAG AA as text on light backgrounds (~2:1). Use
+  `text-info-content` (≥13:1 in both themes) and `text-success-content dark:text-success`
+  (`success-content` is ~1.1:1 in halloween, `success` is ≥5.3:1 there). Plain `text-info` /
+  `text-success` are not used; `bg-*` decorative fills are unaffected.
 
 ### Pages and shared chrome
 
@@ -198,9 +216,9 @@ Other configuration:
 
 ## Where to Look Before Changes
 
-- For layout/theme/search work, read the relevant TSX and `src/_includes/style.css` together.
-- For content compilation, read `_config.ts`, `src/_plugins/typst-plugin.ts`, and
-  `src/posts/_template.typ`; verify against `src/posts/typst-guide.page.typ` when applicable.
+- For layout/theme/search work, read the relevant TSX and `_includes/style.css` together.
+- For content compilation, read `_config.ts`, `_plugins/typst-plugin.ts`, and
+  `posts/_template.typ`; verify against `posts/typst-guide.page.typ` when applicable.
 - For deployment, permissions, or dependency updates, read `package.json`, `pnpm-lock.yaml`,
   `tsconfig.json`, `biome.json`, devenv configuration, and `.github/workflows/deploy-pages.yml`.
   Do not infer current behavior from old blog prose or historical dependency failures.

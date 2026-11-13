@@ -7,6 +7,18 @@
 }
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark {
+  &:where(:root[data-theme="halloween"], :root[data-theme="halloween"] *) {
+    @slot;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
 @utility pagefind-search {
   --pf-text: var(--color-base-content);
   --pf-text-secondary: color-mix(
@@ -224,22 +236,12 @@
     font-style: var(--shiki-light-font-style);
     text-decoration: var(--shiki-light-text-decoration);
 
-    &:where(:root[data-theme="halloween"], :root[data-theme="halloween"] *) {
+    @variant dark {
       background-color: var(--shiki-dark-bg);
       color: var(--shiki-dark);
       font-weight: var(--shiki-dark-font-weight);
       font-style: var(--shiki-dark-font-style);
       text-decoration: var(--shiki-dark-text-decoration);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
-        background-color: var(--shiki-dark-bg);
-        color: var(--shiki-dark);
-        font-weight: var(--shiki-dark-font-weight);
-        font-style: var(--shiki-dark-font-style);
-        text-decoration: var(--shiki-dark-text-decoration);
-      }
     }
   }
 }

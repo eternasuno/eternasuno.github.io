@@ -3,6 +3,7 @@ import type Site from '@lumeland/core/site.ts';
 import { merge } from '@lumeland/core/utils/object.ts';
 import {
   NodeCompiler,
+  type NodeError,
   type NodeTypstDocument,
 } from '@myriaddreamin/typst-ts-node-compiler';
 import type { Element, Root } from 'hast';
@@ -96,12 +97,12 @@ const makeTypstRehype = ({
 
   return function () {
     this.parser = (doc, file) => {
-      const document = compile(doc)(compiler);
+      const document = compile(doc, compiler);
       Object.assign(file.data, {
-        metadata: selector ? matter(selector)(document)(compiler) : undefined,
+        metadata: selector ? matter(selector, document, compiler) : undefined,
       });
 
-      return rewrite(toHast(document)(compiler));
+      return rewrite(toHast(document, compiler));
     };
   };
 };
@@ -151,9 +152,7 @@ const rewrite = (hast: Root | Element): Root => {
   const body = select('body', hast);
 
   if (body) {
-    visit(body, 'element', (node, index, parent) => {
-      rewriteElement(node, index, parent);
-    });
+    visit(body, 'element', rewriteElement);
   }
 
   return { children: body?.children || [], type: 'root' };
@@ -179,54 +178,29 @@ const toSvg = (src: string) => {
   }
 };
 
-const matter =
-  (selector: string) =>
-  (doc: NodeTypstDocument) =>
-  (compiler: NodeCompiler) => {
-    try {
-      const result: unknown = compiler.query(doc, { selector });
-      const first = Array.isArray(result) ? result.at(0) : undefined;
+const matter = (
+  selector: string,
+  doc: NodeTypstDocument,
+  compiler: NodeCompiler
+) => {
+  try {
+    const result: unknown = compiler.query(doc, { selector });
+    const first = Array.isArray(result) ? result.at(0) : undefined;
 
-      return isRecord(first) && isRecord(first.value) ? first.value : undefined;
-    } catch (error) {
-      console.warn('Typst Metadata query failed:', error);
+    return isRecord(first) && isRecord(first.value) ? first.value : undefined;
+  } catch (error) {
+    console.warn('Typst Metadata query failed:', error);
 
-      return undefined;
-    }
-  };
-
-const toHast = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
-  const result = compiler.tryHtml(doc);
-
-  const error = result.takeError();
-  if (error && error.compilationStatus !== 'ok') {
-    const message = error.shortDiagnostics
-      .map(({ message }) => message)
-      .join('\n');
-
-    if (error.compilationStatus === 'warning') {
-      console.info('Compilation completed with warnings:', message);
-    } else {
-      throw new Error(message);
-    }
+    return undefined;
   }
-
-  if (!result.result) {
-    throw new Error('Compilation failed without error message.');
-  }
-
-  const hast: unknown = result.result.hast();
-
-  if (!isParent(hast)) {
-    throw new Error('Compilation produced an invalid HAST tree.');
-  }
-
-  return hast;
 };
 
-const compile = (mainFilePath: string) => (compiler: NodeCompiler) => {
-  const result = compiler.compileHtml({ mainFilePath });
+type Compilation<Result> = {
+  takeError(): NodeError | null;
+  result: Result | null;
+};
 
+const unwrap = <Result>(result: Compilation<Result>): Result => {
   const error = result.takeError();
   if (error && error.compilationStatus !== 'ok') {
     const message = error.shortDiagnostics
@@ -246,3 +220,16 @@ const compile = (mainFilePath: string) => (compiler: NodeCompiler) => {
 
   return result.result;
 };
+
+const toHast = (doc: NodeTypstDocument, compiler: NodeCompiler) => {
+  const hast: unknown = unwrap(compiler.tryHtml(doc)).hast();
+
+  if (!isParent(hast)) {
+    throw new Error('Compilation produced an invalid HAST tree.');
+  }
+
+  return hast;
+};
+
+const compile = (mainFilePath: string, compiler: NodeCompiler) =>
+  unwrap(compiler.compileHtml({ mainFilePath }));

@@ -9,6 +9,12 @@ export default ({ metas, children, title, author }: Lume.Data) => {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if (['light', 'halloween'].includes(localStorage.theme)) document.documentElement.dataset.theme = localStorage.theme;",
+          }}
+        />
         <link rel="stylesheet" href="/style.css" />
         <script type="module" src="/script.js"></script>
         <link rel="alternate" type="application/rss+xml" href="/rss.xml" />

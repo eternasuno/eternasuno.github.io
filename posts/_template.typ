@@ -8,15 +8,9 @@
   }
 }
 
-#let post(description: "", tags: (), title: auto, body) = {
-  let final-title = if title == auto {
-    "Untitled"
-  } else {
-    title
-  }
-
-  set document(title: final-title, description: description, keywords: tags)
-  [#metadata((title: final-title, tags: tags, description: description)) <frontmatter>]
+#let post(description: "", tags: (), title: "Untitled", body) = {
+  set document(title: title, description: description, keywords: tags)
+  [#metadata((title: title, tags: tags, description: description)) <frontmatter>]
 
   show image: it => {
     if target == "html" {
@@ -29,24 +23,16 @@
         alt: if it.alt != none { it.alt } else { "" },
         loading: "lazy",
         "image-size": "",
-        class: "typst-article-image",
       ))
     } else {
       align(center, it)
     }
   }
 
-  show: doc => {
-    if target == "html" {
-      set raw(theme: none)
-      doc
-    } else {
-      doc
-    }
-  }
+  set raw(theme: none) if target == "html"
 
   if target != "html" {
-    align(center, text(size: 2em, weight: "bold", final-title))
+    align(center, text(size: 2em, weight: "bold", title))
     v(2em)
   }
 

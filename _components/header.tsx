@@ -1,23 +1,9 @@
 import SearchDialog from './search-dialog.tsx';
 
-const SearchIcon = () => (
-  <svg
-    class="size-4.5"
-    aria-hidden="true"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-    />
-  </svg>
-);
+const buttonClass =
+  'btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary';
 
-const ThemeIcon = () => (
+const Icon = ({ children }: { children: Lume.Data['children'] }) => (
   <svg
     class="size-4.5"
     aria-hidden="true"
@@ -25,74 +11,52 @@ const ThemeIcon = () => (
     fill="none"
     stroke="currentColor"
     stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
   >
-    <circle cx="12" cy="12" r="4" />
-    <path
-      stroke-linecap="round"
-      d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"
-    />
-  </svg>
-);
-
-const RssIcon = () => (
-  <svg
-    class="size-4.5"
-    aria-hidden="true"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M5 19a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"
-    />
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M4 11a9 9 0 0 1 9 9"
-    />
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M4 4a16 16 0 0 1 16 16"
-    />
+    {children}
   </svg>
 );
 
 const SearchButton = () => (
   <button
     type="button"
-    class="btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary"
+    class={buttonClass}
     aria-label="Search"
     aria-haspopup="dialog"
     aria-controls="search_modal"
     onclick="const dialog = document.getElementById('search_modal'); dialog.showModal(); dialog.querySelector('input')?.focus()"
   >
-    <SearchIcon />
+    <Icon>
+      <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </Icon>
   </button>
 );
 
 const ThemeButton = () => (
   <button
     type="button"
-    class="btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary"
+    class={buttonClass}
     aria-label="Toggle light and dark mode"
-    onclick="const root = document.documentElement; const current = root.getAttribute('data-theme'); const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'halloween' : 'light'; const theme = current || systemTheme; root.setAttribute('data-theme', theme === 'halloween' ? 'light' : 'halloween')"
+    onclick="const root = document.documentElement; const dark = root.dataset.theme ? root.dataset.theme === 'halloween' : matchMedia('(prefers-color-scheme: dark)').matches; root.dataset.theme = dark ? 'light' : 'halloween'; localStorage.theme = root.dataset.theme"
   >
-    <ThemeIcon />
+    <Icon>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+    </Icon>
   </button>
 );
 
 const RssButton = () => (
   <a
-    class="btn btn-ghost btn-square size-11 border-0 text-base-content/75 hover:bg-primary/10 hover:text-primary"
+    class={buttonClass}
     href="/rss.xml"
     target="_blank"
     rel="noopener noreferrer"
   >
-    <RssIcon />
+    <Icon>
+      <path d="M5 19a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" />
+    </Icon>
     <span class="sr-only">RSS feed</span>
   </a>
 );

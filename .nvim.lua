@@ -9,7 +9,7 @@ vim.lsp.config("tailwindcss", {
   settings = {
     tailwindCSS = {
       experimental = {
-        configFile = "src/_includes/style.css",
+        configFile = "_includes/style.css",
       },
     },
   },

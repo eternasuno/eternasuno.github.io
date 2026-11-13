@@ -14,12 +14,11 @@ import robots from '@lumeland/plugin-robots';
 import tailwindcss from '@lumeland/plugin-tailwindcss';
 import rehypeShiki from '@shikijs/rehype';
 import type { Element } from 'hast';
-import typst from './src/_plugins/typst-plugin.ts';
+import typst from './_plugins/typst-plugin.ts';
 
 const DOMAIN = process.env.DOMAIN || 'http://localhost:3000';
 
 const site = lume({
-  src: 'src',
   location: new URL(DOMAIN),
   watcher: {
     dependencies: {
@@ -27,6 +26,9 @@ const site = lume({
     },
   },
 });
+
+site.ignore('AGENTS.md');
+site.ignore('devenv.yaml');
 
 site.add('_includes/style.css', 'style.css');
 site.add('_includes/images', 'img');

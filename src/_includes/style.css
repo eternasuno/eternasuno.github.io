@@ -1,21 +1,56 @@
-@import 'tailwindcss';
-@plugin 'daisyui' {
+@import "tailwindcss";
+@plugin "daisyui" {
   logs: false;
-  themes: light --default, halloween --prefersdark;
+  themes:
+    light --default,
+    halloween --prefersdark;
 }
-@plugin '@tailwindcss/typography';
+@plugin "@tailwindcss/typography";
 
 @utility pagefind-search {
-  --pagefind-ui-primary: var(--color-primary);
-  --pagefind-ui-text: var(--color-base-content);
-  --pagefind-ui-background: var(--color-base-100);
-  --pagefind-ui-border: var(--color-base-300);
-  --pagefind-ui-tag: var(--color-base-200);
-  --pagefind-ui-border-width: 1px;
-  --pagefind-ui-border-radius: 0;
-  --pagefind-ui-font: inherit;
+  --pf-text: var(--color-base-content);
+  --pf-text-secondary: color-mix(
+    in srgb,
+    var(--color-base-content) 75%,
+    transparent
+  );
+  --pf-text-muted: color-mix(
+    in srgb,
+    var(--color-base-content) 60%,
+    transparent
+  );
+  --pf-background: var(--color-base-100);
+  --pf-border: color-mix(in srgb, var(--color-primary) 25%, transparent);
+  --pf-border-focus: var(--color-primary);
+  --pf-skeleton: var(--color-base-200);
+  --pf-skeleton-shine: var(--color-base-300);
+  --pf-hover: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --pf-mark: var(--color-primary);
+  --pf-error-bg: color-mix(
+    in srgb,
+    var(--color-error) 12%,
+    var(--color-base-100)
+  );
+  --pf-error-border: color-mix(in srgb, var(--color-error) 40%, transparent);
+  --pf-error-text: var(--color-error);
+  --pf-error-text-secondary: color-mix(
+    in srgb,
+    var(--color-error) 80%,
+    transparent
+  );
+  --pf-outline-focus: var(--color-primary);
+  --pf-outline-width: 1px;
+  --pf-outline-offset: 0px;
+  --pf-font: var(--font-mono);
+  --pf-input-height: 3.25rem;
+  --pf-input-font-size: 1rem;
+  --pf-summary-font-size: 0.75rem;
+  --pf-result-title-font-size: 0.875rem;
+  --pf-result-excerpt-font-size: 0.875rem;
+  --pf-results-gap: 0px;
+  --pf-border-radius: 0px;
 
-  .pagefind-ui__form {
+  .pf-input-wrapper {
     position: relative;
     display: grid;
 
@@ -24,13 +59,14 @@
     }
   }
 
-  .pagefind-ui__search-input {
+  .pf-input {
     grid-row: 1;
     width: 100%;
     height: 3.25rem;
     padding: 0.75rem 4rem 0.75rem 10.5rem;
     border: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-primary) 30%, transparent);
     border-radius: 0;
     background: var(--color-base-200);
     box-shadow: none;
@@ -40,78 +76,127 @@
     font-size: 1rem;
     line-height: 1.5;
 
+    &:focus,
+    &:focus-visible {
+      border-bottom-color: var(--color-primary);
+      box-shadow: none;
+    }
+
     @media (width < 40rem) {
       padding-left: 2.5rem;
     }
   }
 
-  .pagefind-ui__search-clear {
+  .pf-input-clear {
     position: absolute;
     z-index: 2;
     top: 0.75rem;
     right: 0.75rem;
+    transform: none;
     width: auto;
+    min-width: 0;
     height: 1.75rem;
-    padding: 0;
+    padding: 0 0.375rem;
     border: 0;
+    border-radius: 0.25rem;
     background: transparent;
     color: var(--color-primary);
+    font: inherit;
+    font-size: 0.75rem;
+
+    &:hover {
+      background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+      color: var(--color-primary);
+    }
   }
 
-  .pagefind-ui__drawer {
-    max-height: 46vh;
-    padding: 0 1rem 1rem;
-    overflow-y: auto;
+  .pf-summary {
+    margin: 0;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: color-mix(in srgb, var(--color-base-content) 75%, transparent);
+    font: inherit;
+    font-size: 0.75rem;
+
+    &:empty {
+      display: none;
+    }
   }
 
-  .pagefind-ui__results {
+  .pf-results {
     margin: 0;
     padding: 0;
   }
 
-  .pagefind-ui__result {
+  .pf-result {
+    gap: 0;
+  }
+
+  .pf-result-card,
+  .pf-heading-chip {
     display: block;
     margin: 0;
     padding: 0.5rem 0.625rem;
     border: 0;
     border-left: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 
     &:hover,
-    &:focus-within {
+    &:focus-within,
+    &:has([data-pf-selected]) {
       border-left-color: var(--color-primary);
       background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+      box-shadow: none;
     }
   }
 
-  .pagefind-ui__result-title {
+  .pf-heading-chips {
+    gap: 0;
+    padding-inline-start: 1rem;
+  }
+
+  .pf-result-title {
     margin: 0;
     font-size: 0.875rem;
+    font-weight: normal;
     line-height: 1.625;
+    overflow-wrap: anywhere;
   }
 
-  .pagefind-ui__result-link {
+  .pf-result-link,
+  .pf-heading-link {
     color: var(--color-primary);
     font-weight: normal;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
-  .pagefind-ui__result-excerpt {
+  .pf-result-excerpt,
+  .pf-heading-excerpt {
     margin-top: 0.125rem;
     color: color-mix(in srgb, var(--color-base-content) 75%, transparent);
     font-size: 0.875rem;
     line-height: 1.625;
-  }
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
 
-  .pagefind-ui__message {
-    margin: 0;
-    padding: 0.625rem 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
-    color: color-mix(in srgb, var(--color-base-content) 75%, transparent);
-    font: inherit;
-    font-size: 0.75rem;
+    mark {
+      background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
   }
 }
 
-#search {
+#search#search#search#search {
   @apply pagefind-search;
 }
 
@@ -139,7 +224,7 @@
     font-style: var(--shiki-light-font-style);
     text-decoration: var(--shiki-light-text-decoration);
 
-    &:where(:root[data-theme='halloween'], :root[data-theme='halloween'] *) {
+    &:where(:root[data-theme="halloween"], :root[data-theme="halloween"] *) {
       background-color: var(--shiki-dark-bg);
       color: var(--shiki-dark);
       font-weight: var(--shiki-dark-font-weight);

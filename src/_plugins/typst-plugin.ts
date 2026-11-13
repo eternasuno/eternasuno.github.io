@@ -1,17 +1,39 @@
-import { NodeCompiler, type NodeTypstDocument } from '@myriaddreamin/typst-ts-node-compiler';
+import type Searcher from '@lumeland/core/searcher.ts';
+import type Site from '@lumeland/core/site.ts';
+import { merge } from '@lumeland/core/utils/object.ts';
+import {
+  NodeCompiler,
+  type NodeTypstDocument,
+} from '@myriaddreamin/typst-ts-node-compiler';
 import type { Element, Root } from 'hast';
 import { fromHtml } from 'hast-util-from-html';
 import { select } from 'hast-util-select';
-import Site from 'lume/core/site.ts';
-import { merge } from 'lume/core/utils/object.ts';
 import rehypeStringify from 'rehype-stringify';
-import { type Plugin, unified } from 'unified';
+import { type PluggableList, type Plugin, unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
+declare global {
+  namespace Lume {
+    interface GlobalData {
+      search: Searcher;
+      wordCount?: number;
+    }
+  }
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const isParent = (value: unknown): value is Root | Element =>
+  isRecord(value) &&
+  Array.isArray(value.children) &&
+  (value.type === 'root' ||
+    (value.type === 'element' && typeof value.tagName === 'string'));
+
 export type Options = {
-  extensions?: string[];
+  extensions?: Array<string>;
   pageSubExtension?: string;
-  plugins?: Array<unknown | Array<unknown>>;
+  plugins?: PluggableList;
 } & Omit<MakeTypstRehypeOptions, 'workspace'>;
 
 export const defaults = {
@@ -32,18 +54,22 @@ export const typst = (userOptions?: Options) => {
       workspace: site.src('/'),
     });
 
-    const processor = makeProcessor([typstRehype, ...options.plugins, rehypeStringify]);
+    const processor = unified().use([
+      typstRehype,
+      ...options.plugins,
+      rehypeStringify,
+    ]);
 
     const loader = async (path: string) => {
       const file = await processor.process(path);
-      const metadata = file.data.metadata as Record<string, unknown>;
+      const metadata = isRecord(file.data.metadata) ? file.data.metadata : {};
       const content = String(file);
       let wordCount = 0;
       visit(fromHtml(content, { fragment: true }), 'text', (node) => {
         wordCount += Array.from(node.value.replace(/\s/gu, '')).length;
       });
 
-      return { content, ...metadata, wordCount } as { content: string } & Record<string, unknown>;
+      return { ...metadata, content, wordCount };
     };
 
     site.loadPages(options.extensions, {
@@ -54,21 +80,6 @@ export const typst = (userOptions?: Options) => {
 };
 
 export default typst;
-
-const makeProcessor = (plugins: Array<unknown | Array<unknown>>) => {
-  let processor = unified();
-
-  for (const plugin of plugins) {
-    if (Array.isArray(plugin)) {
-      processor = processor.use(...plugin);
-    } else {
-      // @ts-ignore - This is a valid use of rehype plugins, but the types don't reflect it.
-      processor = processor.use(plugin);
-    }
-  }
-
-  return processor;
-};
 
 type MakeTypstRehypeOptions = {
   inputs?: Record<string, string>;
@@ -86,52 +97,66 @@ const makeTypstRehype = ({
   return function () {
     this.parser = (doc, file) => {
       const document = compile(doc)(compiler);
-      file.data.metadata = selector ? matter(selector)(document)(compiler) : undefined;
+      Object.assign(file.data, {
+        metadata: selector ? matter(selector)(document)(compiler) : undefined,
+      });
 
       return rewrite(toHast(document)(compiler));
     };
   };
 };
 
-const rewrite = (hast: Root) => {
+const isExternalLink = (node: Element) =>
+  node.tagName === 'a' &&
+  typeof node.properties.href === 'string' &&
+  !node.properties.href.startsWith('#');
+
+const isTypstFrame = (node: Element) =>
+  node.tagName === 'img' &&
+  (node.properties?.class ?? node.properties?.className)
+    ?.toString()
+    .includes('typst-frame') &&
+  typeof node.properties.src === 'string';
+
+const rewriteElement = (
+  node: Element,
+  index: number | undefined,
+  parent: Root | Element | undefined
+) => {
+  if (isExternalLink(node)) {
+    Object.assign(node.properties, {
+      target: '_blank',
+      rel: ['noopener', 'noreferrer'],
+    });
+  }
+
+  if (node.tagName === 'code' && node.properties?.['data-lang']) {
+    Object.assign(node.properties, {
+      className: [`language-${node.properties['data-lang']}`],
+    });
+  }
+
+  if (!isTypstFrame(node) || typeof index !== 'number' || !parent) {
+    return;
+  }
+
+  const svg = toSvg(String(node.properties.src));
+
+  if (svg) {
+    parent.children.splice(index, 1, svg);
+  }
+};
+
+const rewrite = (hast: Root | Element): Root => {
   const body = select('body', hast);
 
   if (body) {
     visit(body, 'element', (node, index, parent) => {
-      if (
-        node.tagName === 'a' &&
-        typeof node.properties.href === 'string' &&
-        !node.properties.href.startsWith('#')
-      ) {
-        node.properties.target = '_blank';
-        node.properties.rel = ['noopener', 'noreferrer'];
-      }
-
-      if (node.tagName === 'code' && node.properties?.['data-lang']) {
-        const lang = node.properties['data-lang'];
-
-        node.properties.className = [`language-${lang}`];
-      }
-
-      if (
-        node.tagName === 'img' &&
-        (node.properties?.class ?? node.properties?.className)?.toString().includes(
-          'typst-frame',
-        ) &&
-        typeof node.properties.src === 'string' &&
-        typeof index === 'number' &&
-        parent
-      ) {
-        const svg = toSvg(node.properties?.src);
-
-        if (svg) {
-          parent.children[index] = svg;
-        }
-      }
+      rewriteElement(node, index, parent);
     });
   }
 
-  return { children: body?.children || [], type: 'root' } as Root;
+  return { children: body?.children || [], type: 'root' };
 };
 
 const toSvg = (src: string) => {
@@ -141,35 +166,43 @@ const toSvg = (src: string) => {
   }
 
   try {
-    const svg = metadata === 'base64' ? atob(payload) : decodeURIComponent(payload);
+    const svg =
+      metadata === 'base64' ? atob(payload) : decodeURIComponent(payload);
     const root = fromHtml(svg, { fragment: true, space: 'svg' });
 
     return root.children.find(
-      (child): child is Element => child.type === 'element' && child.tagName === 'svg',
+      (child): child is Element =>
+        child.type === 'element' && child.tagName === 'svg'
     );
   } catch {
     return undefined;
   }
 };
 
-const matter = (selector: string) => (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
-  try {
-    const result = compiler.query(doc, { selector }) as Array<{ value: Record<string, unknown> }>;
+const matter =
+  (selector: string) =>
+  (doc: NodeTypstDocument) =>
+  (compiler: NodeCompiler) => {
+    try {
+      const result: unknown = compiler.query(doc, { selector });
+      const first = Array.isArray(result) ? result.at(0) : undefined;
 
-    return result.at(0)?.value;
-  } catch (error) {
-    console.warn('Typst Metadata query failed:', error);
+      return isRecord(first) && isRecord(first.value) ? first.value : undefined;
+    } catch (error) {
+      console.warn('Typst Metadata query failed:', error);
 
-    return undefined;
-  }
-};
+      return undefined;
+    }
+  };
 
 const toHast = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
   const result = compiler.tryHtml(doc);
 
   const error = result.takeError();
   if (error && error.compilationStatus !== 'ok') {
-    const message = error.shortDiagnostics.map(({ message }) => message).join('\n');
+    const message = error.shortDiagnostics
+      .map(({ message }) => message)
+      .join('\n');
 
     if (error.compilationStatus === 'warning') {
       console.info('Compilation completed with warnings:', message);
@@ -182,7 +215,13 @@ const toHast = (doc: NodeTypstDocument) => (compiler: NodeCompiler) => {
     throw new Error('Compilation failed without error message.');
   }
 
-  return result.result.hast() as Root;
+  const hast: unknown = result.result.hast();
+
+  if (!isParent(hast)) {
+    throw new Error('Compilation produced an invalid HAST tree.');
+  }
+
+  return hast;
 };
 
 const compile = (mainFilePath: string) => (compiler: NodeCompiler) => {
@@ -190,7 +229,9 @@ const compile = (mainFilePath: string) => (compiler: NodeCompiler) => {
 
   const error = result.takeError();
   if (error && error.compilationStatus !== 'ok') {
-    const message = error.shortDiagnostics.map(({ message }) => message).join('\n');
+    const message = error.shortDiagnostics
+      .map(({ message }) => message)
+      .join('\n');
 
     if (error.compilationStatus === 'warning') {
       console.info('Compilation completed with warnings:', message);

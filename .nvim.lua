@@ -1,11 +1,8 @@
-vim.lsp.config("denols", {
-  settings = {
-    deno = {
-      enable = true,
-      lint = true,
-      unstable = true,
-    },
-  },
+vim.lsp.config("tsc", {
+  on_attach = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
 })
 
 vim.lsp.config("tailwindcss", {
@@ -18,4 +15,4 @@ vim.lsp.config("tailwindcss", {
   },
 })
 
-vim.lsp.enable({ "denols", "tinymist", "tailwindcss" })
+vim.lsp.enable({ "tsc", "biome", "tinymist", "tailwindcss" })

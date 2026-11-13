@@ -1,0 +1,49 @@
+{
+  "name": "blog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "lume build",
+    "check": "biome check",
+    "serve": "lume build -s",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lumeland/core": "^1.0.4",
+    "@lumeland/lume": "^4.0.2",
+    "@lumeland/plugin-base-path": "^1.0.0",
+    "@lumeland/plugin-check-urls": "^1.0.0",
+    "@lumeland/plugin-favicon": "^1.0.0",
+    "@lumeland/plugin-feed": "^1.0.0",
+    "@lumeland/plugin-image-size": "^1.0.0",
+    "@lumeland/plugin-jsx": "^1.0.0",
+    "@lumeland/plugin-metas": "^1.0.0",
+    "@lumeland/plugin-og-images": "^1.0.0",
+    "@lumeland/plugin-pagefind": "^1.0.0",
+    "@lumeland/plugin-reading-info": "^1.0.0",
+    "@lumeland/plugin-robots": "^1.0.0",
+    "@lumeland/plugin-tailwindcss": "^1.0.0",
+    "@lumeland/ssx": "^0.1.16",
+    "@myriaddreamin/typst-ts-node-compiler": "^0.8.0-rc3",
+    "@shikijs/rehype": "^4.5.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "daisyui": "^5.7.47",
+    "hast-util-from-html": "^2.0.3",
+    "hast-util-select": "^6.0.4",
+    "rehype-stringify": "^10.0.1",
+    "tailwindcss": "^4.3.3",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/hast": "^3.0.5",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  }
+}

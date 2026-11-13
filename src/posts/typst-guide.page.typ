@@ -79,15 +79,16 @@ print(fibonacci(10))
 TypeScript 同样支持：
 
 ```ts
-interface Book {
+type Book = {
   title: string;
   finished: boolean;
-}
+};
 
-const books: Book[] = [
+const books: Array<Book> = [
   { title: "学习 Typst", finished: false },
   { title: "旅行笔记", finished: true },
 ];
+
 const unread = books.filter((book) => !book.finished);
 console.log(`还有 ${unread.length} 本书没读完。`);
 ```
@@ -123,7 +124,7 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
   [行内公式], [$a^2 + b^2 = c^2$], [与文字混排显示],
   [块级公式], [$E = m c^2$], [单独成行、居中显示],
   [行内代码], [`print("Hello")`], [显示一小段代码],
-  [图片], [#image("../_includes/images/typst-logo.png", width: 60%)], [相对路径引入],
+  [图片], [#image("../_includes/images/typst-logo.png", alt: "Typst Logo", width: 60%)], [相对路径引入],
   [链接], [#link("https://typst.app/")[Typst 官网]], [点击后打开网页],
 )
 
@@ -131,12 +132,12 @@ $ mat(1, 0, 0; 0, cos theta, -sin theta; 0, sin theta, cos theta) $
 
 图片用 `#image("路径")` 引入。相对路径从当前 Typst 文件所在的目录开始查找。例如，把图片 `photo.png` 放在文档旁边，就可以写 `#image("photo.png")`。下面是一张图片示例：
 
-#image("../_includes/images/typst-logo.png")
+#image("../_includes/images/typst-logo.png", alt: "Typst Logo")
 
 想给图片加上说明文字，可以用 `#figure(...)` 包裹图片，并通过 `caption` 设置题注。Typst 会自动为它编号：
 
 #figure(
-  image("../_includes/images/typst-logo.png"),
+  image("../_includes/images/typst-logo.png", alt: "Typst Logo"),
   caption: [Typst 的 Logo],
 )
 

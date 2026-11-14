@@ -134,6 +134,12 @@ Other configuration:
   plugin supplies `readingInfo.words` and `readingInfo.minutes` for article metadata/status. Do not
   substitute one for the other or label the homepage count as file bytes.
 - Math is exported as MathML; `.prose math mtable` spacing is adjusted in CSS.
+- The template's HTML table rule wraps each table in `<div class="overflow-x-auto">`, so tables
+  keep prose's `display: table; width: 100%` (full width on wide screens) and only the wrapper
+  scrolls when a table is wider than the viewport. Do not put `display: block` on tables; it
+  shrinks them to content width. Tables use `wrap-normal` to override the prose `wrap-anywhere`,
+  so words and inline code are not split mid-token; scrolling starts only when the table's
+  min-content width (longest token, capped images, nowrap first column) exceeds the content area.
 - The template's HTML image rule maps the source basename to `/img/<filename>`, adds lazy loading
   and the `image-size` marker, and forwards `it.alt` or an empty string. Typst `width` is not
   forwarded; images inside tables are capped by `[&_table_img]:max-w-48` in `article-body.tsx` so

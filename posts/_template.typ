@@ -29,6 +29,14 @@
     }
   }
 
+  show table: it => {
+    if target == "html" {
+      html.elem("div", attrs: (class: "overflow-x-auto"), it)
+    } else {
+      it
+    }
+  }
+
   set raw(theme: none) if target == "html"
 
   if target != "html" {

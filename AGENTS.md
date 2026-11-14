@@ -92,8 +92,9 @@ Other configuration:
   pnpm store caches, devenv, `devenv test`). Change cache keys here, not in the workflows.
 - `.github/dependabot.yml`: one monthly `dependencies` multi-ecosystem group, so every npm and
   GitHub Actions (workflows and `.github/actions/*`) version update, majors included, arrives in a
-  single PR that is merged manually. Security updates cannot join that group and still open their
-  own PRs immediately (enabled in the repository settings).
+  single PR that is merged manually. `@types/node` major updates are ignored so the types track the
+  Node.js 24 runtime; bump that major together with the runtime. Security updates cannot join that
+  group and still open their own PRs immediately (enabled in the repository settings).
 - YAML files follow Biome 2.6+ formatting (double quotes); Biome's `quoteStyle: single` applies to
   JavaScript only.
 - `main` is protected by the `Protect main` ruleset: no direct pushes, force pushes, or deletion;

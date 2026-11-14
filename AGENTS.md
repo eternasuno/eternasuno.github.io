@@ -83,15 +83,19 @@ Other configuration:
   (Node.js + pnpm) and provides Tinymist, Tailwind language server, and nixfmt. Biome and
   TypeScript are installed as project `devDependencies` in `package.json`.
 - `.envrc`: direnv activation.
-- `.github/workflows/deploy-pages.yml`: full Git checkout → devenv setup + pnpm store cache →
-  `pnpm run check` → `pnpm run typecheck` → `pnpm run build` → upload `_site` → deploy to GitHub
-  Pages. Full history supports Git-based dates. Pull requests run only the `build` job (no Pages
-  upload or deploy); that job is the required status check for `main`.
-- `.github/dependabot.yml`: monthly npm (minor/patch grouped) and GitHub Actions update PRs, merged
-  manually. Dependabot security updates are enabled separately in the repository settings.
+- `.github/workflows/deploy-pages.yml`: on pushes to `main` (and manual dispatch) only: full Git
+  checkout → devenv setup → `pnpm run check` → `pnpm run typecheck` → `pnpm run build` → upload
+  `_site` → deploy to GitHub Pages. Full history supports Git-based dates.
+- `.github/workflows/ci.yml`: pull requests only; the `check` job runs check, typecheck, and build
+  without uploading or deploying anything. It is the required status check for `main`.
+- `.github/actions/setup-devenv`: composite action shared by both workflows (Nix install, Nix and
+  pnpm store caches, devenv, `devenv test`). Change cache keys here, not in the workflows.
+- `.github/dependabot.yml`: monthly npm (minor/patch grouped) and GitHub Actions update PRs
+  (workflows and `.github/actions/*`), merged manually. Dependabot security updates are enabled
+  separately in the repository settings.
 - `main` is protected by the `Protect main` ruleset: no direct pushes, force pushes, or deletion;
-  changes land through pull requests with squash merge only, a passing and up-to-date `build`
-  check, resolved review threads, and linear history. Commit on a branch and open a PR instead of
+  changes land through pull requests with squash merge only, a passing and up-to-date `check`
+  status, resolved review threads, and linear history. Commit on a branch and open a PR instead of
   pushing to `main`.
 
 ## Build and Data Flow

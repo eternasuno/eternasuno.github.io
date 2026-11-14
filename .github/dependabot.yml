@@ -1,28 +1,24 @@
 version: 2
-updates:
-  - package-ecosystem: npm
-    directory: /
+
+multi-ecosystem-groups:
+  dependencies:
     schedule:
       interval: monthly
     commit-message:
       prefix: chore
       include: scope
-    groups:
-      npm-minor-patch:
-        update-types:
-          - minor
-          - patch
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    multi-ecosystem-group: dependencies
+    patterns:
+      - "*"
 
   - package-ecosystem: github-actions
     directories:
       - /
       - /.github/actions/*
-    schedule:
-      interval: monthly
-    commit-message:
-      prefix: ci
-      include: scope
-    groups:
-      github-actions:
-        patterns:
-          - '*'
+    multi-ecosystem-group: dependencies
+    patterns:
+      - "*"

@@ -1,7 +1,7 @@
 export type Props = {
   user: string;
   host: string;
-  command: string;
+  command: Lume.Data['children'];
   path?: string;
   cursor?: boolean;
 };

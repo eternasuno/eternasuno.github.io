@@ -70,7 +70,7 @@ _includes/
 └── style.css                      Themes, terminal UI, Pagefind, prose, Shiki
 _plugins/typst-plugin.ts           Typst loader, metadata, HTML rewriting, character count
 index.page.tsx                     Terminal-style post directory listing
-404.page.tsx                       404, kaomoji, home link
+404.page.tsx                       Terminal-style 404 (cd error, banner, suggestions)
 posts/
 ├── _data.yml                      Post layout, Git Created dates, OG layout, tag metas
 ├── _template.typ                  Shared Typst post template
@@ -214,8 +214,12 @@ Other configuration:
 - `base.tsx` uses `<html lang='zh-CN'>`, so Pagefind builds a Chinese index and derives UI labels
   from that language despite English search chrome.
 - **Footer:** copyright year/author and a CC BY-NC-SA 4.0 license link; RSS is in the header.
-- **404:** large 404, kaomoji, English not-found explanation, and Back to Home button; it uses the
-  base shell rather than a terminal window.
+- **404:** terminal window whose command is `cd <path>`; an inline script fills every
+  `[data-request-path]` with `location.pathname` (fallback `this-page`). Body: bash `No such file or
+  directory` line, decorative figlet 404 banner, h1 `Page not found`, suggestion rows
+  (`cd ~` home link and a `find . -name` button opening `#search_modal`, with decorative prompts
+  `aria-hidden`), and a `E404: Not Found` status bar. `TerminalCommand`'s `command` accepts JSX for
+  the path span.
 
 ## Where to Look Before Changes
 

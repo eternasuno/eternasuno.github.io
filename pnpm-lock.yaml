@@ -22,7 +22,7 @@ importers:
         version: 1.0.0(@lumeland/core@1.0.4)
       '@lumeland/plugin-favicon':
         specifier: ^1.0.0
-        version: 1.0.0(@lumeland/core@1.0.4)(@types/node@24.19.2)
+        version: 1.0.0(@lumeland/core@1.0.4)(@types/node@26.6.6)
       '@lumeland/plugin-feed':
         specifier: ^1.0.0
         version: 1.0.0(@lumeland/core@1.0.4)
@@ -91,8 +91,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5
       '@types/node':
-        specifier: ^24.0.0
-        version: 24.19.2
+        specifier: ^26.6.6
+        version: 26.6.6
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -966,8 +966,8 @@ packages:
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
 
-  '@types/node@24.19.2':
-    resolution: {integrity: sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==}
+  '@types/node@26.6.6':
+    resolution: {integrity: sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -1417,8 +1417,8 @@ packages:
   uc.micro@3.0.0:
     resolution: {integrity: sha512-U3PppEkleoTnIfi8BozMx3yju3qc/L6SwqWo2Sw+54PX+PX0q9I+r1Um5HCmqD7n9VDX5/v3vQH/AjA6deDdtw==}
 
-  undici-types@7.24.6:
-    resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
   unicode-trie@2.0.0:
     resolution: {integrity: sha512-x7bc76x0bm4prf1VLg79uhAzKw8DVboClSN5VxJuQ+LKDOVEW9CdH+VY7SP+vX7xCYQqzzgQpFqz15zeLvAtZQ==}
@@ -1771,12 +1771,12 @@ snapshots:
       '@lumeland/core': 1.0.4
       '@lumeland/plugin-not-found': 1.0.0(@lumeland/core@1.0.4)
 
-  '@lumeland/plugin-favicon@1.0.0(@lumeland/core@1.0.4)(@types/node@24.19.2)':
+  '@lumeland/plugin-favicon@1.0.0(@lumeland/core@1.0.4)(@types/node@26.6.6)':
     dependencies:
       '@lumeland/core': 1.0.4
       '@resvg/resvg-js': 2.6.2
       ico-endec: 0.1.6
-      sharp: 0.35.5(@types/node@24.19.2)
+      sharp: 0.35.5(@types/node@26.6.6)
     transitivePeerDependencies:
       - '@types/node'
 
@@ -2134,9 +2134,9 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
-  '@types/node@24.19.2':
+  '@types/node@26.6.6':
     dependencies:
-      undici-types: 7.24.6
+      undici-types: 8.9.0
 
   '@types/unist@3.0.3': {}
 
@@ -2550,7 +2550,7 @@ snapshots:
 
   semver@7.8.6: {}
 
-  sharp@0.35.5(@types/node@24.19.2):
+  sharp@0.35.5(@types/node@26.6.6):
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
@@ -2581,7 +2581,7 @@ snapshots:
       '@img/sharp-win32-arm64': 0.35.5
       '@img/sharp-win32-ia32': 0.35.5
       '@img/sharp-win32-x64': 0.35.5
-      '@types/node': 24.19.2
+      '@types/node': 26.6.6
 
   shiki@4.6.0:
     dependencies:
@@ -2637,7 +2637,7 @@ snapshots:
 
   uc.micro@3.0.0: {}
 
-  undici-types@7.24.6: {}
+  undici-types@8.9.0: {}
 
   unicode-trie@2.0.0:
     dependencies:

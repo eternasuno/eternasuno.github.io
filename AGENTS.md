@@ -85,7 +85,14 @@ Other configuration:
 - `.envrc`: direnv activation.
 - `.github/workflows/deploy-pages.yml`: full Git checkout → devenv setup + pnpm store cache →
   `pnpm run check` → `pnpm run typecheck` → `pnpm run build` → upload `_site` → deploy to GitHub
-  Pages. Full history supports Git-based dates.
+  Pages. Full history supports Git-based dates. Pull requests run only the `build` job (no Pages
+  upload or deploy); that job is the required status check for `main`.
+- `.github/dependabot.yml`: monthly npm (minor/patch grouped) and GitHub Actions update PRs, merged
+  manually. Dependabot security updates are enabled separately in the repository settings.
+- `main` is protected by the `Protect main` ruleset: no direct pushes, force pushes, or deletion;
+  changes land through pull requests with squash merge only, a passing and up-to-date `build`
+  check, resolved review threads, and linear history. Commit on a branch and open a PR instead of
+  pushing to `main`.
 
 ## Build and Data Flow
 

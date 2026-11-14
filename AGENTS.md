@@ -121,10 +121,14 @@ Other configuration:
 - The custom plugin compiles HTML, extracts metadata, rewrites the HAST, applies rehype plugins,
   and serializes the result. It returns only the compiled HTML body's children.
 - **Code highlighting belongs to Shiki, not Typst.** The HTML template sets `raw(theme: none)`; the
-  plugin rewrites `data-lang` into `language-*`. Shiki uses `defaultColor: false`, inline
-  `tailing-curly-colon`, `defaultLanguage: 'text'` (so language-less blocks get the same styling
-  and line numbers), and a transformer adding `data-line`. The CSS `shiki` utility consumes
-  `--shiki-*` variables and displays line numbers via `content: attr(data-line)` on `.line::before`.
+  plugin rewrites `data-lang` into `language-*`. Shiki uses `defaultColor: 'light-dark()'` with
+  `colorsRendering: 'none'`, inline `tailing-curly-colon`, `defaultLanguage: 'text'` (so
+  language-less blocks get the same styling and line numbers), and a transformer adding
+  `data-line`. Token colors are inline `light-dark(light, dark)` values that follow DaisyUI's
+  `color-scheme`, so no CSS theme switch is needed (one-dark-pro's dark-only italics are not
+  rendered; browsers without `light-dark()` fall back to unhighlighted prose `pre` colors). The CSS
+  `shiki` utility only lays out lines and displays numbers via `content: attr(data-line)` on
+  `.line::before`.
 - **Two separate counts exist:** the Typst loader's `wordCount` counts non-whitespace Unicode code
   points in serialized HTML text nodes and is shown as `字` on the homepage. Lume's `reading_info`
   plugin supplies `readingInfo.words` and `readingInfo.minutes` for article metadata/status. Do not
@@ -167,19 +171,18 @@ Other configuration:
 
 ### Themes
 
-- DaisyUI themes are **`light --default` / `halloween --prefersdark`** in `style.css`.
+- DaisyUI themes are built-in **`light` (default) / `halloween` (prefersdark)**, declared in
+  `style.css` as `@plugin "daisyui/theme"` blocks (main plugin `themes: false`) that override only
+  `info`/`success` tokens; DaisyUI merges the rest from the built-in theme.
 - The header toggle sets the root `data-theme` between `light` and `halloween` and saves it to
   `localStorage.theme`. A blocking inline script in `base.tsx` `<head>` (before the stylesheet)
   restores it on every page load, so the choice survives navigation without a flash. Without a
   saved value, no `data-theme` attribute is set and the system color scheme selects the theme.
-- `style.css` redefines Tailwind's `dark` variant (`@custom-variant dark`) to match the toggle:
-  explicit `data-theme='halloween'`, or the system dark preference only when no `data-theme`
-  attribute exists (`:root:not([data-theme])`). Use `dark:` for theme-specific styles; the Shiki
-  utility's dark colors use `@variant dark`. Keep this aligned with the theme toggle.
-- Text contrast: built-in `info`/`success` fail WCAG AA as text on light backgrounds (~2:1). Use
-  `text-info-content` (≥13:1 in both themes) and `text-success-content dark:text-success`
-  (`success-content` is ~1.1:1 in halloween, `success` is ≥5.3:1 there). Plain `text-info` /
-  `text-success` are not used; `bg-*` decorative fills are unaffected.
+- Do not use Tailwind `dark:` variants; theme-specific colors come from DaisyUI semantic tokens.
+- Text contrast: built-in light `info`/`success` (~2:1) and halloween `info` (3.4:1) fail WCAG AA as
+  text, so the overrides lower/raise only their lightness (with gamut-fit chroma) and flip the
+  matching `*-content`. Measured: `text-info` 4.68/4.70, `text-success` 4.67/5.36
+  (light/halloween). Re-measure both themes when changing these tokens.
 
 ### Pages and shared chrome
 

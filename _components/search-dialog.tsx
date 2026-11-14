@@ -18,7 +18,7 @@ export default () => (
           class="pointer-events-none absolute top-3 left-4 z-1 font-mono text-base-content/75 text-base/7"
           aria-hidden="true"
         >
-          <span class="text-success-content dark:text-success">$</span>{' '}
+          <span class="text-success">$</span>{' '}
           <span class="max-sm:hidden">find . -name</span>
         </span>
         <div id="search" class="relative flex min-h-0 flex-1 flex-col">

@@ -14,7 +14,7 @@ export default ({ author, ...prompt }: Props) => (
     <p class="mb-6 text-primary/80 text-sm">
       Maintained by{' '}
       <a
-        class="link link-hover text-info-content decoration-dashed underline-offset-4"
+        class="link link-hover text-info decoration-dashed underline-offset-4"
         href="/"
       >
         {author}

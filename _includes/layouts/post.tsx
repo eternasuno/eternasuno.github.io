@@ -36,7 +36,7 @@ export default ({
     >
       <a
         href="/"
-        class="mb-6 inline-flex min-h-11 items-center gap-2 text-info-content text-sm hover:underline"
+        class="mb-6 inline-flex min-h-11 items-center gap-2 text-info text-sm hover:underline"
       >
         <span aria-hidden="true">←</span> cd .. / 全部文章
       </a>

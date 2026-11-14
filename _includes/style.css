@@ -1,23 +1,23 @@
 @import "tailwindcss";
 @plugin "daisyui" {
   logs: false;
-  themes:
-    light --default,
-    halloween --prefersdark;
+  themes: false;
+}
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-info: oklch(54% 0.111 232.661);
+  --color-info-content: oklch(98% 0.01 232.661);
+  --color-success: oklch(53% 0.114 163.223);
+  --color-success-content: oklch(98% 0.018 163.223);
+}
+@plugin "daisyui/theme" {
+  name: "halloween";
+  prefersdark: true;
+  --color-info: oklch(62% 0.204 262.88);
+  --color-info-content: oklch(14% 0.043 262.88);
 }
 @plugin "@tailwindcss/typography";
-
-@custom-variant dark {
-  &:where(:root[data-theme="halloween"], :root[data-theme="halloween"] *) {
-    @slot;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
-      @slot;
-    }
-  }
-}
 
 @utility pagefind-search {
   --pf-text: var(--color-base-content);
@@ -226,22 +226,5 @@
     user-select: none;
     opacity: 0.35;
     font-size: 0.8em;
-  }
-
-  &,
-  span {
-    background-color: var(--shiki-light-bg);
-    color: var(--shiki-light);
-    font-weight: var(--shiki-light-font-weight);
-    font-style: var(--shiki-light-font-style);
-    text-decoration: var(--shiki-light-text-decoration);
-
-    @variant dark {
-      background-color: var(--shiki-dark-bg);
-      color: var(--shiki-dark);
-      font-weight: var(--shiki-dark-font-weight);
-      font-style: var(--shiki-dark-font-style);
-      text-decoration: var(--shiki-dark-text-decoration);
-    }
   }
 }

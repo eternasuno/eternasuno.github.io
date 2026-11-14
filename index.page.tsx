@@ -14,10 +14,7 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
       command="ls -la ./posts/ | more"
     >
       <header class="mb-8 border-b border-primary/30 pb-6">
-        <p
-          class="mb-3 text-info-content text-xs tracking-widest"
-          aria-hidden="true"
-        >
+        <p class="mb-3 text-info text-xs tracking-widest" aria-hidden="true">
           ~/posts/
         </p>
         <div class="flex flex-wrap items-end justify-between gap-3">
@@ -35,7 +32,7 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
           <span class="w-24 shrink-0">mode</span>
           <span class="w-20 shrink-0 text-right text-primary">字数</span>
           <span class="w-28 shrink-0">published</span>
-          <span class="text-info-content">name</span>
+          <span class="text-info">name</span>
         </div>
         <ul class="text-sm leading-relaxed">
           {posts.map(({ date, url, title, wordCount }) => {
@@ -85,7 +82,7 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
         <div class="mt-6 flex flex-wrap justify-between gap-x-4 gap-y-2 border-dashed border-primary/30 border-t pt-3 text-base-content/75 text-xs leading-relaxed">
           <span class="flex items-center gap-1.5">
             <span class="font-semibold text-primary">--More--</span>
-            <span class="text-success-content dark:text-success">(100%)</span>
+            <span class="text-success">(100%)</span>
           </span>
           <span>end of listing</span>
         </div>

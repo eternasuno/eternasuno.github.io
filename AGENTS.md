@@ -160,8 +160,8 @@ Other configuration:
   forwarded; images inside tables are capped by `[&_table_img]:max-w-48` in `article-body.tsx` so
   they do not squeeze other columns. Images are copied without a transform pipeline. Keep basenames unique and do not assume nested
   source paths survive this rewrite. Use string alt text, not Typst content blocks.
-- **Vector inlining is live functionality.** The template provides `#drawing(body)`, which wraps
-  vector drawings with `html.frame(box(body))` for HTML. The plugin converts `img.typst-frame` SVG
+- **Vector inlining is live functionality.** The template's `show figure.where(kind: image)` rule wraps
+  non-`image` figure bodies (vector drawings) with `html.frame(box(it.body))` for HTML. The plugin converts `img.typst-frame` SVG
   data URLs into inline SVG, preserving original fill/stroke colors and dimensions. Do not remove
   `toSvg` or restore an unconditional `currentColor` conversion.
 - Known Typst HTML constraints: `show path:` is not a valid element selector; `#quote` can render

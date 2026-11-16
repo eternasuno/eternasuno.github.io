@@ -2,35 +2,45 @@
 
 #show: post.with(
   title: "Hello World",
-  description: "记录基于 Lume 框架，使用 Typst 作为内容格式搭建这个博客的过程与思考。",
-  tags: ("typst", "lume"),
+  description: "从 Next.js + Markdown 迁移到 Lume + Typst：记录这个博客的选型过程、遇到的问题与对 SSG 的思考。",
+  tags: ("typst", "lume", "ssg"),
 )
 
-之前一直使用 #link("https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation")[Next.js 静态编译（SSG）]的方式来搭建博客，但是 Next.js 缓慢的编译速度说明这不是一个好的选择，再加上之前 Next.js 之前连续爆出安全漏洞，这成了我决定重构博客的最后一根稻草。
+之前我一直使用 #link("https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation")[Next.js 静态生成（SSG）]搭建博客。但框架日益臃肿、构建速度缓慢，加上 Next.js 此前接连爆出安全漏洞，高昂的维护成本最终促使我决定重构博客。
 
-此外在之前编写博客的过程中，我发现 Markdown 是有极限的。不仅是数学公式等复杂功能，即使是删除线这样的格式也要依赖扩展。而过多的扩展不仅会增加后续的维护难度，而且会影响文档的可移植性。所以借这次重构的机会我决定也要探索其他的排版语言。
+与此同时，Markdown 的局限也在过去写博客的过程中逐渐显现。数学公式这类复杂功能不必说，连删除线这样的基础格式也不在核心规范内，必须依赖扩展。扩展用得越多，维护成本越高，文档的可移植性也越差。所以我想借这次重构，试试其他的排版语言。
+
+我对新方案的要求有四点：
+
++ 原生支持 Unicode（正文是中文）。
++ 能排版数学公式。
++ 能编译成 HTML。
++ 能在 JavaScript 环境中运行（便于接入静态网站生成器）。
 
 = 通向 Typst 之路
 
-提到排版语言，首先想到的是 #link("https://www.latex-project.org/")[LaTeX]，但是 LaTeX 对 Unicode 的支持并不好，而且如何把 LaTeX 编译成 HTML 本身也没有足够简单成熟的 js 库。接着我找到了 #link("https://asciidoctor.org/")[asciidoctor]，不仅有官方提供的 js 编译库，并且官方维护了部分的常用插件。但是 #link("https://docs.asciidoctor.org/asciidoctor.js/latest/")[asciidoctor.js] 的维护并不积极（update: 在我放弃之后 asciidoctor.js 反而开始频繁更新 😂），另外 asciidoctor 本身也比较小众，这也是要考虑的内容。
+提到排版语言，我首先想到的是 #link("https://www.latex-project.org/")[LaTeX]。但传统 LaTeX 历史包袱较重，也没有足够简单、成熟的 JavaScript 库能把完整文档编译成 HTML。
 
-因此我决定使用 #link("https://typst.app/")[Typst]。Typst 是一个基于 Rust 的开源排版系统，原生支持 Unicode，数学公式，并且可以编译成 HTML。同时有 wasm 编译库 #link("https://myriad-dreamin.github.io/typst.ts/cookery/get-started.html")[typst.ts]，可以在 js 环境中运行。这些可以说完全符合我的要求。
+接着我调研了 #link("https://asciidoctor.org/")[Asciidoctor]。它有官方的 JavaScript 编译库并维护了一部分常用插件，但当时 #link("https://docs.asciidoctor.org/asciidoctor.js/latest/")[Asciidoctor.js] 的更新并不积极，而且 Asciidoctor 本身相对小众，社区和生态都比较有限。（注：在我放弃之后，Asciidoctor.js 反而恢复了频繁更新。）
 
-但是即使是这样，Typst 也有一些不足，主要是集中在编译成 HTML 的过程中：
+最终我选择了 #link("https://typst.app/")[Typst]。它是一个基于 Rust 的开源排版系统，原生支持 Unicode 和数学公式，也可以编译成 HTML。同时，#link("https://myriad-dreamin.github.io/typst.ts/cookery/get-started.html")[typst.ts] 提供了编译绑定，让它可以直接在 JavaScript 环境中运行。这四点要求它都满足。
 
-+ Typst 的编译成 HTML 时，数学公式目前还不支持编译成 MathML，只能编译成 SVG。（update: Typst 在 #link("https://typst.app/docs/changelog/0.15.0/")[0.15.0] 版本中已经支持 MathML 了）
-+ typst.ts 生成的 svg 会把 svg 的内容直接嵌入到 `<img>` 标签中。这导致我无法直接通过 CSS 修改公式的颜色（比如跟随主题色）。为了解决这个问题，我不得不写了一段逻辑，专门将 SVG 内容提取出来进行修改。
-+ Typst 的编译成 HTML 时，代码高亮的暗黑模式并不支持动态修改主题，无法完美适应暗黑模式。最终，我通过引入 #link("https://shiki.app/")[Shiki] 进行后处理，才彻底解决了这个问题。
+不过，将 Typst 编译为 HTML 还有一些细节需要打磨。下面是我遇到的问题和解决办法：
 
-= lume: 意外收获
++ *数学公式渲染。* 最初写作本文时，Typst 的 HTML 导出还不支持 MathML，只能把公式编译成 SVG。好在 Typst 从 #link("https://typst.app/docs/changelog/0.15.0/")[0.15.0] 版本起支持了 MathML，本站现在直接使用 MathML 输出公式。
++ *SVG 无法被 CSS 控制。* Typst 导出的 SVG 会以 data URL 的形式放进 `<img>` 标签，与页面样式隔离，无法通过 CSS 调整样式。我专门写了一段后处理逻辑，将 SVG 从 data URL 中提取出来并内联到页面中。公式改用 MathML 之后，这段逻辑现在继续用于正文的矢量绘图。
++ *代码高亮不支持主题切换。* Typst 内置的代码高亮会在编译时把配色硬编码到 HTML 中，无法同时适配浅色与深色模式。因此我关闭了内置高亮，引入 #link("https://shiki.app/")[Shiki] 对 HTML 做后处理，解决了双主题切换的问题。
 
-因为 Next.js 的前车之鉴，这次重构我不打算使用通用前端框架来搭建博客，而是使用专门的静态网站生成器。但是首先碰到的问题就是对 Typst 的支持。几乎所有的静态生成器都只支持 Markdown，想要支持 typst 就需要自定义渲染管线，而能否方便地自定义渲染管线就是选择的关键。
+= 选择 Lume
 
-最终我找到了 #link("https://lume.land/")[lume], 一个基于 #link("https://deno.com/")[Deno] 的静态网站框架。lume 有一个实验性的 Typst 插件，但是因为上面提到的 svg 和 代码高亮的原因，最终决定自己实现一个 Typst 插件，但是官方的插件依然提供一个好的参考和开始。
+吸取 Next.js 的教训，这次重构我不打算再用通用前端框架，而是选用专门的静态网站生成器。但第一个问题就是对 Typst 的支持：几乎所有静态网站生成器都只默认支持 Markdown，要接入 Typst 就必须自定义渲染管线。因此，能否方便地扩展渲染管线成了选型的关键。
 
-除此之外，还有意外收获：lume 支持使用 #link("https://lume.land/plugins/jsx/")[jsx/tsx] 作为模版语言，这对于习惯了 jsx 的前端开发者来说，是比其他框架的实现的不通用的模版语言更好的选择。此外 lume 还有支持 #link("https://lume.land/plugins/tailwindcss/")[tailwindcss]，#link("https://lume.land/plugins/og_images/")[OG images] 等重要功能的插件，可以极大程度简化网站的开发。
+最终我选了 #link("https://lume.land/")[Lume]。它是一个轻量的静态网站生成器（最初基于 #link("https://deno.com/")[Deno]，现已迁移至 Node.js，本站目前也运行在 Node.js 上）。Lume 官方虽然提供了一个实验性的 Typst 插件，但为了解决前面提到的 SVG 内联和代码高亮问题，我还是以官方插件为参考，自己编写了渲染插件。
+
+除此之外，还有一些意外收获。Lume 支持用 #link("https://lume.land/plugins/jsx/")[JSX/TSX] 作为模板语言——对习惯 JSX 的前端开发者来说，这比专门去适应其他传统模板语法更顺手。同时，Lume 内置了 #link("https://lume.land/plugins/tailwindcss/")[Tailwind CSS]、#link("https://lume.land/plugins/og_images/")[OG 图片]等常用插件，大幅简化了网站开发。
 
 = 感想
 
-本次重构过程中最大的收获就是发现了 lume 这个框架，并不单指 lume 本身，而是这个框架让我重新思考 SSR / SSG 在前段开发中的应用。虽然大部分的框架都把重心放在 SSR 上，但只能使用 SSR 而不能使用 SSG 代替的情况实际上并不多，反而是在编译期就生成所有的静态文件在性能优化和部署上更有优势。之后在需要 SEO 或者加快渲染的时候 SSG 会是比 SSR 更有吸引力的选择。
+这次重构最大的收获是发现了 Lume。这不只是因为 Lume 本身好用，更因为它让我重新思考 SSR 与 SSG 在前端开发中的定位。
 
+如今大部分前端框架都把重心放在 SSR 上，但真正只能用 SSR、无法用 SSG 替代的场景其实并不多。在构建时一次性生成全部静态文件，在性能和部署上反而更有优势：静态文件可以直接放到 CDN 上缓存，部署也不需要维护服务器——比如这个博客就直接托管在 GitHub Pages 上，构建与访问都重新变得简单、轻快。

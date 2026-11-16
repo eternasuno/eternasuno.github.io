@@ -3,13 +3,13 @@ import TerminalFooter from './_components/terminal-footer.tsx';
 import TerminalHeading from './_components/terminal-heading.tsx';
 import TerminalStatus from './_components/terminal-status.tsx';
 
-export default ({ search, author, terminalHost }: Lume.Data) => {
+export default ({ search, author, hostname }: Lume.Data) => {
   const posts = search.pages('url^=/posts/', 'date=desc');
 
   return (
     <Terminal
       user={author}
-      host={terminalHost}
+      host={hostname}
       path="~"
       command="ls -la ./posts/ | more"
     >
@@ -87,7 +87,7 @@ export default ({ search, author, terminalHost }: Lume.Data) => {
           <span>end of listing</span>
         </div>
       </nav>
-      <TerminalFooter host={terminalHost} author={author} path="~" />
+      <TerminalFooter host={hostname} author={author} path="~" />
       <TerminalStatus>posts: {posts.length}</TerminalStatus>
     </Terminal>
   );

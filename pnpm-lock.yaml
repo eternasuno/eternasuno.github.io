@@ -44,6 +44,9 @@ importers:
       '@lumeland/plugin-reading-info':
         specifier: ^1.0.0
         version: 1.0.0(@lumeland/core@1.0.4)
+      '@lumeland/plugin-resolve-urls':
+        specifier: ^1.0.0
+        version: 1.0.0(@lumeland/core@1.0.4)
       '@lumeland/plugin-robots':
         specifier: ^1.0.0
         version: 1.0.0(@lumeland/core@1.0.4)
@@ -601,6 +604,11 @@ packages:
 
   '@lumeland/plugin-reading-info@1.0.0':
     resolution: {integrity: sha512-D4gr4LTn85aum6+kpDtpyVXHdfIjyj9VsZf5pNJoDeLPZJrPdAHIWs7kQaXt6EsEKzrihAzahH1h10pHUB7ubw==}
+    peerDependencies:
+      '@lumeland/core': ^1.0.0
+
+  '@lumeland/plugin-resolve-urls@1.0.0':
+    resolution: {integrity: sha512-L6LYWXAF0Gdmqyp/W5tPT5EcpHMWeP+HwJKZhHiTFpACmKjok0ZvjivvVg9vnuZR0D6Di0oayJCsPNX2rVqCfQ==}
     peerDependencies:
       '@lumeland/core': ^1.0.0
 
@@ -1982,6 +1990,11 @@ snapshots:
   '@lumeland/plugin-reading-info@1.0.0(@lumeland/core@1.0.4)':
     dependencies:
       '@lumeland/core': 1.0.4
+
+  '@lumeland/plugin-resolve-urls@1.0.0(@lumeland/core@1.0.4)':
+    dependencies:
+      '@lumeland/core': 1.0.4
+      '@lumeland/plugin-modify-urls': 1.0.0(@lumeland/core@1.0.4)
 
   '@lumeland/plugin-robots@1.0.0(@lumeland/core@1.0.4)':
     dependencies:

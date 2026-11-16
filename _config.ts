@@ -40,7 +40,6 @@ site.use(jsx());
 site.use(
   typst({
     inputs: { target: 'html' },
-    selector: '<frontmatter>',
     plugins: [
       [
         rehypeShiki,

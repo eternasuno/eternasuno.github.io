@@ -35,7 +35,8 @@ export default ({ search, author, hostname }: Lume.Data) => {
           <span class="text-info">name</span>
         </div>
         <ul class="text-sm leading-relaxed">
-          {posts.map(({ date, url, title, wordCount }) => {
+          {posts.map(({ date, url, title, readingInfo }) => {
+            const wordCount = readingInfo?.words ?? 0;
             const postDate = new Date(date);
             const formattedDate = new Intl.DateTimeFormat('en-US', {
               month: 'short',

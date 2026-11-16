@@ -68,7 +68,8 @@ _includes/
 │   ├── post.tsx                   Terminal article layout and back-to-top behavior
 │   └── og_images.tsx              Black/white Satori OG image template
 └── style.css                      Themes, terminal UI, Pagefind, prose, Shiki
-_plugins/typst-plugin.ts           Typst loader, metadata, HTML rewriting, character count
+_plugins/typst-plugin.ts           Typst loader/engine, metadata, HTML rewriting
+_types.d.ts                        Global Lume type augmentations (e.g. `search` on GlobalData)
 index.page.tsx                     Terminal-style post directory listing
 404.page.tsx                       Terminal-style 404 (cd error, banner, suggestions)
 posts/
@@ -135,8 +136,20 @@ Other configuration:
   with the `<frontmatter>` selector, not parsed from YAML frontmatter.
 - `_config.ts` passes `target: 'html'`. The template defaults to PDF for standalone Typst use and
   only adds its own visible title outside the HTML target; the article layout supplies the HTML h1.
-- The custom plugin compiles HTML, extracts metadata, rewrites the HAST, applies rehype plugins,
-  and serializes the result. It returns only the compiled HTML body's children.
+- The custom plugin registers both a loader and an engine (like Lume's Markdown plugin). The
+  loader runs `compileHtml` + `compiler.query(document, { selector })` only for metadata
+  (`selector` defaults to `<frontmatter>`; `_config.ts` does not pass it) and returns the **raw
+  `.typ` source** as `content`, so preprocessors (e.g. `reading_info`) see source text, not HTML.
+  Querying with `{ mainFilePath }` directly compiles the paged target and fails on the template's
+  `html.*` calls (`unknown variable: html`), so the HTML document is required. The engine ignores
+  the passed `content` (Typst needs the file path for relative imports) and calls
+  `compiler.tryHtml({ mainFilePath })` in one step; `.hast()` returns the `<html>` **element**,
+  not a `Root`. It rewrites elements under `<body>` (external links, `language-*`, inline
+  `typst-frame` SVG), runs the rehype plugins, and serializes only the body's children.
+- `_plugins/typst-plugin.ts` holds only plugin code, as flat top-level arrow functions with
+  dependencies passed as parameters; the plugin body only wires the compiler, processor, loader,
+  and engine. Library types come from the compiler package's exports, not local copies. Global
+  type augmentations live in `_types.d.ts`.
 - **Code highlighting belongs to Shiki, not Typst.** The HTML template sets `raw(theme: none)`; the
   plugin rewrites `data-lang` into `language-*`. Shiki uses `defaultColor: 'light-dark()'` with
   `colorsRendering: 'none'`, inline `tailing-curly-colon`, `defaultLanguage: 'text'` (so
@@ -146,10 +159,10 @@ Other configuration:
   rendered; browsers without `light-dark()` fall back to unhighlighted prose `pre` colors). The CSS
   `shiki` utility only lays out lines and displays numbers via `content: attr(data-line)` on
   `.line::before`.
-- **Two separate counts exist:** the Typst loader's `wordCount` counts non-whitespace Unicode code
-  points in serialized HTML text nodes and is shown as `字` on the homepage. Lume's `reading_info`
-  plugin supplies `readingInfo.words` and `readingInfo.minutes` for article metadata/status. Do not
-  substitute one for the other or label the homepage count as file bytes.
+- **Word counts come only from Lume's `reading_info` plugin.** It segments the raw `.typ` source
+  (`Intl.Segmenter` word granularity, so Typst markup such as `#import`/`#show` is included and a
+  CJK word counts once) into `readingInfo.words` / `readingInfo.minutes`, used by the homepage `字`
+  column and article metadata/status. Do not add a separate count to the Typst plugin.
 - Math is exported as MathML; `.prose math mtable` spacing is adjusted in CSS.
 - The template's HTML table rule wraps each table in `<div class="overflow-x-auto">`, so tables
   keep prose's `display: table; width: 100%` (full width on wide screens) and only the wrapper
@@ -215,7 +228,7 @@ Other configuration:
 ### Pages and shared chrome
 
 - **Homepage:** command `ls -la ./posts/ | more`, heading `文章`, total posts count, then linked
-  rows with decorative permissions, `wordCount` in 字, short en-US date, title, and trailing slash.
+  rows with decorative permissions, `readingInfo.words` in 字, short en-US date, title, and trailing slash.
   Ends with a static `--More-- (100%)` indicator, maintenance footer, and post-count status bar;
   this is presentation, not an interactive pager. Descriptions/tags are not listed here.
 - **Article:** command `cat <source filename>` under `~/posts`; title, optional description, long

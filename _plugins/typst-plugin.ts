@@ -1,235 +1,192 @@
-import type Searcher from '@lumeland/core/searcher.ts';
+import { readFile } from 'node:fs/promises';
 import type Site from '@lumeland/core/site.ts';
 import { merge } from '@lumeland/core/utils/object.ts';
 import {
   NodeCompiler,
-  type NodeError,
-  type NodeTypstDocument,
+  type NodeHtmlOutputExecResult,
+  type NodeTypstCompileResult,
 } from '@myriaddreamin/typst-ts-node-compiler';
 import type { Element, Root } from 'hast';
 import { fromHtml } from 'hast-util-from-html';
 import { select } from 'hast-util-select';
 import rehypeStringify from 'rehype-stringify';
-import { type PluggableList, type Plugin, unified } from 'unified';
+import { type PluggableList, unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
-declare global {
-  namespace Lume {
-    interface GlobalData {
-      search: Searcher;
-      wordCount?: number;
-    }
-  }
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
-
-const isParent = (value: unknown): value is Root | Element =>
-  isRecord(value) &&
-  Array.isArray(value.children) &&
-  (value.type === 'root' ||
-    (value.type === 'element' && typeof value.tagName === 'string'));
-
-export type Options = {
+type Options = {
   extensions?: Array<string>;
+  inputs?: Record<string, string>;
   pageSubExtension?: string;
   plugins?: PluggableList;
-} & Omit<MakeTypstRehypeOptions, 'workspace'>;
+  selector?: string;
+};
 
-export const defaults = {
+const defaults = {
   extensions: ['.typ'],
   inputs: undefined,
   pageSubExtension: '.page',
   plugins: [],
-  selector: undefined,
+  selector: '<frontmatter>',
 } satisfies Options;
 
-export const typst = (userOptions?: Options) => {
-  const options = merge(defaults, userOptions);
+const unwrap = <
+  Compilation extends NodeTypstCompileResult | NodeHtmlOutputExecResult,
+>(
+  compilation: Compilation
+): NonNullable<Compilation['result']> => {
+  const message = compilation
+    .takeError()
+    ?.shortDiagnostics.map(({ message }) => message)
+    .join('\n');
 
-  return (site: Site) => {
-    const typstRehype = makeTypstRehype({
-      inputs: options.inputs,
-      selector: options.selector,
-      workspace: site.src('/'),
-    });
+  if (!compilation.result) {
+    throw new Error(message || 'Typst compilation failed.');
+  }
 
-    const processor = unified().use([
-      typstRehype,
-      ...options.plugins,
-      rehypeStringify,
-    ]);
+  if (message) {
+    console.warn(message);
+  }
 
-    const loader = async (path: string) => {
-      const file = await processor.process(path);
-      const metadata = isRecord(file.data.metadata) ? file.data.metadata : {};
-      const content = String(file);
-      let wordCount = 0;
-      visit(fromHtml(content, { fragment: true }), 'text', (node) => {
-        wordCount += Array.from(node.value.replace(/\s/gu, '')).length;
-      });
-
-      return { ...metadata, content, wordCount };
-    };
-
-    site.loadPages(options.extensions, {
-      loader,
-      pageSubExtension: options.pageSubExtension,
-    });
-  };
+  return compilation.result;
 };
 
-export default typst;
+const openExternalLinksInNewTab = (node: Element) => {
+  const { href } = node.properties;
 
-type MakeTypstRehypeOptions = {
-  inputs?: Record<string, string>;
-  selector?: string;
-  workspace?: string;
+  if (
+    node.tagName !== 'a' ||
+    typeof href !== 'string' ||
+    href.startsWith('#')
+  ) {
+    return;
+  }
+
+  Object.assign(node.properties, {
+    target: '_blank',
+    rel: ['noopener', 'noreferrer'],
+  });
 };
 
-const makeTypstRehype = ({
-  workspace,
-  inputs,
-  selector,
-}: MakeTypstRehypeOptions): Plugin<[], string, Root> => {
-  const compiler = NodeCompiler.create({ workspace, inputs });
+const markCodeLanguage = (node: Element) => {
+  const language = node.properties['data-lang'];
 
-  return function () {
-    this.parser = (doc, file) => {
-      const document = compile(doc, compiler);
-      Object.assign(file.data, {
-        metadata: selector ? matter(selector, document, compiler) : undefined,
-      });
+  if (node.tagName !== 'code' || !language) {
+    return;
+  }
 
-      return rewrite(toHast(document, compiler));
-    };
-  };
+  Object.assign(node.properties, { className: [`language-${language}`] });
 };
 
-const isExternalLink = (node: Element) =>
-  node.tagName === 'a' &&
-  typeof node.properties.href === 'string' &&
-  !node.properties.href.startsWith('#');
-
-const isTypstFrame = (node: Element) =>
+const isTypstFrame = (
+  node: Element
+): node is Element & { properties: { src: string } } =>
   node.tagName === 'img' &&
-  (node.properties?.class ?? node.properties?.className)
-    ?.toString()
-    .includes('typst-frame') &&
+  Boolean(node.properties.class?.toString().includes('typst-frame')) &&
   typeof node.properties.src === 'string';
 
-const rewriteElement = (
+const inlineTypstFrame = (
   node: Element,
   index: number | undefined,
   parent: Root | Element | undefined
 ) => {
-  if (isExternalLink(node)) {
-    Object.assign(node.properties, {
-      target: '_blank',
-      rel: ['noopener', 'noreferrer'],
-    });
-  }
-
-  if (node.tagName === 'code' && node.properties?.['data-lang']) {
-    Object.assign(node.properties, {
-      className: [`language-${node.properties['data-lang']}`],
-    });
-  }
-
-  if (!isTypstFrame(node) || typeof index !== 'number' || !parent) {
+  if (!isTypstFrame(node) || index === undefined || !parent) {
     return;
   }
 
-  const svg = toSvg(String(node.properties.src));
+  const [prefix, encoding, payload] = node.properties.src.split(/[;,]/, 3);
 
-  if (svg) {
-    parent.children.splice(index, 1, svg);
-  }
-};
-
-const rewrite = (hast: Root | Element): Root => {
-  const body = select('body', hast);
-
-  if (body) {
-    visit(body, 'element', rewriteElement);
-  }
-
-  return { children: body?.children || [], type: 'root' };
-};
-
-const toSvg = (src: string) => {
-  const [prefix, metadata, payload] = src.split(/[;,]/, 3);
   if (prefix !== 'data:image/svg+xml') {
-    return undefined;
+    return;
   }
 
   try {
-    const svg =
-      metadata === 'base64' ? atob(payload) : decodeURIComponent(payload);
-    const root = fromHtml(svg, { fragment: true, space: 'svg' });
-
-    return root.children.find(
+    const markup =
+      encoding === 'base64' ? atob(payload) : decodeURIComponent(payload);
+    const root = fromHtml(markup, { fragment: true, space: 'svg' });
+    const svg = root.children.find(
       (child): child is Element =>
         child.type === 'element' && child.tagName === 'svg'
     );
-  } catch {
-    return undefined;
-  }
-};
 
-const matter = (
-  selector: string,
-  doc: NodeTypstDocument,
-  compiler: NodeCompiler
-) => {
-  try {
-    const result: unknown = compiler.query(doc, { selector });
-    const first = Array.isArray(result) ? result.at(0) : undefined;
-
-    return isRecord(first) && isRecord(first.value) ? first.value : undefined;
-  } catch (error) {
-    console.warn('Typst Metadata query failed:', error);
-
-    return undefined;
-  }
-};
-
-type Compilation<Result> = {
-  takeError(): NodeError | null;
-  result: Result | null;
-};
-
-const unwrap = <Result>(result: Compilation<Result>): Result => {
-  const error = result.takeError();
-  if (error && error.compilationStatus !== 'ok') {
-    const message = error.shortDiagnostics
-      .map(({ message }) => message)
-      .join('\n');
-
-    if (error.compilationStatus === 'warning') {
-      console.info('Compilation completed with warnings:', message);
-    } else {
-      throw new Error(message);
+    if (svg) {
+      parent.children.splice(index, 1, svg);
     }
+  } catch {
+    return;
   }
-
-  if (!result.result) {
-    throw new Error('Compilation failed without error message.');
-  }
-
-  return result.result;
 };
 
-const toHast = (doc: NodeTypstDocument, compiler: NodeCompiler) => {
-  const hast: unknown = unwrap(compiler.tryHtml(doc)).hast();
+const extractBody = (html: Element): Root => {
+  const body = select('body', html);
 
-  if (!isParent(hast)) {
-    throw new Error('Compilation produced an invalid HAST tree.');
+  if (body) {
+    visit(body, 'element', (node, index, parent) => {
+      openExternalLinksInNewTab(node);
+      markCodeLanguage(node);
+      inlineTypstFrame(node, index, parent);
+    });
   }
 
-  return hast;
+  return { children: body?.children ?? [], type: 'root' };
 };
 
-const compile = (mainFilePath: string, compiler: NodeCompiler) =>
-  unwrap(compiler.compileHtml({ mainFilePath }));
+const isRoot = (node: { type: string }): node is Root => node.type === 'root';
+
+const createProcessor = (plugins: PluggableList) =>
+  unified().use(plugins).use(rehypeStringify);
+
+type Processor = ReturnType<typeof createProcessor>;
+
+const loadPage = async (
+  compiler: NodeCompiler,
+  path: string,
+  selector: string
+) => {
+  const document = unwrap(compiler.compileHtml({ mainFilePath: path }));
+  const [frontmatter] = compiler.query(document, { selector });
+  const content = await readFile(path, 'utf8');
+
+  return { ...frontmatter?.value, content };
+};
+
+const renderPage = async (
+  site: Site,
+  compiler: NodeCompiler,
+  processor: Processor,
+  filename: string | undefined
+) => {
+  if (!filename) {
+    throw new Error('Typst pages require a source filename to render.');
+  }
+
+  const output = unwrap(compiler.tryHtml({ mainFilePath: site.src(filename) }));
+  const tree = await processor.run(extractBody(output.hast()));
+
+  if (!isRoot(tree)) {
+    throw new Error('Rehype plugins produced a non-root tree.');
+  }
+
+  return processor.stringify(tree);
+};
+
+const typst = (userOptions?: Options) => (site: Site) => {
+  const options = merge(defaults, userOptions);
+  const compiler = NodeCompiler.create({
+    inputs: options.inputs,
+    workspace: site.src('/'),
+  });
+  const processor = createProcessor(options.plugins);
+
+  site.loadPages(options.extensions, {
+    engine: {
+      addHelper: () => {},
+      deleteCache: () => {},
+      render: (_content, _data, filename) =>
+        renderPage(site, compiler, processor, filename),
+    },
+    loader: (path) => loadPage(compiler, path, options.selector),
+    pageSubExtension: options.pageSubExtension,
+  });
+};
+
+export default typst;

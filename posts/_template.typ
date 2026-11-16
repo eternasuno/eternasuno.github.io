@@ -1,13 +1,5 @@
 #let target = sys.inputs.at("target", default: "pdf")
 
-#let drawing(body) = {
-  if target == "html" {
-    html.frame(box(body))
-  } else {
-    body
-  }
-}
-
 #let post(description: "", tags: (), title: "Untitled", body) = {
   set document(title: title, description: description, keywords: tags)
   [#metadata((title: title, tags: tags, description: description)) <frontmatter>]
@@ -26,6 +18,17 @@
       ))
     } else {
       align(center, it)
+    }
+  }
+
+  show figure.where(kind: image): it => {
+    if target == "html" and it.body.func() != image {
+      html.elem("figure", {
+        html.frame(box(it.body))
+        it.caption
+      })
+    } else {
+      it
     }
   }
 

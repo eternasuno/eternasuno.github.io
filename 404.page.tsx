@@ -62,10 +62,10 @@ const Suggestions = ({ user, host }: { user: string; host: string }) => (
   </nav>
 );
 
-export default ({ author, terminalHost }: Lume.Data) => (
+export default ({ author, hostname }: Lume.Data) => (
   <Terminal
     user={author}
-    host={terminalHost}
+    host={hostname}
     path="~"
     command={
       <>
@@ -85,7 +85,7 @@ export default ({ author, terminalHost }: Lume.Data) => (
       </pre>
       <TerminalHeading>Page not found</TerminalHeading>
     </header>
-    <Suggestions user={author} host={terminalHost} />
+    <Suggestions user={author} host={hostname} />
     <TerminalStatus>E404: Not Found</TerminalStatus>
     <script
       dangerouslySetInnerHTML={{

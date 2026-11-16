@@ -10,6 +10,7 @@ import metas from '@lumeland/plugin-metas';
 import og_images from '@lumeland/plugin-og-images';
 import pagefind from '@lumeland/plugin-pagefind';
 import reading_info from '@lumeland/plugin-reading-info';
+import resolve_urls from '@lumeland/plugin-resolve-urls';
 import robots from '@lumeland/plugin-robots';
 import tailwindcss from '@lumeland/plugin-tailwindcss';
 import rehypeShiki from '@shikijs/rehype';
@@ -33,7 +34,7 @@ site.ignore('devenv.yaml');
 site.add('_includes/style.css', 'style.css');
 site.add('_includes/images', 'img');
 
-site.data('terminalHost', site.options.location.hostname);
+site.data('hostname', site.options.location.hostname);
 
 site.use(jsx());
 site.use(
@@ -64,6 +65,7 @@ site.use(
 );
 site.use(robots({ allow: [], disallow: '*' }));
 site.use(tailwindcss());
+site.use(resolve_urls());
 site.use(image_size());
 site.use(base_path());
 site.use(og_images());

@@ -14,7 +14,7 @@ export default ({
   author,
   readingInfo,
   children,
-  terminalHost,
+  hostname,
   page,
 }: Lume.Data) => {
   const formattedDate = date
@@ -30,7 +30,7 @@ export default ({
   return (
     <Terminal
       user={author}
-      host={terminalHost}
+      host={hostname}
       path="~/posts"
       command={`cat ${filename}`}
     >
@@ -65,7 +65,7 @@ export default ({
         )}
       </header>
       <ArticleBody>{children}</ArticleBody>
-      <TerminalFooter host={terminalHost} author={author} path="~/posts" />
+      <TerminalFooter host={hostname} author={author} path="~/posts" />
       <TerminalStatus>
         {readingInfo && `words: ${readingInfo.words.toLocaleString('en-US')}`}
       </TerminalStatus>

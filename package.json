@@ -26,6 +26,7 @@
     "@lumeland/plugin-og-images": "^1.0.0",
     "@lumeland/plugin-pagefind": "^1.0.0",
     "@lumeland/plugin-reading-info": "^1.0.0",
+    "@lumeland/plugin-resolve-urls": "^1.0.0",
     "@lumeland/plugin-robots": "^1.0.0",
     "@lumeland/plugin-tailwindcss": "^1.0.0",
     "@lumeland/ssx": "^0.1.16",

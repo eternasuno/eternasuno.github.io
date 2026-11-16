@@ -44,7 +44,7 @@ would turn into pages must be listed in `site.ignore(...)` in `_config.ts`: curr
 example `README.md` or a local `devenv.local.yaml`), and confirm `_site` gains no extra pages.
 
 ```text
-_config.ts                         Lume plugins, domain, ignores, assets, watchers, terminalHost
+_config.ts                         Lume plugins, domain, ignores, assets, watchers, hostname
 package.json                       Dependencies, scripts, pnpm/Node 24 engines
 pnpm-lock.yaml                     Locked dependency graph
 tsconfig.json                      TypeScript + `@lumeland/ssx` JSX configuration
@@ -107,11 +107,13 @@ Other configuration:
 - This is a static site, not a dynamic application. TSX components render at build time; browser
   behavior is limited to the generated Pagefind UI and inline handlers/scripts in the templates.
 - `_config.ts` uses `DOMAIN` from the environment, falling back to `http://localhost:3000`.
-  `terminalHost` comes from the configured location's hostname. CI supplies `DOMAIN` from
-  repository variables; do not hardcode a separate host in terminal components.
+  The global `hostname` data (terminal prompt host) is `site.options.location.hostname`. CI
+  supplies `DOMAIN` from repository variables; do not hardcode a separate host in terminal
+  components.
 - `_includes/style.css` is published as `/style.css`; `_includes/images` is published as `/img`.
   The watcher maps `posts/*.page.typ` to `posts/_template.typ` so template edits rebuild posts.
-- Plugins provide Tailwind, image sizing, base-path rewriting, OG images, favicon, metas, RSS,
+- Plugins provide Tailwind, source-URL resolution, image sizing, base-path rewriting, OG images,
+  favicon, metas, RSS,
   reading information, Pagefind, and URL checking. Robots configuration currently disallows all
   crawlers (`robots({ allow: [], disallow: '*' })`); do not assume the blog permits indexing.
 - RSS is generated at `/rss.xml` from `url^=/posts/`. Its title is set separately in `_config.ts`.
@@ -155,11 +157,16 @@ Other configuration:
   shrinks them to content width. Tables use `wrap-normal` to override the prose `wrap-anywhere`,
   so words and inline code are not split mid-token; scrolling starts only when the table's
   min-content width (longest token, capped images, nowrap first column) exceeds the content area.
-- The template's HTML image rule maps the source basename to `/img/<filename>`, adds lazy loading
-  and the `image-size` marker, and forwards `it.alt` or an empty string. Typst `width` is not
+- The template's HTML image rule emits `it.source` (the path as written in Typst) as `src`, adds
+  lazy loading and the `image-size` marker, and forwards `it.alt` or an empty string. The
+  `resolve_urls` plugin then resolves that path against the page's source directory (Typst `/`
+  paths are project-root based, matching Lume's `src`) and replaces it with the file's output URL,
+  e.g. `../_includes/images/x.png` → `/img/x.png`. Images must live under `_includes/images` (or
+  another `site.add`ed path); unresolved paths are left as-is and reported by `check_urls`.
+  `resolve_urls` must stay registered before `image_size` and `base_path`. Typst `width` is not
   forwarded; images inside tables are capped by `[&_table_img]:max-w-48` in `article-body.tsx` so
-  they do not squeeze other columns. Images are copied without a transform pipeline. Keep basenames unique and do not assume nested
-  source paths survive this rewrite. Use string alt text, not Typst content blocks.
+  they do not squeeze other columns. Images are copied without a transform pipeline. Use string
+  alt text, not Typst content blocks.
 - **Vector inlining is live functionality.** The template's `show figure.where(kind: image)` rule wraps
   non-`image` figure bodies (vector drawings) with `html.frame(box(it.body))` for HTML. The plugin converts `img.typst-frame` SVG
   data URLs into inline SVG, preserving original fill/stroke colors and dimensions. Do not remove

@@ -6,12 +6,8 @@
 
   show image: it => {
     if target == "html" {
-      let original-path = it.source
-      let file-name = original-path.split("/").last()
-      let web-path = "/img/" + file-name
-
       html.elem("img", attrs: (
-        src: web-path,
+        src: it.source,
         alt: if it.alt != none { it.alt } else { "" },
         loading: "lazy",
         "image-size": "",
